@@ -274,8 +274,6 @@
       </div>
     </div>
     <div>
-      <!--司机编辑界面-->
-      <!-- <component :is='goods'   @adddriverChid="adddriverChid" />  -->
     </div>
   </div>
 </template>
@@ -285,7 +283,6 @@ import { mapState } from "vuex";
 import Cookies from "js-cookie";
 import ThemePicker from "@/components/ThemePicker";
 import LangSelector from "@/components/LangSelector";
-import goods from "@/views/Product/detail/DriverInformationDetail.vue";
 import Vue from "vue";
 
 export default {
@@ -293,7 +290,6 @@ export default {
   components: {
     ThemePicker,
     LangSelector,
-    goods
   },
   data() {
     return {
@@ -307,7 +303,6 @@ export default {
       imgs: "",
       imgs1: "",
       imgs2: "",
-      goods: "goods",
       dataForm: {
         name: "",
         businesslicense: "",
