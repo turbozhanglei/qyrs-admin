@@ -7,11 +7,11 @@
         "blog": "博客",
         "projectRepo": "项目",
         "myMsg": "我的消息",
-        "config": "系统配置",           
+        "config": "系统配置",
         "backup": "备份",
         "restore": "还原",
         "backupRestore": "备份还原",
-        "versionName": "版本名称",             
+        "versionName": "版本名称",
         "exit": "退出"
     },
     "action": {
@@ -33,7 +33,11 @@
         "print": "打印",
         "update": "修改",
         "refresh": "刷新",
-        "review": "刷新"
+        "review": "刷新",
+        "disable":"禁用",
+        "enable":"启用",
+        "batchDisable":"批量禁用",
+        "batchEnable":"批量启用"
     },
     "sys": {
         "sysMng": "系统管理",

@@ -1,0 +1,382 @@
+<template>
+  <div class="page-container">
+    <!--工具栏-->
+    <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
+      <el-form :inline="true" :model="filters" :size="size" ref="filters" :label-position="labelPosition">
+        <el-form-item prop="categoryId" label="分类ID">
+          <el-input v-model="filters.categoryId" placeholder="分类ID" clearable></el-input>
+        </el-form-item>
+        <el-form-item prop="name" label="分类名称">
+          <el-input v-model="filters.name" placeholder="分类名称" clearable></el-input>
+        </el-form-item>
+        <el-form-item prop="platform" label="所属平台">
+          <el-select v-model="filters.platform" placeholder="所属平台">
+            <el-option
+              v-for="item in platforms"
+              :key="item.platform"
+              :label="item.platformName"
+              :value="item.platform">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="platform" label="状态">
+          <el-select v-model="filters.status" placeholder="状态">
+            <el-option
+              v-for="item in categoryStatus"
+              :key="item.status"
+              :label="item.statusName"
+              :value="item.status">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-row>
+          <el-form-item>
+            <kt-button
+              icon="fa fa-search"
+              :label="$t('action.search')"
+              type="primary"
+              @click="$refs.CyTable.findPageBeforeRestPages(filters)"
+            />
+          </el-form-item>
+          <el-form-item>
+            <kt-button
+              icon="fa fa-plus"
+              :label="$t('action.add')"
+              type="primary"
+              @click="handleAdd"
+            />
+          </el-form-item>
+          <el-form-item>
+            <kt-button
+              icon="el-icon-refresh"
+              :label="$t('action.reset')"
+              type="primary"
+              @click="reset"
+            />
+          </el-form-item>
+        </el-row>
+      </el-form>
+    </div>
+    <!--表格内容栏-->
+    <el-table
+      :data="tableData"
+      style="width: 100%"
+      :stripe="stripe"
+      :max-height="countHeight(maxHeight)"
+      :size="size"
+      align="left"
+      row-key="id"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      :header-cell-style="{ 'color': '#FFF','background-color': 'rgb(20, 136, 154)'}">
+      <el-table-column
+        label="分类名称"
+        width="160"
+        align="center"
+        prop="name">
+      </el-table-column>
+      <el-table-column
+        label="分类ID"
+        width="100"
+        align="center"
+        prop="id">
+      </el-table-column>
+      <el-table-column
+        label="支持平台"
+        width="100"
+        align="center"
+        prop="platform"
+        :formatter="platformFormat">
+      </el-table-column>
+      <el-table-column
+        label="显示顺序"
+        width="100"
+        align="center"
+        prop="sort">
+        <template slot-scope="scope">
+          <el-input
+            placeholder=""
+            maxlength="2"
+            v-model="scope.row.sort"
+            @blur="updateSort">
+          </el-input>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="状态"
+        width="100"
+        align="center"
+        prop="status"
+        :formatter="statusFormat">
+      </el-table-column>
+      <el-table-column
+        label="修改时间"
+        width="160"
+        align="center"
+        prop="updator">
+      </el-table-column>
+      <el-table-column label="操作" align="center">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="primary"
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            type="warning"
+            @click="handleEdit(scope.$index, scope.row)">添加子类</el-button>
+          <el-button
+            size="mini"
+            type="info"
+            @click="handleEdit(scope.$index, scope.row)"
+            v-if="scope.row.status == 0">禁用</el-button>
+          <el-button
+            size="mini"
+            type="success"
+            @click="handleEdit(scope.$index, scope.row)"
+            v-if="scope.row.status == 1">启用</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleEdit(scope.$index, scope.row)"
+            v-if="!scope.row.children ">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog
+      :title="operation?'新增':'编辑'"
+      width="40%"
+      :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        :model="dataForm"
+        label-width="80px"
+        :rules="dataFormRules"
+        ref="dataForm"
+        :size="size"
+        label-position="right"
+      >
+        <el-form-item label="上级分类" prop="superCategoryID" required>
+          <el-select v-model="dataForm.superCategoryID" placeholder="请选择上级分类">
+            <el-option
+              v-for="item in superCategorys"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="所属平台" prop="platform" required>
+          <el-radio v-model="dataForm.platform" label="1">微信小程序</el-radio>
+        </el-form-item>
+        <el-form-item label="分类名称" prop="name" required>
+          <el-input v-model="dataForm.name" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="排序" prop="sort">
+          <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="状态" prop="status" required>
+          <el-radio v-model="dataForm.status" label="0">启用</el-radio>
+          <el-radio v-model="dataForm.status" label="1">禁用</el-radio>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button :size="size" @click.native="dialogVisible = false">{{$t('action.cancel')}}</el-button>
+        <el-button
+          :size="size"
+          type="primary"
+          @click.native="submitForm"
+        >{{$t('action.submit')}}</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import PopupTreeInput from "@/components/PopupTreeInput";
+import CyTable from "@/views/Core/CyTable";
+import KtButton from "@/views/Core/KtButton";
+import TableColumnFilterDialog from "@/views/Core/TableColumnFilterDialog";
+import { format } from "@/utils/datetime";
+import { exportExcel } from "@/utils/excel";
+export default {
+  components: {
+    KtButton,
+  },
+  data() {
+    return {
+      size: "small",
+      labelPosition: 'left',
+      stripe:true,
+      maxHeight: 900,
+      filters: {
+        categoryId: "",//文章id
+        name:"",//文章标题
+        platform:"",//支持平台
+        status:"",//状态
+      },
+      columns: [],
+      filterColumns: [],
+      pageRequest: { pageNum: 1, pageSize: 10 },
+      pageResult: {},
+      tableData: [],
+      operation: false, // true:新增, false:编辑
+      dialogVisible: false, // 新增编辑界面是否显示
+      options: [],
+      superCategorys:[
+        {
+          id:1,name:'下载资源'
+        },
+        {
+          id:2,name:'新手指南'
+        }
+      ],
+      categoryStatus:[
+        {
+          'statusName':'全部',
+          'value':''
+        },
+        {
+          'statusName':'启用',
+          'status':'0'
+        },
+        {
+          'statusName':'禁用',
+          'status':'1'
+        }
+      ],
+      platforms:[
+        {
+          platform:1,
+          platformName:'小程序'
+        },
+        {
+          platform:2,
+          platformName:'微信H5'
+        }
+      ],
+      // 新增编辑界面数据
+      dataForm: {
+        superCategoryID: "",
+        platform: "1",
+        name: "",
+        sort: "",
+        status: "0",
+      },
+      dataFormRules: {
+        superCategoryID: [{ required: true, message: "请选择上级分类", trigger: "blur" }],
+        name: [{ required: true, message: "请输入分类名称", trigger: "blur" }],
+        status: [{ required: true, message: "请选择状态", trigger: "blur" }],
+      },
+    };
+  },
+  methods: {
+    // 获取分页数据
+    findPage: function(data) {
+      this.tableData=[
+          {
+            id:1,name:'下载资源',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00',
+            children:[
+              {
+                id:9,name:'商家操作手册',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00',
+                children:[
+                  {id:13,name:'商家操作手册',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00'},
+                  {id:14,name:'加盟协议',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00'},
+                ]
+              },
+              {id:10,name:'加盟协议',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00'},
+            ]
+          },
+          {
+            id:2,name:'新手指南',platform:1,sort:2,status:0,updator:'2020-01-05 20:00:00',
+            children:[
+              {id:11,name:'商家操作手册',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00'},
+              {id:12,name:'加盟协议',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00'},
+            ]
+          },
+        ];
+      // this.$refs.CyTable.findPage({ content: pageResult, total: 11 });
+    },
+    // 批量删除
+    handleDelete: function(data) {
+      if (data != null && data.params != null && data.params.length > 0) {
+        let ids = data.params.map(item => item.id).toString();
+
+        var params = {};
+        params.t = "sysUser";
+        params.ids = ids;
+        params.type= data.params.type;
+        var this_ = this;
+        this.utils.request.batchDeleteInfo(params, function(res) {
+          if (res.code == "0000") {
+            this_.$message({ message: "操作成功", type: "success" });
+            this_.findPage(null);
+          } else {
+            this_.$message({ message: "操作失败, " + res.msg, type: "error" });
+          }
+        });
+      }
+    },
+    handleAdd:function () {
+      this.dialogVisible = true;
+      this.operation = true;
+      this.dataForm= {
+          superCategoryID: "",
+          platform: "1",
+          name: "",
+          sort: "",
+          status: "0",
+      };
+    },
+    // 显示编辑界面
+    handleEdit: function(params) {
+      this.operation = false;
+      this.dialogVisible = true;
+    },
+    updateSort:function (row) {
+      console.log("111")
+    },
+
+    // 平台格式化
+    platformFormat: function(row, column, cellValue, index) {
+      if (Number(cellValue) == 0) {
+        return "微信H5";
+      }
+      return "微信小程序";
+    },
+    // 状态格式化，更加生效时间判断 1、生效中 2、未生效 3、已过期
+    statusFormat: function(row, column, cellValue, index) {
+      if (Number(cellValue) == 0) {
+        return "启用";
+      }
+      return "禁用";
+    },
+
+
+    reset: function() {
+      this.$refs["filters"].resetFields();
+      // this.$refs.CyTable.resetForm();
+      this.findPage();
+    },
+    countHeight(height) {
+      var winHeight =
+        document.body.clientHeight || document.documentElement.clientHeight;
+      if (height > winHeight * 0.7) {
+        height = winHeight * 0.7;
+      }
+      return height;
+    },
+    submitForm:function () {
+      this.$refs.dataForm.validate(valid => {});
+      this.dialogVisible = false;
+    }
+  },
+  mounted() {
+    this.findPage();
+  }
+};
+</script>
+
+<style scoped>
+</style>

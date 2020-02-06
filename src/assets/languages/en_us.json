@@ -8,10 +8,10 @@
         "projectRepo": "Project",
         "myMsg": "My Message",
         "config": "Config",
-        "backup": "Backup",  
-        "restore": "Restore",  
-        "backupRestore": "Backup Restore",  
-        "versionName": "Version",  
+        "backup": "Backup",
+        "restore": "Restore",
+        "backupRestore": "Backup Restore",
+        "versionName": "Version",
         "exit": "Exit"
     },
     "action": {
@@ -25,7 +25,11 @@
         "submit": "Submit",
         "comfirm": "Comfirm",
         "cancel": "Cancel",
-        "reset": "Reset"
+        "reset": "Reset",
+        "disable":"Disable",
+        "enable":"Enable",
+        "batchDisable":"Batch Disable",
+        "batchEnable":"Batch Enable"
     },
     "sys": {
         "sysMng": "System Manage",

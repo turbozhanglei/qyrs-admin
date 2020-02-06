@@ -7,6 +7,13 @@ import NotFound from '@/views/Error/404'
 import Home from '@/views/Home'
 import Intro from '@/views/Intro/Intro'
 import Generator from '@/views/Generator/Generator'
+import Member from '@/views/Sys/Member'
+import MemberInfo from '@/views/Sys/MemberInfo'
+import SensitiveWord from '@/views/Word/SensitiveWord'
+import NewsArticle from '@/views/News/NewsArticle'
+import ArticleAdd from '@/views/News/ArticleAdd'
+import NewsCategory from '@/views/News/NewsCategory'
+import ResourceReport from '@/views/Resource/ResourceReport'
 import api from '@/http/api'
 import store from '@/store'
 
@@ -25,9 +32,9 @@ const router = new Router({
       name: '首页',
       component: Home,
       children: [
-        { 
-          path: '', 
-          name: '首页', 
+        {
+          path: '',
+          name: '首页',
           component: Intro,
           meta: {
             icon: 'fa fa-home fa-lg',
@@ -50,6 +57,41 @@ const router = new Router({
       path: '/registe',
       name: '注册',
       component: Registe
+    },
+    {
+      path: '/sys/member',
+      name: '会员列表',
+      component: Member
+    },
+    {
+      path: '/sys/memberInfo',
+      name: '会员详情',
+      component: MemberInfo
+    },
+    {
+      path: '/word/ensitiveWord',
+      name: '敏感词库',
+      component: SensitiveWord
+    },
+    {
+      path: '/news/newsArticle',
+      name: '资讯列表',
+      component: NewsArticle
+    },
+    {
+      path: '/news/articleAdd',
+      name: '资讯列表',
+      component: ArticleAdd
+    },
+    {
+      path: '/news/newsCategory',
+      name: '资讯分类',
+      component: NewsCategory
+    },
+    {
+      path: '/resource/resourceReport',
+      name:'资源报表',
+      component:ResourceReport
     }
   ]
 })
@@ -67,7 +109,7 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else {
-    
+
     var isFilter = true;
     $.each(white_url,function(key, val){
         if(val == to.path){
@@ -84,7 +126,7 @@ router.beforeEach((to, from, next) => {
       if(isFilter){
           // 加载动态菜单和路由
          addDynamicMenuAndRoutes(userId, to, from)
-      } 
+      }
       next()
     }
   }
@@ -94,10 +136,10 @@ router.beforeEach((to, from, next) => {
 * 加载动态菜单和路由
 */
 function addDynamicMenuAndRoutes(userId, to, from) {
- 
+
   // 处理IFrame嵌套页面
-  handleIFrameUrl(to.path) 
-  
+  handleIFrameUrl(to.path)
+
   if(store.state.app.menuRouteLoaded) {
     console.log('动态菜单和路由已经存在.')
     return
@@ -113,7 +155,7 @@ function addDynamicMenuAndRoutes(userId, to, from) {
             let dynamicRoutes = addDynamicRoutes(response.data)
             // 处理静态组件绑定路由
             handleStaticComponent(router, dynamicRoutes)
-            router.addRoutes(router.options.routes) 
+            router.addRoutes(router.options.routes)
             console.log(dynamicRoutes)
             // 保存菜单树
             store.commit('setNavTree', response.data)
@@ -125,18 +167,18 @@ function addDynamicMenuAndRoutes(userId, to, from) {
 
    utils.request.findPermissions({userid:userId}, function(response){
       var code = response.code;
-      if(code == "0000"){ 
-        
+      if(code == "0000"){
+
         // 保存用户权限标识集合
         store.commit('setPerms', response.data)
-      
+
 
       }
    });
 
-  
+
 }
-   
+
 
 
 

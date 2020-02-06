@@ -2,36 +2,61 @@
   <div class="page-container">
     <!--工具栏-->
     <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-      <el-form :inline="true" :model="filters" :size="size" ref="filters">
-        <el-form-item prop="username">
-          <el-input v-model="filters.username" placeholder="用户名" clearable></el-input>
+      <el-form :inline="true" :model="filters" :size="size" ref="filters" :label-position="labelPosition">
+        <el-form-item prop="username" label="登录名">
+          <el-input v-model="filters.username" placeholder="登录名" clearable></el-input>
         </el-form-item>
-        <el-form-item>
-          <kt-button
-            icon="fa fa-search"
-            :label="$t('action.search')"
-            perms="sys:user:view"
-            type="primary"
-            @click="$refs.CyTable.findPageBeforeRestPages(filters)"
-          />
+        <el-form-item prop="realName" label="员工姓名">
+          <el-input v-model="filters.realName" placeholder="员工姓名" clearable></el-input>
         </el-form-item>
-        <el-form-item>
-          <kt-button
-            icon="fa fa-plus"
-            :label="$t('action.add')"
-            perms="sys:user:add"
-            type="primary"
-            @click="handleAdd"
-          />
+        <el-form-item prop="mobile" label="手机号">
+          <el-input v-model="filters.mobile" placeholder="手机号" clearable></el-input>
         </el-form-item>
-        <el-form-item>
-          <kt-button
-            icon="el-icon-refresh"
-            :label="$t('action.reset')"
-            type="primary"
-            @click="reset"
-          />
+        <el-form-item prop="roleName" label="角色名">
+          <el-input v-model="filters.roleName" placeholder="角色名" clearable></el-input>
         </el-form-item>
+        <el-form-item label="创建时间">
+          <el-date-picker
+            v-model="filters.startTime"
+            type="date"
+            placeholder="开始时间">
+          </el-date-picker>
+          至
+          <el-date-picker
+            v-model="filters.endTime"
+            type="date"
+            placeholder="结束时间">
+          </el-date-picker>
+        </el-form-item>
+
+        <el-row>
+          <el-form-item>
+            <kt-button
+              icon="fa fa-search"
+              :label="$t('action.search')"
+              perms="sys:user:view"
+              type="primary"
+              @click="$refs.CyTable.findPageBeforeRestPages(filters)"
+            />
+          </el-form-item>
+          <el-form-item>
+            <kt-button
+              icon="fa fa-plus"
+              :label="$t('action.add')"
+              perms="sys:user:add"
+              type="primary"
+              @click="handleAdd"
+            />
+          </el-form-item>
+          <el-form-item>
+            <kt-button
+              icon="el-icon-refresh"
+              :label="$t('action.reset')"
+              type="primary"
+              @click="reset"
+            />
+          </el-form-item>
+        </el-row>
       </el-form>
     </div>
     <div class="toolbar" style="float:right;padding-top:10px;padding-right:15px;">
@@ -47,9 +72,6 @@
             <el-tooltip content="列显示" placement="top">
               <el-button icon="fa fa-filter" @click="displayFilterColumnsDialog"></el-button>
             </el-tooltip>
-            <el-tooltip content="导出" placement="top">
-              <el-button icon="fa fa-file-excel-o" @click="downloadExcel"></el-button>
-            </el-tooltip>
           </el-button-group>
         </el-form-item>
       </el-form>
@@ -64,12 +86,15 @@
     <cy-table
       :height="350"
       permsEdit="sys:user:edit"
-      permsDelete="sys:user:delete"
       :data="pageResult"
       :columns="filterColumns"
       @findPage="findPage"
       @handleEdit="handleEdit"
-      @handleDelete="handleDelete"
+      @handleUpStatus="handleUpStatus"
+      :showBatchDelete="false"
+      :showDeleteOperation="false"
+      :showDisableOperation="true"
+      :showEnableOperation="true"
       ref="CyTable"
     ></cy-table>
     <!--新增编辑界面-->
@@ -88,19 +113,9 @@
         label-position="right"
       >
         <input type="password" style="display: none;" />
-        <el-form-item label="ID" prop="id" v-if="false">
-          <el-input v-model="dataForm.id" :disabled="true" auto-complete="off"></el-input>
+        <el-form-item label="登录名" prop="username" required>
+          <el-input v-model="dataForm.username" maxlength="30" show-word-limit placeholder="用户名为必填，1-30字符，不可为为纯符号和纯空格" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="dataForm.username" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="登录账号" prop="account">
-          <el-input v-model="dataForm.account" auto-complete="off"></el-input>
-        </el-form-item>
-        <!-- <el-form-item label="工号" prop="number">
-          <el-input v-model="dataForm.number" auto-complete="off" autocomplete="off"></el-input>
-        </el-form-item>-->
-
         <el-form-item style="position:fixed;buttom:-9999px">
           <el-input v-model="dataForm.password2" auto-complete="off"></el-input>
         </el-form-item>
@@ -108,9 +123,12 @@
           <el-input v-model="dataForm.password1" type="password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="dataForm.password" show-password auto-complete="off"></el-input>
+          <el-input v-model="dataForm.password" maxlength="16" placeholder="密码为必填，6-16位字符" show-password auto-complete="off" show-word-limit></el-input>
         </el-form-item>
-        <el-form-item label="机构" prop="deptname">
+        <el-form-item label="员工姓名" prop="realName">
+          <el-input v-model="dataForm.realName" maxlength="20" placeholder="员工姓名为0-20位字符" auto-complete="off" show-word-limit></el-input>
+        </el-form-item>
+        <!--<el-form-item label="机构" prop="deptname">
           <popup-tree-input
             :data="deptData"
             :props="deptTreeProps"
@@ -119,15 +137,21 @@
             :currentChangeHandle="deptTreeCurrentChangeHandle"
             filter_key="dept_name"
           ></popup-tree-input>
-        </el-form-item>
-        <!-- <el-form-item label="邮箱" prop="email">
-				<el-input v-model="dataForm.email" auto-complete="off"></el-input>
         </el-form-item>-->
-        <el-form-item label="手机" prop="moile">
-          <el-input v-model="dataForm.moile" auto-complete="off"></el-input>
+        <el-form-item label="手机号" prop="mobile">
+          <el-input
+            v-model="dataForm.mobile"
+            auto-complete="off"
+            maxlength="11"
+            placeholder="手机号为必填，11位纯数字"
+            oninput="value=value.replace(/[^\d]/g,'')"
+            show-word-limit
+          ></el-input>
         </el-form-item>
-
-        <el-form-item label="状态" prop="status" :hidden="operation">
+        <el-form-item label="备注" prop="desc">
+          <el-input type="textarea" v-model="dataForm.desc" maxlength="200" placeholder="备注为0-200个字符" show-word-limit auto-complete="off"></el-input>
+        </el-form-item>
+       <!-- <el-form-item label="状态" prop="status" :hidden="operation">
           <el-select v-model="dataForm.status" placeholder="状态">
             <el-option label="在职" :value="1"></el-option>
             <el-option label="离职" :value="0"></el-option>
@@ -153,7 +177,7 @@
               :value="item.id"
             ></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="角色" prop="userRoles">
           <el-select
             v-model="dataForm.userRoles"
@@ -200,11 +224,34 @@ export default {
     TableColumnFilterDialog
   },
   data() {
+    var checkUserName = (rule,value,callback) =>{
+      if (!value){
+        return callback(new Error('登录名为必填'));
+      }else if (value.length < 1 || value.length >30){
+        return callback(new Error('登录名为1-30字符'));
+      }else if (value == ' '){
+        return callback(new Error('登录名不可为纯空格'));
+      }else if (/\s/.test(value)){
+        return callback(new Error('登录名不可为纯空格'));
+      }else if(!(/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(value))){
+        return callback(new Error('登录名不可为纯符号'));
+      }else {
+        callback();
+      }
+
+    };
     return {
       size: "small",
+      labelPosition: 'left',
       filters: {
-        username: "",
-        t: "sysUser"
+        username: "",//登录名
+        t: "sysUser",
+        realName:"",//员工姓名
+        mobile:"",//手机号
+        roleName:"",//角色名
+        startTime:"",//开始日期
+        endTime:"",//结束日期
+        desc:"",//备注
       },
       columns: [],
       filterColumns: [],
@@ -215,7 +262,17 @@ export default {
       dialogVisible: false, // 新增编辑界面是否显示
       editLoading: false,
       dataFormRules: {
-        name: [{ required: true, message: "请输入用户名", trigger: "blur" }]
+        username: [
+          { validator:checkUserName, trigger: "blur" }
+          ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 6, max:16, message: "密码为6-16位字符",trigger:"blur"}
+          ],
+        mobile: [
+          { required: true, message: "请输入手机号", trigger: "blur" },
+          { min: 11, max: 11, message: "手机号为必填，11位纯数字", trigger: "blur" }
+        ],
       },
       // 新增编辑界面数据
       dataForm: {
@@ -225,14 +282,17 @@ export default {
         deptid: "",
         deptname: "",
         email: "",
-        moile: "",
+        mobile: "",
         status: 1,
         userRoles: [],
         account: "",
         pid: "",
         number: "",
-        username: ""
+        username: "",
+        realName:"",//员工姓名
+        desc:"",//备注
       },
+
       deptData: [],
       deptTreeProps: {
         label: "dept_name",
@@ -240,6 +300,20 @@ export default {
       },
       roles: [],
       options: [],
+      optionStatus:[
+        {
+          'label':'全部',
+          'value':''
+        },
+        {
+          'label':'启用',
+          'value':'0'
+        },
+        {
+          'label':'禁用',
+          'value':'1'
+        }
+      ],
       paswordTemp: ""
     };
   },
@@ -291,14 +365,15 @@ export default {
         }
       });
     },
-    // 批量删除
-    handleDelete: function(data) {
+    // 批量修改状态：禁用启用
+    handleUpStatus: function(data) {
       if (data != null && data.params != null && data.params.length > 0) {
         let ids = data.params.map(item => item.id).toString();
 
         var params = {};
         params.t = "sysUser";
         params.ids = ids;
+        params.type= data.params.type;
         var this_ = this;
         this.utils.request.batchDeleteInfo(params, function(res) {
           if (res.code == "0000") {
@@ -321,7 +396,7 @@ export default {
         deptid: "",
         deptname: "",
         email: "",
-        moile: "",
+        mobile: "",
         status: 1,
         userRoles: [1],
         account: "",
@@ -343,7 +418,7 @@ export default {
         deptid: params.row.deptid,
         deptname: params.row.deptname,
         email: params.row.email,
-        moile: params.row.moile,
+        mobile: params.row.mobile,
         status: 1,
         userRoles: [],
         account: params.row.account,
@@ -434,12 +509,12 @@ export default {
       this.dataForm.deptid = data.id;
       this.dataForm.deptname = data.dept_name;
     },
-    // 时间格式化
-    dateFormat: function(row, column, cellValue, index) {
-      if (Number(cellValue) == 1) {
-        return "在职";
+    // 状态格式化
+    statusFormat: function(row, column, cellValue, index) {
+      if (Number(cellValue) == 0) {
+        return "启用";
       }
-      return "离职";
+      return "禁用";
     },
     // 处理表格列过滤显示
     displayFilterColumnsDialog: function() {
@@ -453,19 +528,16 @@ export default {
     // 处理表格列过滤显示
     initColumns: function() {
       this.columns = [
-        { prop: "username", label: "用户名", minWidth: 120 },
-        { prop: "account", label: "登录账号", minWidth: 120 },
-        { prop: "deptname", label: "机构", minWidth: 120 },
-        { prop: "rolename", label: "角色", minWidth: 100 },
-        // { prop: "number", label: "工号", minWidth: 120 },
-        { prop: "moile", label: "手机", minWidth: 100 },
+        { prop: "username", label: "登录名", minWidth: 120 },
+        { prop: "realname", label: "员工姓名", minWidth: 120 },
+        { prop: "mobile", label: "手机号", minWidth: 100 },
         {
           prop: "status",
           label: "状态",
           minWidth: 70,
-          formatter: this.dateFormat
+          formatter: this.statusFormat
         },
-        { prop: "pname", label: "上级名称", minWidth: 120 }
+        { prop: "createtime", label: "创建时间", minWidth: 120 }
       ];
       var temp = [];
       $.each(this.columns, function(key, val) {
@@ -474,18 +546,6 @@ export default {
       this.filterColumns = temp;
     },
 
-    //列表下载
-    downloadExcel() {
-      this.$confirm("确定下载列表文件?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          exportExcel(this.pageResult.content, this.filterColumns);
-        })
-        .catch(() => {});
-    },
     reset: function() {
       this.$refs["filters"].resetFields();
       this.$refs.CyTable.resetForm();

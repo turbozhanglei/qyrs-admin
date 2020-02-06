@@ -16,7 +16,7 @@
       style="width:100%;"
       :header-cell-style="{ 'color': '#FFF','background-color': 'rgb(20, 136, 154)'}"
     >
-      <el-table-column type="selection" width="50" v-if="showBatchDelete" fixed="left"></el-table-column>
+      <el-table-column type="selection" width="50" v-if="showBatchDelete || showBatchDisableOperation || showBatchEnableOperation" fixed="left"></el-table-column>
       <el-table-column type="index" width="50" v-if="showIndex" fixed="left"></el-table-column>
 
       <template v-for="(column,index) in columns">
@@ -80,6 +80,22 @@
             @click="handleDelete(scope.$index, scope.row)"
           />
           <kt-button
+            :label="$t('action.enable')"
+            :show="showEnableOperation && scope.row.status == 1"
+            :perms="permsEnable"
+            :size="size"
+            type="success"
+            @click="handleUpStatus(scope.row,0)"
+          />
+          <kt-button
+            :label="$t('action.disable')"
+            :show="showDisableOperation  && scope.row.status == 0"
+            :perms="permsDisable"
+            :size="size"
+            type="danger"
+            @click="handleUpStatus(scope.row,1)"
+          />
+          <kt-button
             icon="fa fa-search"
             :label="$t('action.detail')"
             :show="showDetailOperation"
@@ -101,6 +117,26 @@
         :disabled="this.selections.length===0"
         style="float:left;"
         v-if="showBatchDelete & showOperation"
+      />
+      <kt-button
+        :label="$t('action.batchDisable')"
+        :perms="permsDisable"
+        :size="size"
+        type="danger"
+        @click="handleBatchUpStatus(1)"
+        :disabled="this.selections.length===0"
+        style="float:left;"
+        v-if="showBatchDisableOperation & showOperation"
+      />
+      <kt-button
+        :label="$t('action.batchEnable')"
+        :perms="permsEnable"
+        :size="size"
+        type="success"
+        @click="handleBatchUpStatus(0)"
+        :disabled="this.selections.length===0"
+        style="float:left;"
+        v-if="showBatchEnableOperation & showOperation"
       />
       <el-pagination
         layout="total, prev, pager, next, jumper,sizes"
@@ -131,6 +167,8 @@ export default {
     data: Object, // 表格分页数据
     permsEdit: String, // 编辑权限标识
     permsDelete: String, // 删除权限标识
+    permsDisable: String, // 禁用权限标识
+    permsEnable: String, // 启用权限标识
     permsDetail: String, // 详情权限标识
     permsEditLable: String,
     size: {
@@ -188,6 +226,26 @@ export default {
       type: Boolean,
       default: true
     },
+    // 是否显示禁用
+    showDisableOperation: {
+      type: Boolean,
+      default: false
+    },
+    //是否显示启用
+    showEnableOperation: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示批量禁用
+    showBatchDisableOperation: {
+      type: Boolean,
+      default: false
+    },
+    //是否显示批量启用
+    showBatchEnableOperation: {
+      type: Boolean,
+      default: false
+    },
     showEditOperation: {
       // 是否显示操作组件
       type: Boolean,
@@ -231,10 +289,19 @@ export default {
         if (res.rows == null) {
           res.rows = [];
         }
-        this_.content = res.rows;
-        this_.totalSize = Number(res.total);
+        // this_.content = res.rows;
+        // this_.totalSize = Number(res.total);
+        this_.content = filters.content;
+        this_.totalSize = Number(filters.total);
       });
+
+
     },
+    /*findPage: function (res) {
+      this.content = res.content;
+      this.totalSize = Number(res.total);
+      this.loading = false
+    },*/
 
     // 分页查询
     findPageBeforeRestPages: function(filters) {
@@ -315,6 +382,34 @@ export default {
     handleDetail: function(index, row) {
       this.$emit("handleDetail", { index: index, row: row });
     },
+    //修改状态：禁用启用
+    handleUpStatus:function (row,type) {
+      this.upStatus(row.id,type)
+    },
+    //批量修改状态：禁用启用
+    handleBatchUpStatus:function (type) {
+      let ids = this.selections.map(item => item.id).toString();
+      this.upStatus(ids,type);
+    },
+    //修改状态：禁用启用
+    upStatus:function (ids,type) {
+      let statusTxt = "启用";
+      if (type && Number(type) == 1){
+        statusTxt = "禁用";
+      }
+      this.$confirm("确认" + statusTxt +"选中记录吗？", "提示", {
+        type: "warning"
+      })
+        .then(() => {
+          let params = [];
+          let idArray = (ids + "").split(",");
+          for (var i = 0; i < idArray.length; i++) {
+            params.push({ id: idArray[i] });
+          }
+          this.$emit("handleUpStatus", { params: params,type:type});
+        })
+        .catch(() => {});
+    },
 
     // 删除操作
     delete: function(ids) {
@@ -380,7 +475,7 @@ export default {
   /deep/  .el-table .sort-caret.descending {
   border-top-color: #FFF;
   bottom: 7px;
-} 
+}
 
  /deep/  .el-table .ascending .sort-caret.ascending {
     border-bottom-color: rgb(20, 136, 154);
@@ -390,15 +485,15 @@ export default {
     border-top-color: rgb(20, 136, 154);
 }
 
- 
-/* 
+
+/*
 /deep/ .el-table__body .el-table__row.hover-row td{
 	   	 background: #ffdd40!important
 	}  */
-/* 
+/*
 /deep/ .el-table__body .el-table__row.hover-row td{
 	   	color: rgb(255, 255, 255); background-color: rgb(64, 158, 255);
-	} 
+	}
 
 
  /deep/ .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
