@@ -16,7 +16,7 @@
       style="width:100%;"
       :header-cell-style="{ 'color': '#FFF','background-color': 'rgb(20, 136, 154)'}"
     >
-      <el-table-column type="selection" width="50" v-if="showBatchDelete || showBatchDisableOperation || showBatchEnableOperation" fixed="left"></el-table-column>
+      <el-table-column type="selection" width="50" v-if="showBatchDelete || showBatchDisableOperation || showBatchEnableOperation || showBatchAuditOperation || showBatchAuditFailOperation" fixed="left"></el-table-column>
       <el-table-column type="index" width="50" v-if="showIndex" fixed="left"></el-table-column>
 
       <template v-for="(column,index) in columns">
@@ -54,7 +54,7 @@
 
       <el-table-column
         :label="$t('action.operation')"
-        width="185"
+        width="220"
         fixed="right"
         v-if="showOperation"
         header-align="center"
@@ -85,23 +85,57 @@
             :perms="permsEnable"
             :size="size"
             type="success"
-            @click="handleUpStatus(scope.row,0)"
+            @click="handleUpStatus(scope.row,1,0)"
           />
           <kt-button
             :label="$t('action.disable')"
             :show="showDisableOperation  && scope.row.status == 0"
             :perms="permsDisable"
             :size="size"
-            type="danger"
-            @click="handleUpStatus(scope.row,1)"
+            type="info"
+            @click="handleUpStatus(scope.row,1,1)"
           />
           <kt-button
             icon="fa fa-search"
             :label="$t('action.detail')"
             :show="showDetailOperation"
             :size="size"
-            type="success"
+            type="primary"
             @click="handleDetail(scope.$index, scope.row)"
+          />
+          <kt-button
+            :label="$t('action.audit')"
+            :show="showAuditOperation  && (scope.row.status == 0 || scope.row.status == 2 || scope.row.status == 4)"
+            :perms="permsAudit"
+            :size="size"
+            type="success"
+            @click="handleUpStatus(scope.row,2,3)"
+          />
+          <kt-button
+            :label="$t('action.auditFail')"
+            :show="showAuditFailOperation  && (scope.row.status == 1 || scope.row.status == 3 || scope.row.status == 0)"
+            :perms="permsAuditFail"
+            :size="size"
+            type="danger"
+            @click="handleUpStatus(scope.row,2,4)"
+          />
+          <kt-button
+            :label="$t('action.sticky')"
+            :show="showStickyOperation  && scope.row.sticky == 0"
+            :perms="permsSticky"
+            :size="size"
+            type="success"
+            @click="handleSticky(scope.row,1)"
+            style="margin-top: 10px"
+          />
+          <kt-button
+            :label="$t('action.cancelSticky')"
+            :show="showCancelStickyOperation  && scope.row.sticky == 1"
+            :perms="permsCancelSticky"
+            :size="size"
+            type="info"
+            @click="handleSticky(scope.row,0)"
+            style="margin-top: 10px"
           />
         </template>
       </el-table-column>
@@ -123,7 +157,7 @@
         :perms="permsDisable"
         :size="size"
         type="danger"
-        @click="handleBatchUpStatus(1)"
+        @click="handleBatchUpStatus(1,1)"
         :disabled="this.selections.length===0"
         style="float:left;"
         v-if="showBatchDisableOperation & showOperation"
@@ -133,10 +167,30 @@
         :perms="permsEnable"
         :size="size"
         type="success"
-        @click="handleBatchUpStatus(0)"
+        @click="handleBatchUpStatus(1,0)"
         :disabled="this.selections.length===0"
         style="float:left;"
         v-if="showBatchEnableOperation & showOperation"
+      />
+      <kt-button
+        :label="$t('action.batchAudit')"
+        :perms="permsAudit"
+        :size="size"
+        type="success"
+        @click="handleBatchUpStatus(2,3)"
+        :disabled="this.selections.length===0"
+        style="float:left;"
+        v-if="showBatchAuditOperation & showOperation"
+      />
+      <kt-button
+        :label="$t('action.batchAuditFail')"
+        :perms="permsAuditFail"
+        :size="size"
+        type="danger"
+        @click="handleBatchUpStatus(2,4)"
+        :disabled="this.selections.length===0"
+        style="float:left;"
+        v-if="showBatchAuditFailOperation & showOperation"
       />
       <el-pagination
         layout="total, prev, pager, next, jumper,sizes"
@@ -169,6 +223,10 @@ export default {
     permsDelete: String, // 删除权限标识
     permsDisable: String, // 禁用权限标识
     permsEnable: String, // 启用权限标识
+    permsSticky: String, // 置顶权限标识
+    permsCancelSticky: String, // 取消置顶权限标识
+    permsAudit: String, // 审核通过权限标识
+    permsAuditFail: String, // 审核不通过权限标识
     permsDetail: String, // 详情权限标识
     permsEditLable: String,
     size: {
@@ -225,6 +283,36 @@ export default {
       // 是否显示操作组件
       type: Boolean,
       default: true
+    },
+    // 是否显示审核通过
+    showAuditOperation: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示审核不通过
+    showAuditFailOperation: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示批量审核通过
+    showBatchAuditOperation: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示批量审核不通过
+    showBatchAuditFailOperation: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示置顶
+    showStickyOperation: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示取消置顶
+    showCancelStickyOperation: {
+      type: Boolean,
+      default: false
     },
     // 是否显示禁用
     showDisableOperation: {
@@ -382,20 +470,29 @@ export default {
     handleDetail: function(index, row) {
       this.$emit("handleDetail", { index: index, row: row });
     },
+    handleSticky: function(row, type) {
+      this.$emit("handleSticky", { row: row,type:type });
+    },
     //修改状态：禁用启用
-    handleUpStatus:function (row,type) {
-      this.upStatus(row.id,type)
+    handleUpStatus:function (row,type,value) {
+      this.upStatus(row.id,type,value)
     },
     //批量修改状态：禁用启用
-    handleBatchUpStatus:function (type) {
+    handleBatchUpStatus:function (type,value) {
       let ids = this.selections.map(item => item.id).toString();
-      this.upStatus(ids,type);
+      this.upStatus(ids,type,value);
     },
     //修改状态：禁用启用
-    upStatus:function (ids,type) {
+    upStatus:function (ids,type,value) {
       let statusTxt = "启用";
-      if (type && Number(type) == 1){
+      if (type && Number(type) == 1 && Number(value) == 1){
         statusTxt = "禁用";
+      }else if (Number(type) == 1 && Number(value) == 0){
+        statusTxt = "启用";
+      }else if (Number(type) == 2 && Number(value) == 3){
+        statusTxt = "审核通过";
+      }else if (Number(type) == 2 && Number(value) == 4){
+        statusTxt = "审核不通过";
       }
       this.$confirm("确认" + statusTxt +"选中记录吗？", "提示", {
         type: "warning"
@@ -406,7 +503,7 @@ export default {
           for (var i = 0; i < idArray.length; i++) {
             params.push({ id: idArray[i] });
           }
-          this.$emit("handleUpStatus", { params: params,type:type});
+          this.$emit("handleUpStatus", { params: params,type:value});
         })
         .catch(() => {});
     },

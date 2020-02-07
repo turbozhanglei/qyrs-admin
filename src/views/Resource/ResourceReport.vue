@@ -16,19 +16,19 @@
             placeholder="结束时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item prop="">
+        <el-form-item prop="yesterday">
           <el-button type="primary"
                      v-model="filters.yesterday"
                      @click="$refs.CyTable.findPageBeforeRestPages(filters)"
                      plain>昨日</el-button>
         </el-form-item>
-        <el-form-item prop="">
+        <el-form-item prop="weeks">
           <el-button type="primary"
                      v-model="filters.weeks"
                      @click="$refs.CyTable.findPageBeforeRestPages(filters)"
                      plain>近7天</el-button>
         </el-form-item>
-        <el-form-item prop="">
+        <el-form-item prop="months">
           <el-button type="primary"
                      v-model="filters.months"
                      @click="$refs.CyTable.findPageBeforeRestPages(filters)"

@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <!--工具栏-->
-    <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
+    <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;width: 100%">
       <el-form :model="filters" ref="filters" label-width="80px">
         <el-row :gutter="80">
           <el-col :span="8">
@@ -21,7 +21,7 @@
             </div></el-col>
           <el-col :span="8">
             <div class="grid-content bg-purple">
-              <el-form-item prop="mobile" label="粉丝数">
+              <el-form-item prop="mobile" label="粉丝数:">
                 <span>500</span>
               </el-form-item>
             </div>
@@ -45,7 +45,7 @@
             </div></el-col>
           <el-col :span="8">
             <div class="grid-content bg-purple">
-              <el-form-item prop="mobile" label="公司地址">
+              <el-form-item prop="mobile" label="公司地址:">
                 <span>上海上海市浦东新区春申大厦</span>
               </el-form-item>
             </div>
@@ -67,7 +67,7 @@
             </div></el-col>
           <el-col :span="8">
             <div class="grid-content bg-purple">
-              <el-form-item prop="mobile" label="注册来源">
+              <el-form-item prop="mobile" label="注册来源:">
                 <span>小程序</span>
               </el-form-item>
             </div>

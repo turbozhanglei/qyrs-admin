@@ -14,6 +14,8 @@ import NewsArticle from '@/views/News/NewsArticle'
 import ArticleAdd from '@/views/News/ArticleAdd'
 import NewsCategory from '@/views/News/NewsCategory'
 import ResourceReport from '@/views/Resource/ResourceReport'
+import ResourceList from '@/views/Resource/ResourceList'
+import ResourceInfo from '@/views/Resource/ResourceInfo'
 import api from '@/http/api'
 import store from '@/store'
 
@@ -92,6 +94,16 @@ const router = new Router({
       path: '/resource/resourceReport',
       name:'资源报表',
       component:ResourceReport
+    },
+    {
+      path: '/resource/resourceList',
+      name:'资源信息列表',
+      component:ResourceList
+    },
+    {
+      path: '/resource/resourceInfo',
+      name:'资源信息详情',
+      component:ResourceInfo
     }
   ]
 })

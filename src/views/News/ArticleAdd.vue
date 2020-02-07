@@ -95,7 +95,7 @@
         data(){
           return {
             size: "small",
-            labelPosition: 'left',
+            labelPosition: 'right',
             dataFormRules: {
               title: [{ required: true, message: "请输入文章标题", trigger: "blur" }],
               categoryId: [{ required: true, message: "请选择所属分类", trigger: "blur" }],

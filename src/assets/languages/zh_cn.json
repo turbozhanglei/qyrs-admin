@@ -37,7 +37,13 @@
         "disable":"禁用",
         "enable":"启用",
         "batchDisable":"批量禁用",
-        "batchEnable":"批量启用"
+        "batchEnable":"批量启用",
+        "sticky":"置顶",
+        "cancelSticky":"取消置顶",
+        "audit":"审核通过",
+        "auditFail":"审核不通过",
+        "batchAudit":"批量审核通过",
+        "batchAuditFail":"批量审核不通过"
     },
     "sys": {
         "sysMng": "系统管理",
