@@ -16,6 +16,8 @@ import NewsCategory from '@/views/News/NewsCategory'
 import ResourceReport from '@/views/Resource/ResourceReport'
 import ResourceList from '@/views/Resource/ResourceList'
 import ResourceInfo from '@/views/Resource/ResourceInfo'
+import AdvertList from '@/views/Advert/AdvertList'
+import AdvertAdd from '@/views/Advert/AdvertAdd'
 import api from '@/http/api'
 import store from '@/store'
 
@@ -104,6 +106,16 @@ const router = new Router({
       path: '/resource/resourceInfo',
       name:'资源信息详情',
       component:ResourceInfo
+    },
+    {
+      path: '/advert/advertList',
+      name:'广告位列表',
+      component:AdvertList
+    },
+    {
+      path: '/advert/advertAdd',
+      name:'广告位列表',
+      component:AdvertAdd
     }
   ]
 })
