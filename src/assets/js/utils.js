@@ -4,8 +4,8 @@ import router from '../../router'
 import { Message } from 'element-ui'
 
 
-const host='http://39.107.86.181:8092/wms-rest/';
-//const host = 'http://localhost:8092/wms-rest/';
+//const host='http://39.107.86.181:8092/wms-rest/';
+const host = 'http://localhost:8092/gy-rest/';
 const PIC_URL_PRE = 'F:/usr/local/static/imgs';
 
 export default {
