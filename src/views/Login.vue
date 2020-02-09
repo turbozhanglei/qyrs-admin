@@ -19,8 +19,8 @@
       <!-- <lang-selector class="lang-selector"></lang-selector>    -->
     </span>
     <h2 class="title" style="padding-left:22px;">系统登录</h2>
-    <el-form-item prop="account">
-      <el-input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号"></el-input>
+    <el-form-item prop="username">
+      <el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
     <el-form-item prop="password">
       <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
@@ -75,13 +75,13 @@ export default {
     return {
       loading: false,
       loginForm: {
-        account: "admin",
+        username: "admin",
         password: "admin",
         captcha: "",
         src: ""
       },
       fieldRules: {
-        account: [{ required: true, message: "请输入账号", trigger: "blur" }],
+        username: [{ required: true, message: "请输入账号", trigger: "blur" }],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
         // ,
         // captcha: [
@@ -104,12 +104,12 @@ export default {
     login() {
       var this_ = this;
       var queryParam = {
-        account: this.loginForm.account,
+        username: this.loginForm.username,
         password: this.loginForm.password,
         verifyCode: this.loginForm.captcha
       };
 
-      if (this.utils.isNull(this.loginForm.account)) {
+      if (this.utils.isNull(this.loginForm.username)) {
         return;
       }
 
@@ -136,7 +136,7 @@ export default {
           localStorage.setItem("token", data.token);
           localStorage.setItem("id", data.id);
           localStorage.setItem("isLogin", "true");
-          localStorage.setItem("user", data.account);
+          localStorage.setItem("user", data.username);
 
           if (data.customer != null && data.customer != "") {
             localStorage.setItem("customer_id", data.customer.id);
@@ -144,7 +144,7 @@ export default {
             localStorage.removeItem("customer_id");
           }
 
-          sessionStorage.setItem("user", data.account); // 保存用户到本地会话
+          sessionStorage.setItem("user", data.username); // 保存用户到本地会话
 
           this_.$store.commit("menuRouteLoaded", false); // 要求重新加载导航菜单
           this_.$router.push("/"); // 登录成功，跳转到主页
