@@ -18,6 +18,8 @@ import ResourceList from '@/views/Resource/ResourceList'
 import ResourceInfo from '@/views/Resource/ResourceInfo'
 import AdvertList from '@/views/Advert/AdvertList'
 import AdvertAdd from '@/views/Advert/AdvertAdd'
+import AdvertSource from '@/views/Advert/AdvertSource'
+import AdvertSourceAdd from '@/views/Advert/AdvertSourceAdd'
 import api from '@/http/api'
 import store from '@/store'
 
@@ -114,8 +116,19 @@ const router = new Router({
     },
     {
       path: '/advert/advertAdd',
-      name:'广告位列表',
+      name:'广告位新增',
       component:AdvertAdd
+    },
+    {
+      path: '/advert/advertSource',
+      name:'广告位新增',
+      component:AdvertSource
+    }
+    ,
+    {
+      path: '/advert/advertSourceAdd',
+      name:'广告位新增',
+      component:AdvertSourceAdd
     }
   ]
 })
