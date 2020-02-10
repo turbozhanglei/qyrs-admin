@@ -6,17 +6,17 @@
         <el-row :gutter="80">
           <el-col :span="8">
             <div class="grid-content bg-purple">
-              <el-form-item prop="nickname" label="头像:">
+              <el-form-item prop="head_pic" label="头像:">
                 <div class="block">
-                  <el-avatar :size="50" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
+                  <el-avatar :size="50" :src="filters.head_pic"></el-avatar>
                 </div>
               </el-form-item>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="grid-content bg-purple">
-              <el-form-item prop="userId" label="性别:">
-                <span>男</span>
+              <el-form-item prop="sex" label="性别:">
+                <span>{{filters.sec}}</span>
               </el-form-item>
             </div></el-col>
           <el-col :span="8">
@@ -30,23 +30,23 @@
         <el-row :gutter="80">
           <el-col :span="8">
             <div class="grid-content bg-purple">
-              <el-form-item prop="nickname" label="手机号:">
+              <el-form-item prop="mobile" label="手机号:">
                 <div class="block">
-                  <span>15298798827</span>
+                  <span>{{filters.mobile}}</span>
                 </div>
               </el-form-item>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="grid-content bg-purple">
-              <el-form-item prop="userId" label="公司名称:">
-                <span>国烨集团</span>
+              <el-form-item prop="company_name" label="公司名称:">
+                <span>{{filters.company_name}}</span>
               </el-form-item>
             </div></el-col>
           <el-col :span="8">
             <div class="grid-content bg-purple">
               <el-form-item prop="mobile" label="公司地址:">
-                <span>上海上海市浦东新区春申大厦</span>
+                <span>{{filters.mobile}}</span>
               </el-form-item>
             </div>
           </el-col>
@@ -55,20 +55,20 @@
           <el-col :span="8">
             <div class="grid-content bg-purple">
               <el-form-item prop="nickname" label="昵称:">
-                <span>昵称昵称</span>
+                <span>{{filters.nickname}}</span>
               </el-form-item>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="grid-content bg-purple">
               <el-form-item prop="userId" label="用户ID:">
-                <span>16245345435345</span>
+                <span>{{filters.id}}</span>
               </el-form-item>
             </div></el-col>
           <el-col :span="8">
             <div class="grid-content bg-purple">
-              <el-form-item prop="mobile" label="注册来源:">
-                <span>小程序</span>
+              <el-form-item prop="source" label="注册来源:">
+                <span>{{filters.sources}}</span>
               </el-form-item>
             </div>
           </el-col>
@@ -104,12 +104,26 @@ export default {
         startTime:"",//开始日期
         endTime:"",//结束日期
       },
-      userId: this.$route.query.categoryId,
+      userId: this.$route.query.userId,
     };
   },
   methods: {
+    
+    queryInfo(){
+      let this_=this
+      let query={};
+      query.id=this.userId
+      query.t='sysUser';
+      this.utils.request.queryUserInfo(query,function(res){
+         this_.filters=res.data
+       })
+      console.log(this.userId);
+    }
+    
+    
   },
   mounted() {
+    this.queryInfo()
   }
 };
 </script>

@@ -121,13 +121,13 @@ export default {
       size: "small",
       labelPosition: 'left',
       filters: {
-        nickname: "",//会员昵称
-        t: "sysUser",
-        userId:"",//用户id
-        mobile:"",//手机号
-        userStatus:"",//用户状态
-        startTime:"",//开始日期
-        endTime:"",//结束日期
+        // nickname: "",//会员昵称
+        // t: "sysUser",
+        // id:"",//用户id
+        // mobile:"",//手机号
+        // userStatus:"",//用户状态
+        // startTime:"",//开始日期
+        // endTime:"",//结束日期
       },
       columns: [],
       filterColumns: [],
@@ -158,40 +158,11 @@ export default {
     };
   },
   methods: {
-    remoteMethod: function(query) {
-      if (query !== "") {
-        //查询后台客户信息
-        var search = {};
-        search.t = "sysUser";
-        search.username = query;
-        var this_ = this;
-        this.utils.request.queryUserList(search, function(res) {
-          this_.options = res.data;
-        });
-      } else {
-        this.options = [];
-      }
-    },
-    choseCustomer: function(selVal) {
-      var temp = this.options;
-      var this_ = this;
-
-      if (selVal == "" || selVal == null) {
-        this_.dataForm.manager_name = "";
-        this_.dataForm.manager_mobile = "";
-      } else {
-        $.each(temp, function(key, val) {
-          if (val.id == selVal) {
-            this_.dataForm.manager_name = val.manager_name;
-            this_.dataForm.manager_mobile = val.manager_mobile;
-            return;
-          }
-        });
-      }
-    },
     // 获取分页数据
     findPage: function(data) {
+      this.filters.t = "sysUser";
       this.$refs.CyTable.findPage(this.filters);
+      console.log(this.filters)
     },
     // 加载用户角色信息
     findUserRoles: function() {
@@ -205,16 +176,21 @@ export default {
         }
       });
     },
-    // 批量删除
+    // 启用停用
     handleUpStatus: function(data) {
+      
       if (data != null && data.params != null && data.params.length > 0) {
         let ids = data.params.map(item => item.id).toString();
-
         var params = {};
         params.t = "sysUser";
         params.ids = ids;
+        if(data.type==1){
+          params.status=1;
+        }else if(data.type==0){
+          params.status=0;
+        }
         var this_ = this;
-        this.utils.request.batchDeleteInfo(params, function(res) {
+        this.utils.request.updateUserInfo(params, function(res) {
           if (res.code == "0000") {
             this_.$message({ message: "操作成功", type: "success" });
             this_.findPage(null);
@@ -227,17 +203,7 @@ export default {
     handleDetail:function (params) {
       this.$router.push({path:"/sys/memberInfo",query:{userId:params.row.id}});
     },
-    // 获取部门列表
-    findDeptTree: function() {
-      var this_ = this;
-
-      this.utils.request.findDeptTree({}, function(res) {
-        if (res.code == "0000") {
-          this_.deptData = res.data;
-        } else {
-        }
-      });
-    },
+   
     // 菜单树选中
     deptTreeCurrentChangeHandle(data, node) {
       console.log(data);
@@ -251,6 +217,13 @@ export default {
       }
       return "禁用";
     },
+    source:function(row,column,cellValue,index){
+       if(Number(cellValue) == 1){
+         return "小程序";
+       }else{
+         return "后台";
+       }
+    },
     // 处理表格列过滤显示
     displayFilterColumnsDialog: function() {
       this.$refs.tableColumnFilterDialog.setDialogVisible(true);
@@ -263,7 +236,8 @@ export default {
     // 处理表格列过滤显示
     initColumns: function() {
       this.columns = [
-        { prop: "userid", label: "用户ID", minWidth: 120 },
+        { prop: "id", label: "用户ID", minWidth: 120 },
+        { prop: "nickname", label: "会员昵称", minWidth: 120 },
         { prop: "username", label: "用户名", minWidth: 120 },
         { prop: "mobile", label: "手机号", minWidth: 100 },
         {
@@ -272,9 +246,9 @@ export default {
           minWidth: 70,
           formatter: this.statusFormat
         },
-        { prop: "source", label: "注册来源", minWidth: 100 },
+        { prop: "source", label: "注册来源", minWidth: 100 ,formatter: this.source},
         { prop: "fans", label: "粉丝数", minWidth: 100 },
-        { prop: "createtime", label: "注册时间", minWidth: 120 }
+        { prop: "create_time", label: "注册时间", minWidth: 120 }
       ];
       var temp = [];
       $.each(this.columns, function(key, val) {
@@ -290,9 +264,8 @@ export default {
     }
   },
   mounted() {
-    this.findDeptTree();
     this.initColumns();
-    this.findUserRoles();
+    this.findPage();
   }
 };
 </script>

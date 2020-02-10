@@ -214,6 +214,9 @@ export default {
     editNotorderoutInfo: function (data, callback) { //   编辑信息
       this.requestUrl(data, 'return/saveNotorderout', callback);
     },
+    updateUserInfo: function (data, callback) { //   编辑信息
+      this.requestUrl(data, 'suser/updateUserInfo', callback);
+    },
 
     checkPhoneSystem() {
       var u = navigator.userAgent,

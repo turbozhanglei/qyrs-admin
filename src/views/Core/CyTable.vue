@@ -377,10 +377,10 @@ export default {
         if (res.rows == null) {
           res.rows = [];
         }
-        // this_.content = res.rows;
-        // this_.totalSize = Number(res.total);
-        this_.content = filters.content;
-        this_.totalSize = Number(filters.total);
+         this_.content = res.rows;
+         this_.totalSize = Number(res.total);
+        //this_.content = filters.content;
+       // this_.totalSize = Number(filters.total);
       });
 
 
