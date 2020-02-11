@@ -18,7 +18,7 @@ export default {
         'sign': 'qazwsxedc'
       }
       if (data != null && data != '') {
-        for (var key in data) {  
+        for (var key in data) {
           if (data[key] == null || data[key] == undefined || (jQuery.type(data[key]) === "string" && data[key] == "")) {
 
           } else {
@@ -216,6 +216,12 @@ export default {
     },
     updateUserInfo: function (data, callback) { //   编辑信息
       this.requestUrl(data, 'suser/updateUserInfo', callback);
+    },
+    getWordInfo: function (data, callback) { //获取敏感词信息
+      this.requestUrl(data, 'word/getInfo', callback);
+    },
+    saveWordInfo:function (data,callback) {//保存或修改敏感词
+      this.requestUrl(data,'word/saveInfo',callback)
     },
 
     checkPhoneSystem() {

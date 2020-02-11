@@ -3,7 +3,7 @@
     <!--工具栏-->
     <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
       <el-form :inline="true" :model="filters" :size="size" ref="filters" :label-position="labelPosition">
-        <el-form-item prop="nickname" label="敏感词：">
+        <el-form-item prop="word" label="敏感词：">
           <el-input v-model="filters.word" placeholder="敏感词" clearable></el-input>
         </el-form-item>
         <el-row>
@@ -13,7 +13,7 @@
               :label="$t('action.search')"
               perms="sys:user:view"
               type="primary"
-              @click="$refs.CyTable.findPageBeforeRestPages(filters)"
+              @click="findPage(filters)"
             />
           </el-form-item>
           <el-form-item>
@@ -35,7 +35,9 @@
     <el-table
       :data="tableData"
       style="width: 100%"
-      :header-cell-style="{ 'color': '#FFF','background-color': 'rgb(20, 136, 154)'}">
+      :header-cell-style="{ 'color': '#FFF','background-color': 'rgb(20, 136, 154)'}"
+      v-loading="loading"
+      element-loading-text="$t('action.loading')">
       <el-table-column
         label="敏感词库"
         min-width="280"
@@ -74,29 +76,65 @@
         size: "small",
         labelPosition: 'left',
         filters: {
-          word: "",//会员昵称
-          t: "sysUser",
+          word: "",//敏感词
         },
-        tableData: [{
-          word: '王小虎',
-        }]
+        tableData: [],
+        loading:false,
       };
     },
     methods: {
       // 获取分页数据
       findPage: function(data) {
-        this.$refs.CyTable.findPage(this.filters);
+        let this_= this;
+        this_.loading = true;
+        this.utils.request.getWordInfo(this.filters, function(data) {
+          if (data && data.data && data.code == '0000'){
+            this_.tableData = [];
+            this_.tableData.push(data.data);
+          }else {
+            if (!this_.filters.word){
+              this_.tableData = [{word:""}];
+            }else {
+              this_.tableData = [];
+            }
+          }
+          this_.loading = false;
+        });
       },
       reset: function() {
         this.$refs["filters"].resetFields();
-        this.$refs.CyTable.resetForm();
         this.findPage();
       },
       handleEdit(index, row) {
-        console.log(index, row);
+        let word = row.word,
+        this_=this;
+        if (!word || word == ''){
+          this_.$message({
+            message: '请输入敏感词!',
+            type: 'warning'
+          });
+          return;
+        }else if (word.indexOf("，") > 0){
+          this_.$message.error('请输入英文逗号!');
+          return;
+        }else {
+          this.utils.request.saveWordInfo(row, function(data) {
+            if (data && data.code == '0000'){
+              this_.findPage();
+              this_.$message({
+                message: '敏感词修改成功!',
+                type: 'success'
+              });
+            }else {
+              this_.$message.error(data.msg || '敏感词修改失败!');
+            }
+          });
+        }
+
       },
     },
     mounted() {
+      this.findPage();
     }
   };
 </script>
