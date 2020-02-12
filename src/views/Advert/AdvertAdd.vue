@@ -15,7 +15,7 @@
           <el-input v-model="dataForm.name" max-length="32" show-word-limit placeholder="广告位名称不能位空,不能包含特殊字符,限制在32个字符以内" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="广告位页面设置" prop="pageType" required>
-          <el-select v-model="dataForm.pageType" placeholder="广告位页面">
+          <el-select v-model="dataForm.pageType" placeholder="广告位页面设置">
             <el-option label="全部" value=""></el-option>
             <el-option label="首页" value="1"></el-option>
           </el-select>
@@ -23,14 +23,14 @@
         <el-form-item label="广告位标识" prop="code" required>
           <el-input v-model="dataForm.code" placeholder="广告位唯一的标识符，随意修改后可能导致广告位广告不生效" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="素材类型" prop="type" required>
-          <el-checkbox-group v-model="dataForm.type">
+        <el-form-item label="素材类型" prop="adType" required>
+          <el-checkbox-group v-model="dataForm.adType">
             <el-checkbox label="0">文字</el-checkbox>
             <el-checkbox label="1">图片
-              <el-form-item v-if="dataForm.type && dataForm.type.length>0 && (dataForm.type[0] ==1 ||dataForm.type[1] ==1 )" label="图片高度" prop="height">
+              <el-form-item v-if="dataForm.adType && dataForm.adType.length>0 && (dataForm.adType[0] ==1 ||dataForm.adType[1] ==1 )" label="图片高度" prop="height">
                 <el-input v-model="dataForm.height" auto-complete="off"></el-input>PX
               </el-form-item>
-              <el-form-item v-if="dataForm.type && dataForm.type.length>0 && (dataForm.type[0] ==1 ||dataForm.type[1] ==1 )" label="图片宽度" prop="width">
+              <el-form-item v-if="dataForm.adType && dataForm.adType.length>0 && (dataForm.adType[0] ==1 ||dataForm.adType[1] ==1 )" label="图片宽度" prop="width">
                 <el-input v-model="dataForm.width" auto-complete="off"></el-input>PX
               </el-form-item>
             </el-checkbox>
@@ -65,38 +65,110 @@
     },
     name: "article-add",
     data(){
+      var checkName = (rule,value,callback) =>{
+        if (!value){
+          return callback(new Error('请输入广告名称'));
+        }else if (value.length < 1 || value.length >32){
+          return callback(new Error('广告名称在32字符内'));
+        }else if(!(/^[\u4e00-\u9fa5a-z]+$/gi.test(value))){
+          return callback(new Error('广告名称不能包含特殊字符'));
+        }else {
+          callback();
+        }
+
+      };
       return {
         size: "small",
         labelPosition: 'right',
         dataFormRules: {
-          name: [{ required: true, message: "请输入广告名称", trigger: "blur" }],
+          name: [{ validator:checkName, trigger: "blur" }],
           pageType: [{ required: true, message: "请选择广告页面类型", trigger: "blur" }],
           code: [{ required: true, message: "请输入广告位标识", trigger: "blur" }],
-          type: [{ required: true, message: "素材类型至少选择一种", trigger: "blur" }],
+          adType: [{ required: true, message: "素材类型至少选择一种", trigger: "blur" }],
         },
         // 新增编辑界面数据
-        dataForm: {
+        dataForm:{
           name: "",
-          pageType: "",
+          pageType: "1",
           code: "",
-          type:[],
+          adType:[],
+          type:"",
           num: "",
           status: "0",
+          width:"",
+          height:"",
         },
-
         editLoading: false,
-
+        adId:this.$route.query.adId,
       }
     },
     methods:{
-
+      //新增或修改
       submitForm:function () {
-        this.$refs.dataForm.validate(valid => {});
+        this.$refs.dataForm.validate(valid => {
+          if (valid) {
+            var this_ = this;
+            if (this_.dataForm.adType && this_.dataForm.adType.length > 0){
+              this_.dataForm.type = this_.dataForm.adType.join(',');
+              if (this_.dataForm.type.indexOf('1') < 0){
+                this_.dataForm.width = '';
+                this_.dataForm.height = '';
+              }
+            }
+            this.utils.request.saveAdvertInfo(this.dataForm, function(data) {
+              if (data && data.code == '0000'){
+                this_.$message({
+                  message: '操作成功!',
+                  type: 'success'
+                });
+                setTimeout(function () {
+                  this_.$router.push({path:"/advert/AdvertList"});
+                }, 3000);
+              }else {
+                this_.$message.error(data.msg || '操作失败!');
+              }
+            });
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
+      queryAdvertInfo:function (id) {
+        var this_ = this;
+        this.utils.request.getAdvertInfo({id:id}, function(data) {
+          if (data && data.data && data.code == '0000'){
+            this_.dataForm = {
+              id:data.data.id,
+              name: data.data.name,
+              pageType: '' + data.data.page_type,
+              code: data.data.code,
+              adType: data.data.type.split(','),
+              type:"",
+              num: data.data.num,
+              status: '' + data.data.status,
+              width: data.data.width,
+              height: data.data.height,
+            }
+          }else {
+            this_.$message.error(data.msg || '获取详情失败!');
+          }
+        })
+      },
+      //返回
       go:function () {
         this.$router.go(-1);
+      },
+      //初始化
+      init:function () {
+        if (this.adId){
+          this.queryAdvertInfo(this.adId);
+        }
       }
-    }
+    },
+    mounted(){
+      this.init();
+    },
   }
 </script>
 

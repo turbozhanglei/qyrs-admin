@@ -221,7 +221,13 @@ export default {
       this.requestUrl(data, 'word/getInfo', callback);
     },
     saveWordInfo:function (data,callback) {//保存或修改敏感词
-      this.requestUrl(data,'word/saveInfo',callback)
+      this.requestUrl(data,'word/saveInfo',callback);
+    },
+    saveAdvertInfo:function (data,callback) {//保存或修改广告位
+      this.requestUrl(data,'advert/saveInfo',callback);
+    },
+    getAdvertInfo:function (data,callback) {//保存或修改广告位
+      this.requestUrl(data,'advert/getInfo',callback);
     },
 
     checkPhoneSystem() {

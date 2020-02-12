@@ -184,6 +184,7 @@
         totalSize:0,
         options: [],
         activeName:"0",//tab默认选中生效中 0
+        adId:this.$route.query.adId,//广告codeid
       };
     },
     methods: {
