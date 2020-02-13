@@ -79,16 +79,16 @@ const router = new Router({
       name: '敏感词库',
       component: SensitiveWord
     },
-    {
-      path: '/news/newsArticle',
-      name: '资讯列表',
-      component: NewsArticle
-    },
-    {
-      path: '/news/articleAdd',
-      name: '资讯列表',
-      component: ArticleAdd
-    },
+    // {
+    //   path: '/news/newsArticle',
+    //   name: '资讯列表',
+    //   component: NewsArticle
+    // },
+    // {
+    //   path: '/news/articleAdd',
+    //   name: '资讯列表',
+    //   component: ArticleAdd
+    // },
     {
       path: '/news/newsCategory',
       name: '资讯分类',
@@ -130,6 +130,16 @@ const router = new Router({
       name:'广告位新增',
       component:AdvertSourceAdd
     }
+    ,{
+      path: '/',
+      name: '咨询新增',
+      component: Home,
+      children: [{
+        path: '/news/articleAdd',
+        name: '咨询新增',
+        component: ArticleAdd
+      }]
+    },
   ]
 })
 
