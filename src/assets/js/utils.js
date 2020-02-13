@@ -229,6 +229,12 @@ export default {
     getAdvertInfo:function (data,callback) {//保存或修改广告位
       this.requestUrl(data,'advert/getInfo',callback);
     },
+    saveAdvertSourceInfo:function (data,callback) {//保存或修改广告素材
+      this.requestUrl(data,'advertSource/saveInfo',callback);
+    },
+    getAdvertSourceInfo:function (data,callback) {//保存或修改广告位
+      this.requestUrl(data,'advertSource/getInfo',callback);
+    },
 
     checkPhoneSystem() {
       var u = navigator.userAgent,
