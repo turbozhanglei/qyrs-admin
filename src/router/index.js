@@ -119,23 +119,41 @@ const router = new Router({
       path: '/advert/advertAdd',
       name:'广告位新增',
       component:AdvertAdd
-    },*/
+    },
     {
       path: '/advert/advertSource',
-      name:'广告位新增',
+      name:'广告素材管理',
       component:AdvertSource
-    }
-    ,
+    },*/
     {
-      path: '/advert/advertSourceAdd',
-      name:'广告位新增',
-      component:AdvertSourceAdd
+      path: '/',
+      name: '新增广告位',
+      component: Home,
+      children: [{
+        path: '/advert/advertAdd',
+        name: '新增广告位',
+        component: AdvertAdd
+      }]
     },
-
     {
-      path: '/advert/advertAdd',
-      name:'广告位新增',
-      component:AdvertAdd
+      path: '/',
+      name: '广告素材管理',
+      component: Home,
+      children: [{
+        path: '/advert/advertSource',
+        name: '广告素材管理',
+        component: AdvertSource
+      }]
+    },
+    {
+      path: '/',
+      name: '广告素材',
+      component: Home,
+      children: [{
+        path: '/advert/advertSourceAdd',
+        name: '广告素材',
+        component: AdvertSourceAdd
+      }]
     },
   ]
 })
