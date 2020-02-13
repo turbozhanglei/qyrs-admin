@@ -18,7 +18,9 @@
             v-model="filters.startDate"
             type="date"
             placeholder="开始时间"
-            value-format="yyyy-MM-dd">
+            value-format="yyyy-MM-dd"
+            :picker-options="startDateDisabled"
+            @change="changeStartDate">
           </el-date-picker>
           至
         </el-form-item>
@@ -28,7 +30,8 @@
             type="date"
             placeholder="结束时间"
             value-format="yyyy-MM-dd"
-            :picker-options="pickerOptions">
+            :picker-options="endDateDisabled"
+            @change="changeendDate">
           </el-date-picker>
         </el-form-item>
 
@@ -194,14 +197,31 @@
         options: [],
         activeName:"0",//tab默认选中生效中 0
         adId:this.$route.query.adId,//广告codeid
-        pickerOptions:{
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          },
-        },
+        startDateDisabled:{},
+        endDateDisabled:{},
       };
     },
     methods: {
+      changeStartDate:function () {
+        var this_= this;
+        this_.endDateDisabled = {
+          disabledDate: (time)=> {
+            if (this_.filters.startDate){
+              return time.getTime() < new Date(this_.filters.startDate).getTime();
+            }
+          },
+        };
+      },
+      changeendDate:function () {
+        var this_= this;
+        this_.startDateDisabled = {
+          disabledDate: (time)=> {
+            if (this_.filters.endDate){
+              return time.getTime() > new Date(this_.filters.endDate).getTime();
+            }
+          },
+        };
+      },
       // 获取分页数据
       findPage: function(filters) {
         var this_ = this;
