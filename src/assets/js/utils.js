@@ -239,7 +239,7 @@ export default {
     queryCategoryList:function(data,callback){//分类列表初始化
       this.requestUrl(data,'news/queryCategoryList',callback);
     },
-    delCategory:function(data,callback){//删除分类
+    delCategory:function(data,callback){//删除咨询分类
       this.requestUrl(data,'news/delCategory',callback);
     },
     changeCateGoryStatus:function(data,callback){//禁用启用分类

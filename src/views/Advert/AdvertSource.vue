@@ -4,9 +4,9 @@
     <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
       <el-form :inline="true" :model="filters" :size="size" ref="filters" :label-position="labelPosition">
         <el-form-item prop="name" label="广告名称">
-          <el-input v-model="filters.name" placeholder="广告位编号" clearable></el-input>
+          <el-input v-model="filters.name" placeholder="广告名称" clearable></el-input>
         </el-form-item>
-        <el-form-item prop="pageType" label="素材类型">
+        <el-form-item prop="type" label="素材类型">
           <el-select v-model="filters.type" placeholder="素材类型">
             <el-option label="全部" value=""></el-option>
             <el-option label="文字" value="0"></el-option>
@@ -17,7 +17,10 @@
           <el-date-picker
             v-model="filters.startDate"
             type="date"
-            placeholder="开始时间" >
+            placeholder="开始时间"
+            value-format="yyyy-MM-dd"
+            :picker-options="startDateDisabled"
+            @change="changeStartDate">
           </el-date-picker>
           至
         </el-form-item>
@@ -25,7 +28,10 @@
           <el-date-picker
             v-model="filters.endDate"
             type="date"
-            placeholder="结束时间">
+            placeholder="结束时间"
+            value-format="yyyy-MM-dd"
+            :picker-options="endDateDisabled"
+            @change="changeendDate">
           </el-date-picker>
         </el-form-item>
 
@@ -36,7 +42,7 @@
               :label="$t('action.search')"
               perms="sys:user:view"
               type="primary"
-              @click="$refs.CyTable.findPageBeforeRestPages(filters)"
+              @click="findPage(filters)"
             />
           </el-form-item>
           <el-form-item>
@@ -106,6 +112,9 @@
             width="280"
             align="center"
             prop="validDate">
+            <template slot-scope="scope">
+              <span>{{scope.row.start_date}}--{{scope.row.end_date}}</span>
+            </template>
           </el-table-column>
           <el-table-column
             label="显示顺序"
@@ -130,7 +139,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleEdit(scope.$index, scope.row)">删除</el-button>
+                @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -172,10 +181,13 @@
         stripe:true,
         maxHeight: 900,
         filters: {
+          t:"adSource",
           name:"",//广告名称
           type:"",//素材类型
           startDate:"",//有效期开始时间
           endDate:"",//有效期结束时间
+          status:"0",
+
         },
         columns: [],
         filterColumns: [],
@@ -185,33 +197,61 @@
         options: [],
         activeName:"0",//tab默认选中生效中 0
         adId:this.$route.query.adId,//广告codeid
+        startDateDisabled:{},
+        endDateDisabled:{},
       };
     },
     methods: {
+      changeStartDate:function () {
+        var this_= this;
+        this_.endDateDisabled = {
+          disabledDate: (time)=> {
+            if (this_.filters.startDate){
+              return time.getTime() < new Date(this_.filters.startDate).getTime();
+            }
+          },
+        };
+      },
+      changeendDate:function () {
+        var this_= this;
+        this_.startDateDisabled = {
+          disabledDate: (time)=> {
+            if (this_.filters.endDate){
+              return time.getTime() > new Date(this_.filters.endDate).getTime();
+            }
+          },
+        };
+      },
       // 获取分页数据
-      findPage: function(data) {
-        this.pageResult=[
-          {id:1,name:'乙二醇',type:1,content:'',imageUrl:"https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",validDate:"2016-06-30 00:00:00--2016-06-30 23:59:59",sort:0},
-          {id:2,name:'PTA',type:0,content:'AD_TOP_INDEX',imageUrl:"",validDate:"2016-06-30 00:00:00--2016-06-30 23:59:59",sort:1},
-          {id:3,name:'成品油',type:1,content:'',imageUrl:"https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",validDate:"2016-06-30 00:00:00--2016-06-30 23:59:59",sort:2},
-          {id:4,name:'PVC',type:0,content:'AD_TOP_INDEX',imageUrl:"",validDate:"2016-06-30 00:00:00--2016-06-30 23:59:59",sort:3},
-          {id:5,name:'甲醇',type:1,content:'',imageUrl:"https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",validDate:"2016-06-30 00:00:00--2016-06-30 23:59:59",sort:4},
-          {id:6,name:'其他',type:0,content:'AD_TOP_INDEX',imageUrl:"",validDate:"2016-06-30 00:00:00--2016-06-30 23:59:59",sort:5},
-        ];
-        this.totalSize=6;
-        //this.$refs.CyTable.findPage({ content: pageResult, total: 6 });
+      findPage: function(filters) {
+        var this_ = this;
+        if (filters == undefined || filters == null) {
+          filters = {};
+        }
+
+        filters.start = this.pageRequest.pageNum;
+        filters.limit = this.pageRequest.pageSize;
+        this.utils.request.queryUserPage(filters, function(res) {
+          if (res && res.code == '0000' && res.rows) {
+            this_.pageResult = res.rows;
+            this_.totalSize = Number(res.total);
+          }else {
+            this_.pageResult = [];
+            this_.totalSize = 0;
+          }
+        });
       },
       //新增
       handleAdd:function () {
-        this.$router.push({path:"/advert/advertSourceAdd"});
+        this.$router.push({path:"/advert/advertSourceAdd",query:{adCodeId:this.adId}});
       },
       // 显示编辑界面
       handleEdit: function(index,row) {
-        this.$router.push({path:"/advert/advertSourceAdd",query:{adSourceId:row.id}});
+        this.$router.push({path:"/advert/advertSourceAdd",query:{adSourceId:row.id,adCodeId:this.adId}});
       },
       //查看
       handleDetail:function (index,row) {
-        this.$router.push({path:"/advert/advertSourceAdd",query:{adSourceId:row.id,isEdit:1}});
+        this.$router.push({path:"/advert/advertSourceAdd",query:{adSourceId:row.id,adCodeId:this.adId,isEdit:1}});
       },
       // 类型格式化
       typeFormat: function(row, column, cellValue, index) {
@@ -220,15 +260,14 @@
         }
         return "图片";
       },
-
-
       reset: function() {
         this.$refs["filters"].resetFields();
-        this.$refs.CyTable.resetForm();
-        this.findPage();
+        this.findPage(this.filters);
       },
-      handleClick(tab, event) {
-        console.log(tab.name, event);
+      //切换状态tab 0：生效中 1：待生效 2：已过期
+      handleClick(tab) {
+        this.filters.status = tab.name;
+        this.findPage(this.filters)
       },
       countHeight(height) {
         var winHeight =
@@ -241,17 +280,37 @@
       // 换页刷新
       refreshPageRequest: function(pageNum) {
         this.pageRequest.pageNum = pageNum;
-        this.findPage();
+        this.findPage(this.filters);
       },
       // 换页刷新
       handleSizeChange: function(pageSize) {
         this.pageRequest.pageSize = pageSize;
         this.pageRequest.pageNum = 1;
-        this.findPage();
+        this.findPage(this.filters);
       },
+      //删除
+      handleDelete:function (row) {
+        this.$confirm("确认该条记录吗？", "提示", {
+          type: "warning"
+        }).then(()=>{
+          let params = {
+            id:row.id,
+            deleteFlag:'1',
+          };
+          var this_ = this;
+          this.utils.request.saveAdvertSourceInfo(params,function (res) {
+            if (res && res.code == '0000'){
+              this_.$message({ message: "删除成功!", type: "success" });
+              this_.findPage(this_.filters)
+            }else {
+              this_.$message.error(res.msg || '删除失败!');
+            }
+          });
+        })
+      }
     },
     mounted() {
-      this.findPage();
+      this.findPage(this.filters);
     }
   };
 </script>
