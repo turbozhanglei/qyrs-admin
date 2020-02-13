@@ -2,7 +2,13 @@
   <div class="page-container">
     <!--工具栏-->
     <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-      <el-form :inline="true" :model="filters" :size="size" ref="filters" :label-position="labelPosition">
+      <el-form
+        :inline="true"
+        :model="filters"
+        :size="size"
+        ref="filters"
+        :label-position="labelPosition"
+      >
         <el-form-item prop="categoryId" label="分类ID">
           <el-input v-model="filters.categoryId" placeholder="分类ID" clearable></el-input>
         </el-form-item>
@@ -15,18 +21,18 @@
               v-for="item in platforms"
               :key="item.platform"
               :label="item.platformName"
-              :value="item.platform">
-            </el-option>
+              :value="item.platform"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="platform" label="状态">
+        <el-form-item prop="status" label="状态">
           <el-select v-model="filters.status" placeholder="状态">
             <el-option
               v-for="item in categoryStatus"
               :key="item.status"
               :label="item.statusName"
-              :value="item.status">
-            </el-option>
+              :value="item.status"
+            ></el-option>
           </el-select>
         </el-form-item>
 
@@ -36,7 +42,7 @@
               icon="fa fa-search"
               :label="$t('action.search')"
               type="primary"
-              @click="$refs.CyTable.findPageBeforeRestPages(filters)"
+              @click="findPage()"
             />
           </el-form-item>
           <el-form-item>
@@ -68,38 +74,20 @@
       align="left"
       row-key="id"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      :header-cell-style="{ 'color': '#FFF','background-color': 'rgb(20, 136, 154)'}">
-      <el-table-column
-        label="分类名称"
-        width="160"
-        align="center"
-        prop="name">
-      </el-table-column>
-      <el-table-column
-        label="分类ID"
-        width="100"
-        align="center"
-        prop="id">
-      </el-table-column>
+      :header-cell-style="{ 'color': '#FFF','background-color': 'rgb(20, 136, 154)'}"
+    >
+      <el-table-column label="分类名称" width="200" align="center" prop="name"></el-table-column>
+      <el-table-column label="分类ID" width="100" align="center" prop="id"></el-table-column>
       <el-table-column
         label="支持平台"
         width="100"
         align="center"
         prop="platform"
-        :formatter="platformFormat">
-      </el-table-column>
-      <el-table-column
-        label="显示顺序"
-        width="100"
-        align="center"
-        prop="sort">
+        :formatter="platformFormat"
+      ></el-table-column>
+      <el-table-column label="显示顺序" width="100" align="center" prop="sort">
         <template slot-scope="scope">
-          <el-input
-            placeholder=""
-            maxlength="2"
-            v-model="scope.row.sort"
-            @blur="updateSort">
-          </el-input>
+          <el-input placeholder maxlength="2" v-model="scope.row.sort" @blur="updateSort"></el-input>
         </template>
       </el-table-column>
       <el-table-column
@@ -107,39 +95,38 @@
         width="100"
         align="center"
         prop="status"
-        :formatter="statusFormat">
-      </el-table-column>
-      <el-table-column
-        label="修改时间"
-        width="160"
-        align="center"
-        prop="updator">
-      </el-table-column>
+        :formatter="statusFormat"
+      ></el-table-column>
+      <el-table-column label="修改时间" width="160" align="center" prop="update_time"></el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="primary"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-            size="mini"
-            type="warning"
-            @click="handleEdit(scope.$index, scope.row)">添加子类</el-button>
+          <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">添加子类</el-button>
           <el-button
             size="mini"
             type="info"
-            @click="handleEdit(scope.$index, scope.row)"
-            v-if="scope.row.status == 0">禁用</el-button>
+            @click="changeCateGoryStatus(scope.$index, scope.row)"
+            v-if="scope.row.status == 0"
+          >禁用</el-button>
           <el-button
             size="mini"
             type="success"
-            @click="handleEdit(scope.$index, scope.row)"
-            v-if="scope.row.status == 1">启用</el-button>
+            @click="changeCateGoryStatus(scope.$index, scope.row)"
+            v-if="scope.row.status == 1"
+          >启用</el-button>
           <el-button
             size="mini"
             type="danger"
-            @click="handleEdit(scope.$index, scope.row)"
-            v-if="!scope.row.children ">删除</el-button>
+            @click="delCategory(scope.$index, scope.row)"
+            v-if="scope.row.isArticle"
+          >删除</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="delCategory(scope.$index, scope.row)"
+            v-else-if="scope.row.children==''"
+          >删除</el-button>
+         
         </template>
       </el-table-column>
     </el-table>
@@ -157,18 +144,19 @@
         :size="size"
         label-position="right"
       >
-        <el-form-item label="上级分类" prop="superCategoryID" required>
-          <el-select v-model="dataForm.superCategoryID" placeholder="请选择上级分类">
+        <el-form-item label="上级分类" prop="refId" required>
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类">
             <el-option
               v-for="item in superCategorys"
-              :key="item.id"
+              :key="item.refId"
               :label="item.name"
-              :value="item.id">
-            </el-option>
+              :value="item.refId"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="所属平台" prop="platform" required>
           <el-radio v-model="dataForm.platform" label="1">微信小程序</el-radio>
+          <el-radio v-model="dataForm.platform" label="2">H5</el-radio>
         </el-form-item>
         <el-form-item label="分类名称" prop="name" required>
           <el-input v-model="dataForm.name" auto-complete="off"></el-input>
@@ -183,11 +171,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :size="size" @click.native="dialogVisible = false">{{$t('action.cancel')}}</el-button>
-        <el-button
-          :size="size"
-          type="primary"
-          @click.native="submitForm"
-        >{{$t('action.submit')}}</el-button>
+        <el-button :size="size" type="primary" @click.native="submitForm">{{$t('action.submit')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -202,19 +186,19 @@ import { format } from "@/utils/datetime";
 import { exportExcel } from "@/utils/excel";
 export default {
   components: {
-    KtButton,
+    KtButton
   },
   data() {
     return {
       size: "small",
-      labelPosition: 'left',
-      stripe:true,
+      labelPosition: "left",
+      stripe: true,
       maxHeight: 900,
       filters: {
-        categoryId: "",//文章id
-        name:"",//文章标题
-        platform:"",//支持平台
-        status:"",//状态
+        categoryId: "", //文章id
+        name: "", //文章标题
+        platform: "", //支持平台
+        status: "" //状态
       },
       columns: [],
       filterColumns: [],
@@ -224,109 +208,118 @@ export default {
       operation: false, // true:新增, false:编辑
       dialogVisible: false, // 新增编辑界面是否显示
       options: [],
-      superCategorys:[
+      superCategorys: [
+       
+      ],
+      categoryStatus: [
         {
-          id:1,name:'下载资源'
+          statusName: "全部",
+          value: ""
         },
         {
-          id:2,name:'新手指南'
+          statusName: "启用",
+          status: "0"
+        },
+        {
+          statusName: "禁用",
+          status: "1"
         }
       ],
-      categoryStatus:[
+      platforms: [
         {
-          'statusName':'全部',
-          'value':''
+          platform: 1,
+          platformName: "小程序"
         },
         {
-          'statusName':'启用',
-          'status':'0'
-        },
-        {
-          'statusName':'禁用',
-          'status':'1'
-        }
-      ],
-      platforms:[
-        {
-          platform:1,
-          platformName:'小程序'
-        },
-        {
-          platform:2,
-          platformName:'微信H5'
+          platform: 2,
+          platformName: "微信H5"
         }
       ],
       // 新增编辑界面数据
       dataForm: {
-        superCategoryID: "",
+        refId: "",
         platform: "1",
         name: "",
         sort: "",
-        status: "0",
+        status: "0"
       },
       dataFormRules: {
-        superCategoryID: [{ required: true, message: "请选择上级分类", trigger: "blur" }],
+        refId: [{ required: true, message: "请选择上级分类", trigger: "blur" }],
         name: [{ required: true, message: "请输入分类名称", trigger: "blur" }],
-        status: [{ required: true, message: "请选择状态", trigger: "blur" }],
-      },
+        status: [{ required: true, message: "请选择状态", trigger: "blur" }]
+      }
     };
   },
   methods: {
     // 获取分页数据
     findPage: function(data) {
-      this.tableData=[
-          {
-            id:1,name:'下载资源',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00',
-            children:[
-              {
-                id:9,name:'商家操作手册',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00',
-                children:[
-                  {id:13,name:'商家操作手册',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00'},
-                  {id:14,name:'加盟协议',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00'},
-                ]
-              },
-              {id:10,name:'加盟协议',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00'},
-            ]
-          },
-          {
-            id:2,name:'新手指南',platform:1,sort:2,status:0,updator:'2020-01-05 20:00:00',
-            children:[
-              {id:11,name:'商家操作手册',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00'},
-              {id:12,name:'加盟协议',platform:1,sort:1,status:1,updator:'2020-01-05 20:00:00'},
-            ]
-          },
-        ];
       // this.$refs.CyTable.findPage({ content: pageResult, total: 11 });
+      let this_=this;
+      this.utils.request.queryCategoryList(this.filters,function(res){
+        if(res.data!=null){
+         this_.tableData=res.data
+         }
+      });
     },
-    // 批量删除
-    handleDelete: function(data) {
-      if (data != null && data.params != null && data.params.length > 0) {
-        let ids = data.params.map(item => item.id).toString();
-
-        var params = {};
-        params.t = "sysUser";
-        params.ids = ids;
-        params.type= data.params.type;
-        var this_ = this;
-        this.utils.request.batchDeleteInfo(params, function(res) {
-          if (res.code == "0000") {
-            this_.$message({ message: "操作成功", type: "success" });
-            this_.findPage(null);
-          } else {
-            this_.$message({ message: "操作失败, " + res.msg, type: "error" });
+  
+    // 删除按钮
+      delCategory:function(index,row){
+        let this_=this;
+        let params={};
+        params.id=row.id;
+        params.level=row.level;
+        console.log(params);
+        this.utils.request.delCategory(params,function(res){
+          if(res != null && res.code == "0000"){
+             this_.$message({ message: "删除成功, ", type: "success" });
+             this_.findPage();
+          }else{
+            this_.$message({ message: "操作失败, ", type: "error" });
           }
         });
-      }
-    },
-    handleAdd:function () {
+      },
+
+      //禁用按钮
+      changeCateGoryStatus:function(index,row){
+       
+        let this_ = this;
+        let params = {};
+        params.id = row.id;
+        params.status=row.status;
+        params.level=row.level;
+        this.utils.request.changeCateGoryStatus(params,function(res){
+          if(res != null && res.code == "0000"){
+             this_.$message({ message: "操作成功, ", type: "success" });
+             this_.findPage();
+          }else{
+            this_.$message({ message: "操作失败, ", type: "error" });
+          }
+        });
+
+      },
+
+    //分类初始化
+
+  
+    getTypeList: function(data) {
+       
+        var this_ = this;
+        this.utils.request.getTypeList({}, function(res) {
+          this_.superCategorys=res.data
+         
+        });
+      },
+    
+
+    handleAdd: function() {
       this.dialogVisible = true;
       this.operation = true;
-      this.dataForm= {
-          superCategoryID: "",
-          platform: "1",
-          name: "",
-          sort: "",
-          status: "0",
+      this.dataForm = {
+        refId: "",
+        platform: "1",
+        name: "",
+        sort: "",
+        status: "0"
       };
     },
     // 显示编辑界面
@@ -334,13 +327,13 @@ export default {
       this.operation = false;
       this.dialogVisible = true;
     },
-    updateSort:function (row) {
-      console.log("111")
+    updateSort: function(row) {
+      console.log("111");
     },
 
     // 平台格式化
     platformFormat: function(row, column, cellValue, index) {
-      if (Number(cellValue) == 0) {
+      if (Number(cellValue) == 2) {
         return "微信H5";
       }
       return "微信小程序";
@@ -352,7 +345,6 @@ export default {
       }
       return "禁用";
     },
-
 
     reset: function() {
       this.$refs["filters"].resetFields();
@@ -367,13 +359,53 @@ export default {
       }
       return height;
     },
-    submitForm:function () {
-      this.$refs.dataForm.validate(valid => {});
-      this.dialogVisible = false;
-    }
+    // submitForm: function(data) {
+    //   let this_ = this;
+    //   if (this_.dataForm.refId == 1) {
+    //     //判断是否为顶级Id
+    //     dataForm.level = 1;
+    //     //ref_id在后台判断 为当前新增id
+    //   } else {
+    //     dataForm.level = 2;
+    //     dataForm.refId = this_.dataForm.refId;
+    //   }
+
+    //   console.log("成功啊" + this_.dataForm);
+    //   this.utils.request.saveCategory(dataForm, function(res) {});
+    //   // this.$refs.dataForm.validate(valid => {});
+    //   this.dialogVisible = false;
+    // }
+    // 编辑
+  submitForm: function() {
+    this.$refs.dataForm.validate(valid => {
+      if (valid) {
+        this.$confirm("确认提交吗？", "提示", {}).then(() => {
+          this.editLoading = true;
+          let params = Object.assign({}, this.dataForm);
+          console.log("成功啊"+params.refId+params.level)
+          this.utils.request.saveCateGory(params, this.editInfoBack);
+        });
+      }
+    });
   },
+
+  editInfoBack: function(data) {
+      if (data.code == "0000") {
+        this.$message({ message: "操作成功", type: "success" });
+      } else {
+        this.$message({ message: "操作失败, ", type: "error" });
+      }
+      this.findPage();
+      this.dialogVisible = false;
+      this.operation = false;
+      this.editLoading = false;
+    },
+  },
+
+  
   mounted() {
     this.findPage();
+    this.getTypeList();
   }
 };
 </script>

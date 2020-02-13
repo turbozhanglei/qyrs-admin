@@ -229,6 +229,24 @@ export default {
     getAdvertInfo:function (data,callback) {//保存或修改广告位
       this.requestUrl(data,'advert/getInfo',callback);
     },
+    getTypeList:function(data,callback){//咨询分类类型初始化 单独查询
+      this.requestUrl(data,'news/getTypeList',callback);
+
+    },
+    saveCateGory:function(data,callback){//新增咨询分类
+      this.requestUrl(data,'news/saveCateGory',callback);
+    },
+    queryCategoryList:function(data,callback){//分类列表初始化
+      this.requestUrl(data,'news/queryCategoryList',callback);
+    },
+    delCategory:function(data,callback){//删除分类
+      this.requestUrl(data,'news/delCategory',callback);
+    },
+    changeCateGoryStatus:function(data,callback){//禁用启用分类
+      this.requestUrl(data,'news/changeCateGoryStatus',callback);
+    },
+    
+    
 
     checkPhoneSystem() {
       var u = navigator.userAgent,
