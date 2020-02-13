@@ -7,7 +7,7 @@ import NotFound from '@/views/Error/404'
 import Home from '@/views/Home'
 import Intro from '@/views/Intro/Intro'
 import Generator from '@/views/Generator/Generator'
-import Member from '@/views/Sys/Member'
+/*import Member from '@/views/Sys/Member'
 import MemberInfo from '@/views/Sys/MemberInfo'
 import SensitiveWord from '@/views/Word/SensitiveWord'
 import NewsArticle from '@/views/News/NewsArticle'
@@ -17,9 +17,10 @@ import ResourceReport from '@/views/Resource/ResourceReport'
 import ResourceList from '@/views/Resource/ResourceList'
 import ResourceInfo from '@/views/Resource/ResourceInfo'
 import AdvertList from '@/views/Advert/AdvertList'
-import AdvertAdd from '@/views/Advert/AdvertAdd'
+import AdvertAdd from '@/views/Advert/AdvertAdd'*/
 import AdvertSource from '@/views/Advert/AdvertSource'
 import AdvertSourceAdd from '@/views/Advert/AdvertSourceAdd'
+import AdvertAdd from '@/views/Advert/AdvertAdd'
 import api from '@/http/api'
 import store from '@/store'
 
@@ -64,7 +65,7 @@ const router = new Router({
       name: '注册',
       component: Registe
     },
-    {
+    /*{
       path: '/sys/member',
       name: '会员列表',
       component: Member
@@ -75,7 +76,7 @@ const router = new Router({
       component: MemberInfo
     },
     {
-      path: '/word/ensitiveWord',
+      path: '/word/sensitiveWord',
       name: '敏感词库',
       component: SensitiveWord
     },
@@ -118,7 +119,7 @@ const router = new Router({
       path: '/advert/advertAdd',
       name:'广告位新增',
       component:AdvertAdd
-    },
+    },*/
     {
       path: '/advert/advertSource',
       name:'广告位新增',
@@ -129,7 +130,13 @@ const router = new Router({
       path: '/advert/advertSourceAdd',
       name:'广告位新增',
       component:AdvertSourceAdd
-    }
+    },
+
+    {
+      path: '/advert/advertAdd',
+      name:'广告位新增',
+      component:AdvertAdd
+    },
   ]
 })
 
