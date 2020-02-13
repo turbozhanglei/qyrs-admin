@@ -11,7 +11,7 @@ import Generator from '@/views/Generator/Generator'
 import MemberInfo from '@/views/Sys/MemberInfo'
 import SensitiveWord from '@/views/Word/SensitiveWord'
 import NewsArticle from '@/views/News/NewsArticle'
-import ArticleAdd from '@/views/News/ArticleAdd'
+
 import NewsCategory from '@/views/News/NewsCategory'
 import ResourceReport from '@/views/Resource/ResourceReport'
 import ResourceList from '@/views/Resource/ResourceList'
@@ -21,6 +21,7 @@ import AdvertAdd from '@/views/Advert/AdvertAdd'*/
 import AdvertSource from '@/views/Advert/AdvertSource'
 import AdvertSourceAdd from '@/views/Advert/AdvertSourceAdd'
 import AdvertAdd from '@/views/Advert/AdvertAdd'
+import ArticleAdd from '@/views/News/ArticleAdd'
 import api from '@/http/api'
 import store from '@/store'
 
