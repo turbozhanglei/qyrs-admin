@@ -28,7 +28,6 @@
             <kt-button
               icon="fa fa-search"
               :label="$t('action.search')"
-              perms="sys:user:view"
               type="primary"
               @click="$refs.CyTable.findPageBeforeRestPages(filters)"
             />
@@ -37,7 +36,6 @@
             <kt-button
               icon="fa fa-plus"
               :label="$t('action.add')"
-              perms="sys:user:add"
               type="primary"
               @click="handleAdd"
             />
@@ -62,8 +60,11 @@
       :columns="filterColumns"
       @findPage="findPage"
       @handleEdit="handleEdit"
+      @handleDetail="handleDetail"
       :showBatchDelete="false"
       :showDeleteOperation="false"
+      :detailButtonName="detailButtonName"
+      :showDetailOperation="true"
       ref="CyTable"
     ></cy-table>
 
@@ -89,6 +90,7 @@
         size: "small",
         labelPosition: 'left',
         filters: {
+          t:"adCode",
           id: "",//广告位编号
           name:"",//广告位名称
           pageType:"",//广告位页面类型
@@ -98,31 +100,22 @@
         filterColumns: [],
         pageRequest: { pageNum: 1, pageSize: 10 },
         pageResult: {},
-
         options: [],
+        detailButtonName:'广告管理',
       };
     },
     methods: {
       // 获取分页数据
       findPage: function(data) {
-        let pageResult=[
-          {id:1,pageType:1,name:'顶部通栏广告',code:'AD_TOP_INDEX',num:1,status:0},
-          {id:2,pageType:1,name:'搜索框左侧广告',code:'AD_LEFT_INDEX',num:1,status:1},
-          {id:3,pageType:1,name:'轮播广告',code:'AD_BANNER_INDEX',num:1,status:0},
-          {id:4,pageType:1,name:'顶部通栏广告',code:'AD_TOP_INDEX',num:1,status:0},
-          {id:5,pageType:1,name:'顶部通栏广告',code:'AD_TOP_INDEX',num:1,status:0},
-          {id:6,pageType:1,name:'顶部通栏广告',code:'AD_TOP_INDEX',num:1,status:0},
-          {id:7,pageType:1,name:'顶部通栏广告',code:'AD_TOP_INDEX',num:1,status:0},
-        ];
-        this.$refs.CyTable.findPage({ content: pageResult, total: 7 });
+        this.$refs.CyTable.findPage(this.filters);
       },
       //新增
       handleAdd:function () {
-
+        this.$router.push({path:"/advert/advertAdd"});
       },
       // 显示编辑界面
       handleEdit: function(params) {
-
+        this.$router.push({path:"/advert/advertAdd",query:{adId:params.row.id}});
       },
 
       // 页面类型格式化
@@ -142,7 +135,7 @@
       initColumns: function() {
         this.columns = [
           { prop: "id", label: "广告位编号", minWidth: 60 },
-          { prop: "pageType", label: "广告位页面", minWidth: 120,formatter:this.pageTypeFormat },
+          { prop: "page_type", label: "广告位页面", minWidth: 120,formatter:this.pageTypeFormat },
           { prop: "name", label: "广告位名称", minWidth: 70 },
           { prop: "code", label: "广告位标识", minWidth: 80,},
           { prop: "num", label: "广告位显示个数", minWidth: 60 },
@@ -159,11 +152,15 @@
         });
         this.filterColumns = temp;
       },
-
+      //重置按钮
       reset: function() {
         this.$refs["filters"].resetFields();
         this.$refs.CyTable.resetForm();
         this.findPage();
+      },
+      //跳转广告素材管理
+      handleDetail:function (params) {
+        this.$router.push({path:"/advert/advertSource",query:{adId:params.row.id}});
       }
     },
     mounted() {

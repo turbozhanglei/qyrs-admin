@@ -10,14 +10,20 @@
           <el-input v-model="filters.title" placeholder="文章标题" clearable></el-input>
         </el-form-item>
         <el-form-item prop="categoryId" label="所属分类">
-          <el-select v-model="filters.categoryId" placeholder="所属分类">
-            <el-option
-              v-for="item in categorys"
-              :key="item.categoryId"
-              :label="item.categoryName"
-              :value="item.categoryId">
-            </el-option>
-          </el-select>
+          <el-popover placement="bottom" trigger="click">
+            <ul>
+              <li class="ul_li_style">
+                <span>成交订单金额</span>
+
+              </li>
+              <li class="ul_li_style"><span>成交订单数</span></li>
+              <li class="ul_li_style"><span>成交转化率 </span></li>
+              <li class="ul_li_style"><span>PV</span></li>
+              <li class="ul_li_style"><span>UV</span></li>
+              <li class="ul_li_style"><span>二跳率</span></li>
+            </ul>
+            <el-input v-model="filters.title" placeholder="文章标题" clearable></el-input>
+          </el-popover>
         </el-form-item>
         <el-form-item prop="platform" label="支持平台">
           <el-select v-model="filters.platform" placeholder="支持平台">
@@ -29,7 +35,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="platform" label="状态">
+        <el-form-item prop="status" label="状态">
           <el-select v-model="filters.status" placeholder="状态">
             <el-option
               v-for="item in articleStatus"
@@ -45,16 +51,14 @@
             <kt-button
               icon="fa fa-search"
               :label="$t('action.search')"
-              perms="sys:user:view"
               type="primary"
-              @click="$refs.CyTable.findPageBeforeRestPages(filters)"
+              @click="findPage(null)"
             />
           </el-form-item>
           <el-form-item>
             <kt-button
               icon="fa fa-plus"
               :label="$t('action.add')"
-              perms="sys:user:add"
               type="primary"
               @click="handleAdd"
             />
@@ -77,7 +81,7 @@
             <el-tooltip content="刷新" placement="top">
               <el-button
                 icon="fa fa-refresh"
-                @click="$refs.CyTable.findPageBeforeRestPages(filters)"
+                @click="$refs.CyTable.findPage(null)"
               ></el-button>
             </el-tooltip>
             <el-tooltip content="列显示" placement="top">
@@ -147,31 +151,18 @@ export default {
         },
         {
           'statusName':'生效中',
-          'status':'0'
-        },
-        {
-          'statusName':'未生效',
           'status':'1'
         },
         {
-          'statusName':'已过期',
+          'statusName':'未生效',
           'status':'2'
-        }
-      ],
-      categorys:[
-        {
-        categoryId:0,
-        categoryName:"全部"
         },
         {
-          categoryId:1,
-          categoryName:"帮助中心"
-        },
-        {
-          categoryId:2,
-          categoryName:"头条"
+          'statusName':'已过期',
+          'status':'3'
         }
       ],
+      categorys:[],
       platforms:[
         {
           platform:1,
@@ -218,47 +209,25 @@ export default {
     },
     // 获取分页数据
     findPage: function(data) {
-      let pageResult=[
-          {id:1,title:'备战开学季 全民半价购',categoryName:'优化活动',platform:1,shares:11,likes:34,browses:45,status:1,validDate:'2020-01-03 0:00:00~2020-01-05 0:00:00',updator:'2020-01-05 20:00:00'},
-          {id:2,title:'备战开学季 全民半价购',categoryName:'优化活动',platform:1,shares:32,likes:234,browses:54,status:2,validDate:'2020-01-03 0:00:00~2020-01-05 0:00:00',updator:'2020-01-05 20:00:00'},
-          {id:3,title:'备战开学季 全民半价购',categoryName:'优化活动',platform:1,shares:45,likes:534,browses:2343,status:3,validDate:'2020-01-03 0:00:00~2020-01-05 0:00:00',updator:'2020-01-05 20:00:00'},
-          {id:4,title:'备战开学季 全民半价购',categoryName:'优化活动',platform:1,shares:1451,likes:4645,browses:878,status:3,validDate:'2020-01-03 0:00:00~2020-01-05 0:00:00',updator:'2020-01-05 20:00:00'},
-          {id:5,title:'备战开学季 全民半价购',categoryName:'优化活动',platform:1,shares:342,likes:5645,browses:65,status:2,validDate:'2020-01-03 0:00:00~2020-01-05 0:00:00',updator:'2020-01-05 20:00:00'},
-          {id:6,title:'备战开学季 全民半价购',categoryName:'优化活动',platform:1,shares:453,likes:676,browses:7867,status:3,validDate:'2020-01-03 0:00:00~2020-01-05 0:00:00',updator:'2020-01-05 20:00:00'},
-          {id:7,title:'备战开学季 全民半价购',categoryName:'优化活动',platform:1,shares:454,likes:546,browses:675,status:2,validDate:'2020-01-03 0:00:00~2020-01-05 0:00:00',updator:'2020-01-05 20:00:00'},
-          {id:8,title:'备战开学季 全民半价购',categoryName:'优化活动',platform:1,shares:657,likes:456,browses:655,status:2,validDate:'2020-01-03 0:00:00~2020-01-05 0:00:00',updator:'2020-01-05 20:00:00'},
-          {id:9,title:'备战开学季 全民半价购',categoryName:'优化活动',platform:1,shares:767,likes:454,browses:6765,status:2,validDate:'2020-01-03 0:00:00~2020-01-05 0:00:00',updator:'2020-01-05 20:00:00'},
-          {id:10,title:'备战开学季 全民半价购',categoryName:'优化活动',platform:1,shares:456,likes:343,browses:4353,status:2,validDate:'2020-01-03 0:00:00~2020-01-05 0:00:00',updator:'2020-01-05 20:00:00'},
-          {id:11,title:'备战开学季 全民半价购',categoryName:'优化活动',platform:1,shares:56,likes:4565,browses:767,status:3,validDate:'2020-01-03 0:00:00~2020-01-05 0:00:00',updator:'2020-01-05 20:00:00'}
-        ];
-      this.$refs.CyTable.findPage({ content: pageResult, total: 11 });
+      this.filters.t='newsArticle'
+      this.$refs.CyTable.findPage(this.filters);
     },
     // 批量删除
     handleDelete: function(data) {
-      if (data != null && data.params != null && data.params.length > 0) {
-        let ids = data.params.map(item => item.id).toString();
-
-        var params = {};
-        params.t = "sysUser";
-        params.ids = ids;
-        params.type= data.params.type;
-        var this_ = this;
-        this.utils.request.batchDeleteInfo(params, function(res) {
-          if (res.code == "0000") {
-            this_.$message({ message: "操作成功", type: "success" });
-            this_.findPage(null);
-          } else {
-            this_.$message({ message: "操作失败, " + res.msg, type: "error" });
-          }
-        });
+      var ids='';
+      for(var i=0;i<data.params.length;i++){
+        ids=ids+data.params[i].id+',';
       }
+      data.t='newsArticle'
+      data.ids=ids
+      this.utils.request.deleteUserInfo(data, data.callback)
     },
     handleAdd:function () {
-
+      this.$router.push({path:"/news/articleAdd",query:{}});
     },
     // 显示编辑界面
     handleEdit: function(params) {
-
+      this.$router.push({path:"/news/articleAdd",query:{articleId:params.row.articleId}});
     },
 
     // 菜单树选中
@@ -295,7 +264,7 @@ export default {
     // 处理表格列过滤显示
     initColumns: function() {
       this.columns = [
-        { prop: "id", label: "文章编号", minWidth: 60 },
+        { prop: "articleId", label: "文章编号", minWidth: 60 },
         { prop: "title", label: "文章标题", minWidth: 120 },
         { prop: "categoryName", label: "所属分类", minWidth: 70 },
         {
@@ -314,7 +283,7 @@ export default {
           formatter: this.statusFormat
         },
         { prop: "validDate", label: "有效期", minWidth: 160 },
-        { prop: "updator", label: "上一次操作时间", minWidth: 110 }
+        { prop: "update_time", label: "上一次操作时间", minWidth: 110 }
       ];
       var temp = [];
       $.each(this.columns, function(key, val) {
@@ -331,6 +300,7 @@ export default {
   },
   mounted() {
     this.initColumns();
+    this.findPage()
   }
 };
 </script>

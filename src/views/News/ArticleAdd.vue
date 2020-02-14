@@ -11,6 +11,9 @@
         label-position="right"
         style="margin-bottom: 100px"
       >
+        <el-form-item label="ID" prop="id" v-if="false">
+          <el-input v-model="dataForm.id" :disabled="true" auto-complete="off"></el-input>
+        </el-form-item>
         <el-form-item label="文章标题" prop="title" required>
           <el-input v-model="dataForm.title" placeholder="文章标题" auto-complete="off"></el-input>
         </el-form-item>
@@ -18,19 +21,20 @@
           <el-select v-model="dataForm.categoryId" placeholder="所属分类">
             <el-option
               v-for="item in categorys"
-              :key="item.categoryId"
-              :label="item.categoryName"
-              :value="item.categoryId">
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="支持平台" prop="platform" required>
-          <el-radio v-model="dataForm.platform" label="1">微信小程序</el-radio>
+          <el-radio v-model="platform" label="1">微信小程序</el-radio>
         </el-form-item>
         <el-form-item label="有效期" prop="startDate" required>
           <el-date-picker
             v-model="dataForm.startDate"
             type="date"
+            value-format="yyyy-MM-dd"
             placeholder="开始时间">
           </el-date-picker>
           至
@@ -38,7 +42,9 @@
         <el-form-item prop="endDate" required>
           <el-date-picker
             v-model="dataForm.endDate"
+            value-format="yyyy-MM-dd"
             type="date"
+            @change="checkDate"
             placeholder="结束时间">
           </el-date-picker>
         </el-form-item>
@@ -60,7 +66,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="文章摘要" prop="desc">
-          <el-input type="textarea" v-model="dataForm.desc" placeholder="不填写会默认抓取正文前54字" auto-complete="off"></el-input>
+          <el-input type="textarea" v-model="dataForm.describes" placeholder="不填写会默认抓取正文前54字" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="文章内容" prop="content">
           <quill-editor ref="myTextEditor" v-model="dataForm.content" class="myQuillEditor"
@@ -70,7 +76,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :size="size" @click.native="dialogVisible = false">{{$t('action.cancel')}}</el-button>
+        <el-button :size="size" @click="closeArticleAdd">{{$t('action.cancel')}}</el-button>
         <el-button
           :size="size"
           type="primary"
@@ -95,6 +101,7 @@
         data(){
           return {
             size: "small",
+            articleId: this.$route.query.articleId,
             labelPosition: 'right',
             dataFormRules: {
               title: [{ required: true, message: "请输入文章标题", trigger: "blur" }],
@@ -105,23 +112,17 @@
             fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
             // 新增编辑界面数据
             dataForm: {
+              id:"",
               title: "",
               categoryId: "",
               platform: "1",
               startDate: "",
               endDate: "",
-              desc: "",
+              describes: "",
               content: "",
             },
+            platform:"1",
             categorys:[
-              {
-                categoryId:1,
-                categoryName:'优惠活动'
-              },
-              {
-                categoryId:2,
-                categoryName:'优惠活动'
-              }
             ],
             editLoading: false,
             editorOption:{
@@ -165,8 +166,83 @@
           });
         },
         submitForm:function () {
-          this.$refs.dataForm.validate(valid => {});
+          this.$refs.dataForm.validate(valid => {
+            if (valid) {
+              this.$confirm("确认提交吗？", "提示", {}).then(() => {
+                this.editLoading = true;
+                let this_=this
+               if(this.dataForm.describes==""){
+                if(this_.dataForm.content.length>=54){
+                  this_.dataForm.describes=this.dataForm.content .replace(/<[^>]+>/g, "").slice(0,54)
+                }else{
+                  this_.dataForm.describes=this.dataForm.content .replace(/<[^>]+>/g, "")
+                }
+               }
+                let params = Object.assign({}, this.dataForm);
+
+                params.t="newsArticle"
+                this.utils.request.editUserInfo(params, this.editInfoBack);
+              });
+            }
+          });
+        },
+        // 新增修改回调
+        editInfoBack: function(data) {
+          if (data.code == "0000") {
+            this.$message({ message: "操作成功", type: "success" });
+            this.$router.push({path:"/news/newsArticle",query:{}});
+          } else {
+            this.$message({ message: "操作失败, " + data.msg, type: "error" });
+          }
+        },
+        closeArticleAdd:function () {
+          this.$router.push({path:"/news/newsArticle",query:{}});
+          this.dataForm={
+            title: "",
+              categoryId: "",
+              platform: "1",
+              startDate: "",
+              endDate: "",
+              desc: "",
+              content: "",
+          }
+        },
+        queryUserList(){
+          var that=this;
+          let params={}
+          params.t="newsArticle"
+          params.sql="queryCategorys"
+          this.utils.request.queryUserList(params,function(data){
+            that.categorys=data.data
+            if(that.articleId!=null || that.articleId!=''){
+              that.queryArticleById()
+            }
+          })
+        },
+        queryArticleById(){
+          if(this.articleId!=null && this.articleId!=''){
+            var that=this;
+            let params={}
+            params.t="newsArticle"
+            params.articleId=that.articleId
+            this.utils.request.queryUserInfo(params,function(data){
+              that.dataForm=data.data
+              that.dataForm.platform=data.data.platform
+              console.log(that.dataForm)
+            })
+          }
+        },
+        checkDate:function () {
+          let this_=this
+          if(this.dataForm.startDate>=this.dataForm.endDate){
+            this_.$message({ message: "开始时间不能大于结束时间", type: "error" });
+            this_.dataForm.endDate="";
+          }
         }
+      },
+      mounted() {
+        this.queryUserList();
+
       }
     }
 </script>

@@ -97,7 +97,7 @@
           />
           <kt-button
             icon="fa fa-search"
-            :label="$t('action.detail')"
+            :label="detailButtonName"
             :show="showDetailOperation"
             :size="size"
             type="primary"
@@ -229,7 +229,10 @@ export default {
     permsAuditFail: String, // 审核不通过权限标识
     permsDetail: String, // 详情权限标识
     permsEditLable: String,
-    permsStart: String,
+    detailButtonName:{
+      type:String,
+      default:'详情'
+    },
     size: {
       // 尺寸样式
       type: String,

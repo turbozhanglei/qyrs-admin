@@ -18,7 +18,7 @@ export default {
         'sign': 'qazwsxedc'
       }
       if (data != null && data != '') {
-        for (var key in data) {  
+        for (var key in data) {
           if (data[key] == null || data[key] == undefined || (jQuery.type(data[key]) === "string" && data[key] == "")) {
 
           } else {
@@ -217,6 +217,36 @@ export default {
     updateUserInfo: function (data, callback) { //   编辑信息
       this.requestUrl(data, 'suser/updateUserInfo', callback);
     },
+    getWordInfo: function (data, callback) { //获取敏感词信息
+      this.requestUrl(data, 'word/getInfo', callback);
+    },
+    saveWordInfo:function (data,callback) {//保存或修改敏感词
+      this.requestUrl(data,'word/saveInfo',callback);
+    },
+    saveAdvertInfo:function (data,callback) {//保存或修改广告位
+      this.requestUrl(data,'advert/saveInfo',callback);
+    },
+    getAdvertInfo:function (data,callback) {//保存或修改广告位
+      this.requestUrl(data,'advert/getInfo',callback);
+    },
+    getTypeList:function(data,callback){//咨询分类类型初始化 单独查询
+      this.requestUrl(data,'news/getTypeList',callback);
+
+    },
+    saveCateGory:function(data,callback){//新增咨询分类
+      this.requestUrl(data,'news/saveCateGory',callback);
+    },
+    queryCategoryList:function(data,callback){//分类列表初始化
+      this.requestUrl(data,'news/queryCategoryList',callback);
+    },
+    delCategory:function(data,callback){//删除咨询分类
+      this.requestUrl(data,'news/delCategory',callback);
+    },
+    changeCateGoryStatus:function(data,callback){//禁用启用分类
+      this.requestUrl(data,'news/changeCateGoryStatus',callback);
+    },
+    
+    
 
     checkPhoneSystem() {
       var u = navigator.userAgent,

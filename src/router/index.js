@@ -7,17 +7,21 @@ import NotFound from '@/views/Error/404'
 import Home from '@/views/Home'
 import Intro from '@/views/Intro/Intro'
 import Generator from '@/views/Generator/Generator'
-import Member from '@/views/Sys/Member'
+/*import Member from '@/views/Sys/Member'
 import MemberInfo from '@/views/Sys/MemberInfo'
 import SensitiveWord from '@/views/Word/SensitiveWord'
 import NewsArticle from '@/views/News/NewsArticle'
-import ArticleAdd from '@/views/News/ArticleAdd'
+
 import NewsCategory from '@/views/News/NewsCategory'
 import ResourceReport from '@/views/Resource/ResourceReport'
 import ResourceList from '@/views/Resource/ResourceList'
 import ResourceInfo from '@/views/Resource/ResourceInfo'
 import AdvertList from '@/views/Advert/AdvertList'
+import AdvertAdd from '@/views/Advert/AdvertAdd'*/
+import AdvertSource from '@/views/Advert/AdvertSource'
+import AdvertSourceAdd from '@/views/Advert/AdvertSourceAdd'
 import AdvertAdd from '@/views/Advert/AdvertAdd'
+import ArticleAdd from '@/views/News/ArticleAdd'
 import api from '@/http/api'
 import store from '@/store'
 
@@ -62,31 +66,31 @@ const router = new Router({
       name: '注册',
       component: Registe
     },
-    // {
-    //   path: '/sys/member',
-    //   name: '会员列表',
-    //   component: Member
-    // },
+    /*{
+      path: '/sys/member',
+      name: '会员列表',
+      component: Member
+    },
     {
       path: '/sys/memberInfo',
       name: '会员详情',
       component: MemberInfo
     },
     {
-      path: '/word/ensitiveWord',
+      path: '/word/sensitiveWord',
       name: '敏感词库',
       component: SensitiveWord
     },
-    {
-      path: '/news/newsArticle',
-      name: '资讯列表',
-      component: NewsArticle
-    },
-    {
-      path: '/news/articleAdd',
-      name: '资讯列表',
-      component: ArticleAdd
-    },
+    // {
+    //   path: '/news/newsArticle',
+    //   name: '资讯列表',
+    //   component: NewsArticle
+    // },
+    // {
+    //   path: '/news/articleAdd',
+    //   name: '资讯列表',
+    //   component: ArticleAdd
+    // },
     {
       path: '/news/newsCategory',
       name: '资讯分类',
@@ -114,9 +118,58 @@ const router = new Router({
     },
     {
       path: '/advert/advertAdd',
-      name:'广告位列表',
+      name:'广告位新增',
       component:AdvertAdd
+    },
+    {
+      path: '/advert/advertSource',
+      name:'广告素材管理',
+      component:AdvertSource
+    },*/
+    {
+      path: '/',
+      name: '新增广告位',
+      component: Home,
+      children: [{
+        path: '/advert/advertAdd',
+        name: '新增广告位',
+        component: AdvertAdd
+      }]
+    },
+    {
+      path: '/',
+      name: '广告素材管理',
+      component: Home,
+      children: [{
+        path: '/advert/advertSource',
+        name: '广告素材管理',
+        component: AdvertSource
+      }]
+    },
+    {
+      path: '/advert/advertSourceAdd',
+      name:'广告位新增',
+      component:AdvertSourceAdd
     }
+    ,{
+      path: '/',
+      name: '咨询新增',
+      component: Home,
+      children: [{
+        path: '/news/articleAdd',
+        name: '咨询新增',
+        component: ArticleAdd
+      }]
+    },
+    {path: '/',
+      name: '广告素材',
+      component: Home,
+      children: [{
+        path: '/advert/advertSourceAdd',
+        name: '广告素材',
+        component: AdvertSourceAdd
+      }]
+    },
   ]
 })
 
