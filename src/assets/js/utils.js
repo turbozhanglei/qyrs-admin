@@ -245,8 +245,14 @@ export default {
     changeCateGoryStatus:function(data,callback){//禁用启用分类
       this.requestUrl(data,'news/changeCateGoryStatus',callback);
     },
-    
-    
+    updateAdvertSourceSort:function (data,callback) {//广告素材排序
+      this.requestUrl(data,'advertSource/updateSort',callback);
+    },
+
+    getCategoryList:function(data,callback){//查询所以一级分类
+      this.requestUrl(data,'queryArticle/queryCategoryList',callback);
+    },
+
 
     checkPhoneSystem() {
       var u = navigator.userAgent,

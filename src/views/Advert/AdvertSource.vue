@@ -40,7 +40,6 @@
             <kt-button
               icon="fa fa-search"
               :label="$t('action.search')"
-              perms="sys:user:view"
               type="primary"
               @click="findPage(filters)"
             />
@@ -49,7 +48,6 @@
             <kt-button
               icon="fa fa-plus"
               :label="$t('action.add')"
-              perms="sys:user:add"
               type="primary"
               @click="handleAdd"
             />
@@ -103,7 +101,7 @@
             width="100"
             align="center">
             <template slot-scope="scope" >
-              <el-image v-if="scope.row.type==1" :src="scope.row.imageUrl"></el-image>
+              <el-image v-if="scope.row.type==1" :src="scope.row.image_url"></el-image>
               <span v-if="scope.row.type==0">{{scope.row.content}}</span>
             </template>
           </el-table-column>
@@ -122,8 +120,8 @@
             align="center"
             prop="sort">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" v-if="scope.$index != 0">上移</el-button>
-              <el-button size="mini" type="primary" v-if="pageResult && pageResult.length > 0 && scope.$index != pageResult.length -1">下移</el-button>
+              <el-button size="mini" type="primary" @click="handleUpdateSort(0,scope.row,scope.$index)" :disabled="(pageResult && pageResult.length > 0 && pageResult.length ==1) || scope.$index == 0">上移</el-button>
+              <el-button size="mini" type="primary" @click="handleUpdateSort(1,scope.row,scope.$index)" :disabled="(pageResult && pageResult.length > 0 && pageResult.length ==1) || (scope.$index == pageResult.length -1)">下移</el-button>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="left">
@@ -228,7 +226,9 @@
         if (filters == undefined || filters == null) {
           filters = {};
         }
-
+        if (this_.adId){
+          filters.adCodeId = this_.adId;
+        }
         filters.start = this.pageRequest.pageNum;
         filters.limit = this.pageRequest.pageSize;
         this.utils.request.queryUserPage(filters, function(res) {
@@ -307,8 +307,37 @@
             }
           });
         })
-      }
+      },
+      //排序,type：0 上移 1 下移
+      handleUpdateSort:function (type,row,index) {
+        var oldSort = row.sort,oldId = row.id;
+        var newSort = '',newId = '';
+        if (type == 0){
+          newId =  this.pageResult[index-1].id;
+          newSort = this.pageResult[index-1].sort;
+        }else {
+          newId =  this.pageResult[index+1].id;
+          newSort = this.pageResult[index+1].sort;
+        }
+        var this_ = this,
+          params = {
+            oldSort:oldSort,
+            oldId:oldId,
+            newSort:newSort,
+            newId:newId
+          };
+        console.log(params);
+        this.utils.request.updateAdvertSourceSort(params,function (res) {
+          if (res && res.code == '0000'){
+            //this_.$message({ message: "删除成功!", type: "success" });
+            this_.findPage(this_.filters)
+          }else {
+            this_.$message.error(res.msg || '删除失败!');
+          }
+        });
+      },
     },
+
     mounted() {
       this.findPage(this.filters);
     }

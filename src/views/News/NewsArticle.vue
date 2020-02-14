@@ -10,20 +10,13 @@
           <el-input v-model="filters.title" placeholder="文章标题" clearable></el-input>
         </el-form-item>
         <el-form-item prop="categoryId" label="所属分类">
-          <el-popover placement="bottom" trigger="click">
-            <ul>
-              <li class="ul_li_style">
-                <span>成交订单金额</span>
-
-              </li>
-              <li class="ul_li_style"><span>成交订单数</span></li>
-              <li class="ul_li_style"><span>成交转化率 </span></li>
-              <li class="ul_li_style"><span>PV</span></li>
-              <li class="ul_li_style"><span>UV</span></li>
-              <li class="ul_li_style"><span>二跳率</span></li>
-            </ul>
-            <el-input v-model="filters.title" placeholder="文章标题" clearable></el-input>
-          </el-popover>
+            <tree-select
+              :options="options"
+              placeholder="请选择分类"
+              v-model="filters.categoryId"
+              style="width:230px"
+              @select="selecteCategory"
+            />
         </el-form-item>
         <el-form-item prop="platform" label="支持平台">
           <el-select v-model="filters.platform" placeholder="支持平台">
@@ -100,7 +93,6 @@
     <!--表格内容栏-->
     <cy-table
       :height="350"
-      permsEdit="sys:user:edit"
       :data="pageResult"
       :columns="filterColumns"
       @findPage="findPage"
@@ -120,21 +112,27 @@ import KtButton from "@/views/Core/KtButton";
 import TableColumnFilterDialog from "@/views/Core/TableColumnFilterDialog";
 import { format } from "@/utils/datetime";
 import { exportExcel } from "@/utils/excel";
+import TreeSelect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
+  name: 'CustomTreeSelect',
   components: {
     PopupTreeInput,
     CyTable,
     KtButton,
-    TableColumnFilterDialog
+    TableColumnFilterDialog,
+    TreeSelect
   },
   data() {
     return {
+      options:[],
+      value:null,
       size: "small",
       labelPosition: 'left',
       filters: {
         articleId: "",//文章id
         title:"",//文章标题
-        categoryId:"",//所属分类
+        categoryId:null,//所属分类
         platform:"",//支持平台
         status:"",//状态
       },
@@ -142,8 +140,6 @@ export default {
       filterColumns: [],
       pageRequest: { pageNum: 1, pageSize: 10 },
       pageResult: {},
-
-      options: [],
       articleStatus:[
         {
           'statusName':'全部',
@@ -176,20 +172,7 @@ export default {
     };
   },
   methods: {
-    remoteMethod: function(query) {
-      if (query !== "") {
-        //查询后台客户信息
-        var search = {};
-        search.t = "sysUser";
-        search.username = query;
-        var this_ = this;
-        this.utils.request.queryUserList(search, function(res) {
-          this_.options = res.data;
-        });
-      } else {
-        this.options = [];
-      }
-    },
+
     choseCustomer: function(selVal) {
       var temp = this.options;
       var this_ = this;
@@ -291,9 +274,26 @@ export default {
       });
       this.filterColumns = temp;
     },
-
+    //初始化分类
+    queryCategoryList(){
+      var that=this;
+      let params={}
+      params.t="newsArticle"
+      params.sql="queryCategoryList"
+      this.utils.request.getCategoryList(params,function(data){
+        that.options=data.data
+      })
+    },
+    selecteCategory(param){
+      if(param.isFirstLevel==0){
+        this.filters.isFirstLevel=0;
+      }else if(param.isFirstLevel==1){
+        this.filters.isFirstLevel=1;
+      }
+    },
     reset: function() {
       this.$refs["filters"].resetFields();
+      this.filters.isFirstLevel=""
       this.$refs.CyTable.resetForm();
       this.findPage();
     }
@@ -301,6 +301,7 @@ export default {
   mounted() {
     this.initColumns();
     this.findPage()
+    this.queryCategoryList()
   }
 };
 </script>
