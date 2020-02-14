@@ -11,6 +11,9 @@
         label-position="right"
         style="margin-bottom: 100px"
       >
+        <el-form-item label="ID" prop="id" v-if="false">
+          <el-input v-model="dataForm.id" :disabled="true" auto-complete="off"></el-input>
+        </el-form-item>
         <el-form-item label="文章标题" prop="title" required>
           <el-input v-model="dataForm.title" placeholder="文章标题" auto-complete="off"></el-input>
         </el-form-item>
@@ -25,14 +28,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="支持平台" prop="platform" required>
-          <el-radio v-model="dataForm.platform" label="1">微信小程序</el-radio>
+          <el-radio v-model="platform" label="1">微信小程序</el-radio>
         </el-form-item>
         <el-form-item label="有效期" prop="startDate" required>
           <el-date-picker
             v-model="dataForm.startDate"
             type="date"
             value-format="yyyy-MM-dd"
-            placeholder="选择日期">
+            placeholder="开始时间">
           </el-date-picker>
           至
         </el-form-item>
@@ -41,6 +44,7 @@
             v-model="dataForm.endDate"
             value-format="yyyy-MM-dd"
             type="date"
+            @change="checkDate"
             placeholder="结束时间">
           </el-date-picker>
         </el-form-item>
@@ -108,6 +112,7 @@
             fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
             // 新增编辑界面数据
             dataForm: {
+              id:"",
               title: "",
               categoryId: "",
               platform: "1",
@@ -116,6 +121,7 @@
               describes: "",
               content: "",
             },
+            platform:"1",
             categorys:[
             ],
             editLoading: false,
@@ -164,8 +170,16 @@
             if (valid) {
               this.$confirm("确认提交吗？", "提示", {}).then(() => {
                 this.editLoading = true;
-
+                let this_=this
+               if(this.dataForm.describes==""){
+                if(this_.dataForm.content.length>=54){
+                  this_.dataForm.describes=this.dataForm.content .replace(/<[^>]+>/g, "").slice(0,54)
+                }else{
+                  this_.dataForm.describes=this.dataForm.content .replace(/<[^>]+>/g, "")
+                }
+               }
                 let params = Object.assign({}, this.dataForm);
+
                 params.t="newsArticle"
                 this.utils.request.editUserInfo(params, this.editInfoBack);
               });
@@ -200,6 +214,9 @@
           params.sql="queryCategorys"
           this.utils.request.queryUserList(params,function(data){
             that.categorys=data.data
+            if(that.articleId!=null || that.articleId!=''){
+              that.queryArticleById()
+            }
           })
         },
         queryArticleById(){
@@ -210,16 +227,22 @@
             params.articleId=that.articleId
             this.utils.request.queryUserInfo(params,function(data){
               that.dataForm=data.data
+              that.dataForm.platform=data.data.platform
+              console.log(that.dataForm)
             })
           }
+        },
+        checkDate:function () {
+          let this_=this
+          if(this.dataForm.startDate>=this.dataForm.endDate){
+            this_.$message({ message: "开始时间不能大于结束时间", type: "error" });
+            this_.dataForm.endDate="";
+          }
         }
-
       },
       mounted() {
         this.queryUserList();
-        if(this.articleId!=null&&this.articleId!=''){
-          this.queryArticleById()
-        }
+
       }
     }
 </script>

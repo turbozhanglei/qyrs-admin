@@ -10,14 +10,20 @@
           <el-input v-model="filters.title" placeholder="文章标题" clearable></el-input>
         </el-form-item>
         <el-form-item prop="categoryId" label="所属分类">
-          <el-select v-model="filters.categoryId" placeholder="所属分类">
-            <el-option
-              v-for="item in categorys"
-              :key="item.categoryId"
-              :label="item.categoryName"
-              :value="item.categoryId">
-            </el-option>
-          </el-select>
+          <el-popover placement="bottom" trigger="click">
+            <ul>
+              <li class="ul_li_style">
+                <span>成交订单金额</span>
+
+              </li>
+              <li class="ul_li_style"><span>成交订单数</span></li>
+              <li class="ul_li_style"><span>成交转化率 </span></li>
+              <li class="ul_li_style"><span>PV</span></li>
+              <li class="ul_li_style"><span>UV</span></li>
+              <li class="ul_li_style"><span>二跳率</span></li>
+            </ul>
+            <el-input v-model="filters.title" placeholder="文章标题" clearable></el-input>
+          </el-popover>
         </el-form-item>
         <el-form-item prop="platform" label="支持平台">
           <el-select v-model="filters.platform" placeholder="支持平台">
@@ -208,23 +214,13 @@ export default {
     },
     // 批量删除
     handleDelete: function(data) {
-      if (data != null && data.params != null && data.params.length > 0) {
-        let ids = data.params.map(item => item.id).toString();
-
-        var params = {};
-        params.t = "sysUser";
-        params.ids = ids;
-        params.type= data.params.type;
-        var this_ = this;
-        this.utils.request.batchDeleteInfo(params, function(res) {
-          if (res.code == "0000") {
-            this_.$message({ message: "操作成功", type: "success" });
-            this_.findPage(null);
-          } else {
-            this_.$message({ message: "操作失败, " + res.msg, type: "error" });
-          }
-        });
+      var ids='';
+      for(var i=0;i<data.params.length;i++){
+        ids=ids+data.params[i].id+',';
       }
+      data.t='newsArticle'
+      data.ids=ids
+      this.utils.request.deleteUserInfo(data, data.callback)
     },
     handleAdd:function () {
       this.$router.push({path:"/news/articleAdd",query:{}});
