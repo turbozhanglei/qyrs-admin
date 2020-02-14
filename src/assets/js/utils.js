@@ -245,8 +245,11 @@ export default {
     changeCateGoryStatus:function(data,callback){//禁用启用分类
       this.requestUrl(data,'news/changeCateGoryStatus',callback);
     },
-    
-    
+
+    queryCategoryList:function(data,callback){//查询所以一级分类
+      this.requestUrl(data,'queryCategory/queryCategoryList',callback);
+    },
+
 
     checkPhoneSystem() {
       var u = navigator.userAgent,
