@@ -251,6 +251,12 @@ export default {
     updateAdvertSourceSort:function (data,callback) {//广告素材排序
       this.requestUrl(data,'advertSource/updateSort',callback);
     },
+    saveAdvertSourceInfo:function (data,callback) {//保存或修改广告素材
+      this.requestUrl(data,'advertSource/saveInfo',callback);
+    },
+    getAdvertSourceInfo:function (data,callback) {//保存或修改广告位
+      this.requestUrl(data,'advertSource/getInfo',callback);
+    },
 
     getCategoryList:function(data,callback){//查询所以一级分类
       this.requestUrl(data,'queryArticle/queryCategoryList',callback);

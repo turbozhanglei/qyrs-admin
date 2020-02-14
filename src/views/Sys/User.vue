@@ -475,9 +475,10 @@ export default {
             }
 
             var this_ = this;
-            params.identity_type=1
-            params.status=0
-            params.source=1
+            params.identity_type=1;
+            params.status=0;
+            params.source=1;
+            params.editSum=0;
 
             this.utils.request.editUser(params, function(res) {
               if (res.code == "0000") {
