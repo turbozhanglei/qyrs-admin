@@ -21,7 +21,7 @@
           />
         </el-form-item>
         <el-form-item>
-          <kt-button icon="fa fa-plus" :label="$t('action.add')" type="primary" @click="handleAdd" />
+          <kt-button icon="fa fa-plus" :label="$t('action.add')" type="primary" @click="handleAdd" perms="sys:dict:add"/>
         </el-form-item>
         <el-form-item>
           <kt-button

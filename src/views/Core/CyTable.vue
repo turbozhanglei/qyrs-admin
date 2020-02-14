@@ -229,6 +229,7 @@ export default {
     permsAuditFail: String, // 审核不通过权限标识
     permsDetail: String, // 详情权限标识
     permsEditLable: String,
+    permsStart: String,
     size: {
       // 尺寸样式
       type: String,

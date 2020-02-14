@@ -7,13 +7,13 @@
           <el-input v-model="filters.nickname" placeholder="会员昵称" clearable></el-input>
         </el-form-item>
         <el-form-item prop="userId" label="用户ID">
-          <el-input v-model="filters.userId" placeholder="用户ID" clearable></el-input>
+          <el-input v-model="filters.id" placeholder="用户ID" clearable></el-input>
         </el-form-item>
         <el-form-item prop="mobile" label="手机号">
           <el-input v-model="filters.mobile" placeholder="手机号" clearable></el-input>
         </el-form-item>
-        <el-form-item prop="userStatus" label="用户状态">
-          <el-select v-model="filters.userStatus" placeholder="用户状态">
+        <el-form-item prop="status" label="用户状态">
+          <el-select v-model="filters.status" placeholder="用户状态">
             <el-option
               v-for="item in optionStatus"
               :key="item.value"
@@ -82,7 +82,8 @@
     <!--表格内容栏-->
     <cy-table
       :height="350"
-      permsEdit="sys:user:edit"
+      permsDisable="sys:mem:start"
+      permsEnable="sys:mem:disable"
       :data="pageResult"
       :columns="filterColumns"
       @findPage="findPage"

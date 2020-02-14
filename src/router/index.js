@@ -62,11 +62,11 @@ const router = new Router({
       name: '注册',
       component: Registe
     },
-    {
-      path: '/sys/member',
-      name: '会员列表',
-      component: Member
-    },
+    // {
+    //   path: '/sys/member',
+    //   name: '会员列表',
+    //   component: Member
+    // },
     {
       path: '/sys/memberInfo',
       name: '会员详情',
