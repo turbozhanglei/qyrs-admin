@@ -247,7 +247,7 @@ export default {
     },
 
     queryCategoryList:function(data,callback){//查询所以一级分类
-      this.requestUrl(data,'queryCategory/queryCategoryList',callback);
+      this.requestUrl(data,'queryArticle/queryCategoryList',callback);
     },
 
 
