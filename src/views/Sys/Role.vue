@@ -4,7 +4,7 @@
     <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
       <el-form :inline="true" :model="filters" :size="size">
         <el-form-item>
-          <el-input v-model="filters.name" placeholder="角色名"></el-input>
+          <el-input v-model="filters.role_name" placeholder="角色名"></el-input>
         </el-form-item>
         <el-form-item>
           <kt-button
@@ -15,7 +15,7 @@
           />
         </el-form-item>
         <el-form-item>
-          <kt-button icon="fa fa-plus" :label="$t('action.add')" type="primary" @click="handleAdd" />
+          <kt-button icon="fa fa-plus" :label="$t('action.add')" perms="sys:role:add" type="primary" @click="handleAdd" />
         </el-form-item>
         <el-form-item>
           <kt-button
@@ -29,9 +29,9 @@
     </div>
     <!--表格内容栏-->
     <cy-table
+       permsEdit="sys:role:edit"
+       permsDelete="sys:role:delete"
       :height="220"
-      permsEdit="sys:role:edit"
-      permsDelete="sys:role:delete"
       :highlightCurrentRow="true"
       :stripe="false"
       :data="pageResult"
