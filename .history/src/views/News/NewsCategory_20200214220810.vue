@@ -101,7 +101,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="primary" @click="addChildrenCategory(scope.$index, scope.row)" v-if="scope.row.level == 1">添加子类</el-button>
+          <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">添加子类</el-button>
           <el-button
             size="mini"
             type="info"
@@ -145,7 +145,7 @@
         label-position="right"
       >
         <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" >
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类">
             <el-option
               v-for="item in superCategorys"
               :key="item.refId"
@@ -154,8 +154,9 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所属平台" prop="platform"  required>
-          <el-radio v-model="radio" label="1">微信小程序</el-radio>
+        <el-form-item label="所属平台" prop="platform" required>
+          <el-radio v-model="dataForm.platform" label="1">微信小程序</el-radio>
+          <el-radio v-model="dataForm.platform" label="2">H5</el-radio>
         </el-form-item>
         <el-form-item label="分类名称" prop="name" required>
           <el-input v-model="dataForm.name" auto-complete="off"></el-input>
@@ -163,76 +164,14 @@
         <el-form-item label="排序" prop="sort">
           <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off"></el-input>
         </el-form-item>
-
-        <el-form-item label="状态" required>
-          <el-radio-group v-model="dataForm.status">
-            <el-radio
-              v-for="item in status"
-              :key="item.value"
-              :value="item.value"
-              :label="item.value"
-            >{{item.label}}</el-radio>
-          </el-radio-group> 
+        <el-form-item label="状态" prop="status" required>
+          <el-radio v-model="dataForm.status" label="0">启用</el-radio>
+          <el-radio v-model="dataForm.status" label="1">禁用</el-radio>
         </el-form-item>
       </el-form>
-      
       <div slot="footer" class="dialog-footer">
         <el-button :size="size" @click.native="dialogVisible = false">{{$t('action.cancel')}}</el-button>
         <el-button :size="size" type="primary" @click.native="submitForm">{{$t('action.submit')}}</el-button>
-      </div>
-    </el-dialog>
-
-
-
-    <el-dialog
-      title="新增子类"
-      width="40%"
-      :visible.sync="dialogVisible1"
-      :close-on-click-modal="false"
-    >
-      <el-form
-        :model="dataForm"
-        label-width="80px"
-        :rules="dataFormRules"
-        ref="dataForm"
-        :size="size"
-        label-position="right"
-      >
-        <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" >
-            <el-option
-              v-for="item in superCategorys"
-              :key="item.refId"
-              :label="item.name"
-              :value="item.refId"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所属平台" prop="platform"  required>
-          <el-radio v-model="radio" label="1">微信小程序</el-radio>
-        </el-form-item>
-        <el-form-item label="分类名称" prop="name" required>
-          <el-input v-model="dataForm.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off"></el-input>
-        </el-form-item>
-
-        <el-form-item label="状态" required>
-          <el-radio-group v-model="dataForm.status">
-            <el-radio
-              v-for="item in status"
-              :key="item.value"
-              :value="item.value"
-              :label="item.value"
-            >{{item.label}}</el-radio>
-          </el-radio-group> 
-        </el-form-item>
-      </el-form>
-      
-      <div slot="footer" class="dialog-footer">
-        <el-button :size="size" @click.native="dialogVisible1 = false">{{$t('action.cancel')}}</el-button>
-        <el-button :size="size" type="primary" @click.native="submitForm1">{{$t('action.submit')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -251,12 +190,6 @@ export default {
   },
   data() {
     return {
-      dialogVisible1:false,
-      radio: '1',
-       status: [
-        { label: "启用", value: 0},
-        { label: "停用", value: 1}
-      ],
       size: "small",
       labelPosition: "left",
       stripe: true,
@@ -308,7 +241,7 @@ export default {
         platform: "1",
         name: "",
         sort: "",
-        status: ""
+        status: "0"
       },
       dataFormRules: {
         refId: [{ required: true, message: "请选择上级分类", trigger: "blur" }],
@@ -326,29 +259,7 @@ export default {
         if(res.data!=null){
          this_.tableData=res.data
          }
-         
       });
-    },
-
-    // 显示编辑界面
-    handleEdit: function(index,row) {
-      
-      let this_=this
-      this_.operation = false;
-      this_.dialogVisible = true;
-      this_.dataForm=row
-      this_.dataForm.refId=row.ref_id
-      this_.dataForm.status=row.status
-      this_.dataForm.id = row.id
-      console.log(row.id);
-     console.log(row.status+"******")
-     if(row.ref_id==1){
-       this_.setType();
-     }else{
-       this_.setTypes();
-     }
-      
-
     },
   
     // 删除按钮
@@ -390,11 +301,10 @@ export default {
     //分类初始化
 
   
-    getTypeList: function(params) {
+    getTypeList: function(data) {
        
         var this_ = this;
-        
-        this.utils.request.getTypeList(params, function(res) {
+        this.utils.request.getTypeList({}, function(res) {
           this_.superCategorys=res.data
          
         });
@@ -402,7 +312,6 @@ export default {
     
 
     handleAdd: function() {
-      
       this.dialogVisible = true;
       this.operation = true;
       this.dataForm = {
@@ -410,42 +319,21 @@ export default {
         platform: "1",
         name: "",
         sort: "",
-        status: ""
+        status: "0"
       };
     },
-//新增子类
-    addChildrenCategory:function(index,row){
-        
-   
-        this.dialogVisible1 = true;
-        this.dataForm = {
-        refId: "",
-        platform: "1",
-        name: "",
-        sort: "",
-        status: ""
-      };
-      this.superCategorys=[{name: "顶级分类", refId: 1}]
-      this.dataForm.firstId=row.id
-      
-        
-    },
-    //保存新增子类
-    submitForm1: function() {
-    this.$refs.dataForm.validate(valid => {
-      if (valid) {
-        this.$confirm("确认提交吗？", "提示", {}).then(() => {
-          this.editLoading = true;
-          let params = Object.assign({}, this.dataForm);
-         
-          console.log("成功啊"+params.refId+params.level)
-          this.utils.request.saveChildrenCategory(params, this.editInfoBack);
-          
-        });
+    // 显示编辑界面
+    handleEdit: function(index,row) {
+      let this_=this
+      this_.operation = false;
+      this_.dialogVisible = true;
+      this_.dataForm=row
+      console.log(row.refId+"nnnnnnnnnnnnn")
+      if(row.refId==1){
+        this_.setType();
       }
-    });
-  },
-    
+
+    },
     updateSort: function(row) {
       console.log("111");
     },
@@ -503,7 +391,6 @@ export default {
           let params = Object.assign({}, this.dataForm);
           console.log("成功啊"+params.refId+params.level)
           this.utils.request.saveCateGory(params, this.editInfoBack);
-          
         });
       }
     });
@@ -517,22 +404,13 @@ export default {
       }
       this.findPage();
       this.dialogVisible = false;
-       this.dialogVisible1 = false;
       this.operation = false;
       this.editLoading = false;
     },
-     setType:function(data){//编辑时如果是一级分类
+     setType:function(data){
        let this_ = this
-       this_.superCategorys=[{name: "顶级分类", refId: 1}]
+       this_.superCategorys=[]
      },
-
-     setTypes:function(data){
-       let this_ = this
-       let params={}
-       params.level=1
-       this_.getTypeList(params);
-     },
-     
   },
 
  

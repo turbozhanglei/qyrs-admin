@@ -415,17 +415,19 @@ export default {
     },
 //新增子类
     addChildrenCategory:function(index,row){
-        
-   
+      
+
         this.dialogVisible1 = true;
-        this.dataForm = {
-        refId: "",
-        platform: "1",
-        name: "",
-        sort: "",
-        status: ""
-      };
-      this.superCategorys=[{name: "顶级分类", refId: 1}]
+        
+        
+      // this.dataForm = {
+      //   refId: "",
+      //   platform: "1",
+      //   name: "",
+      //   sort: "",
+      //   status: ""
+      // };
+      this.dataForm.refId=row.ref_id
       this.dataForm.firstId=row.id
       
         

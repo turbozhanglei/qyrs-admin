@@ -425,7 +425,7 @@ export default {
         sort: "",
         status: ""
       };
-      this.superCategorys=[{name: "顶级分类", refId: 1}]
+      this.setType();
       this.dataForm.firstId=row.id
       
         

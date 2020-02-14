@@ -101,7 +101,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="primary" @click="addChildrenCategory(scope.$index, scope.row)" v-if="scope.row.level == 1">添加子类</el-button>
+          <el-button size="mini" type="warning" @click="addChildrenCategory(scope.$index, scope.row)" v-if="scope.row.level == 1">添加子类</el-button>
           <el-button
             size="mini"
             type="info"
@@ -177,15 +177,15 @@
       </el-form>
       
       <div slot="footer" class="dialog-footer">
-        <el-button :size="size" @click.native="dialogVisible = false">{{$t('action.cancel')}}</el-button>
-        <el-button :size="size" type="primary" @click.native="submitForm">{{$t('action.submit')}}</el-button>
+        <el-button :size="size" @click.native="dialogVisible1 = false">{{$t('action.cancel')}}</el-button>
+        <el-button :size="size" type="primary" @click.native="submitForm1">{{$t('action.submit')}}</el-button>
       </div>
     </el-dialog>
 
 
 
     <el-dialog
-      title="新增子类"
+      title="新增自雷"
       width="40%"
       :visible.sync="dialogVisible1"
       :close-on-click-modal="false"
@@ -231,8 +231,8 @@
       </el-form>
       
       <div slot="footer" class="dialog-footer">
-        <el-button :size="size" @click.native="dialogVisible1 = false">{{$t('action.cancel')}}</el-button>
-        <el-button :size="size" type="primary" @click.native="submitForm1">{{$t('action.submit')}}</el-button>
+        <el-button :size="size" @click.native="dialogVisible = false">{{$t('action.cancel')}}</el-button>
+        <el-button :size="size" type="primary" @click.native="submitForm">{{$t('action.submit')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -402,7 +402,7 @@ export default {
     
 
     handleAdd: function() {
-      
+      this.getTypeList()
       this.dialogVisible = true;
       this.operation = true;
       this.dataForm = {
@@ -415,19 +415,19 @@ export default {
     },
 //新增子类
     addChildrenCategory:function(index,row){
-        
-   
-        this.dialogVisible1 = true;
-        this.dataForm = {
+      
+      let this_ = this
+      this_.dataForm = {
         refId: "",
         platform: "1",
         name: "",
         sort: "",
         status: ""
       };
-      this.superCategorys=[{name: "顶级分类", refId: 1}]
-      this.dataForm.firstId=row.id
-      
+        this_.setType();
+        this.dialogVisible1 = true;
+        this.operation1 = true;
+        dataForm.refId=row.id
         
     },
     //保存新增子类
@@ -517,7 +517,6 @@ export default {
       }
       this.findPage();
       this.dialogVisible = false;
-       this.dialogVisible1 = false;
       this.operation = false;
       this.editLoading = false;
     },

@@ -425,7 +425,9 @@ export default {
         sort: "",
         status: ""
       };
-      this.superCategorys=[{name: "顶级分类", refId: 1}]
+       let params={}
+       params.id=row.id
+       this.getTypeList(params); //查询当前分类名称
       this.dataForm.firstId=row.id
       
         

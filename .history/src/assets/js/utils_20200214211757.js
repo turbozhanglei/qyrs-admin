@@ -245,9 +245,6 @@ export default {
     changeCateGoryStatus:function(data,callback){//禁用启用分类
       this.requestUrl(data,'news/changeCateGoryStatus',callback);
     },
-    saveChildrenCategory:function(data,callback){//新增子类
-      this.requestUrl(data,'news/saveChildrenCategory',callback);
-    },
     updateAdvertSourceSort:function (data,callback) {//广告素材排序
       this.requestUrl(data,'advertSource/updateSort',callback);
     },
@@ -255,7 +252,6 @@ export default {
     getCategoryList:function(data,callback){//查询所以一级分类
       this.requestUrl(data,'queryArticle/queryCategoryList',callback);
     },
-   
 
 
     checkPhoneSystem() {

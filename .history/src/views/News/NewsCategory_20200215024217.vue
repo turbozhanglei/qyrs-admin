@@ -101,7 +101,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="primary" @click="addChildrenCategory(scope.$index, scope.row)" v-if="scope.row.level == 1">添加子类</el-button>
+          <el-button size="mini" type="warning" @click="addChildrenCategory(scope.$index, scope.row)" v-if="scope.row.level == 1">添加子类</el-button>
           <el-button
             size="mini"
             type="info"
@@ -415,17 +415,19 @@ export default {
     },
 //新增子类
     addChildrenCategory:function(index,row){
-        
-   
+      
+
         this.dialogVisible1 = true;
-        this.dataForm = {
-        refId: "",
-        platform: "1",
-        name: "",
-        sort: "",
-        status: ""
-      };
-      this.superCategorys=[{name: "顶级分类", refId: 1}]
+        
+        
+      // this.dataForm = {
+      //   refId: "",
+      //   platform: "1",
+      //   name: "",
+      //   sort: "",
+      //   status: ""
+      // };
+      this.dataForm.refId=row.ref_id
       this.dataForm.firstId=row.id
       
         
