@@ -18,8 +18,8 @@
 
         <el-form-item label="素材类型" prop="type" required>
           <el-radio-group v-model="dataForm.type">
-            <el-radio label="0">文字</el-radio>
-            <el-radio label="1">图片</el-radio>
+            <el-radio label="0" v-if="textType">文字</el-radio>
+            <el-radio label="1" v-if="imageType">图片</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="广告文本" prop="content" v-if="dataForm.type != 1" required>
@@ -144,6 +144,8 @@
         adSourceId: this.$route.query.adSourceId,
         isEdit:this.$route.query.isEdit,
         adCodeId:this.$route.query.adCodeId,//广告位id
+        textType:true,
+        imageType:false,
       }
     },
     methods:{
@@ -195,6 +197,7 @@
           confirmButtonText: '确定'
         });
       },
+      //查询素材详情
       queryAdSourceInfo:function (id) {
         var this_ = this;
         this.utils.request.getAdvertSourceInfo({id:id}, function(data) {
@@ -217,7 +220,34 @@
           }
         })
       },
+      //查询对应广告位信息
+      queryAdvertInfo:function (id) {
+        var this_ = this;
+        this.utils.request.getAdvertInfo({id:id}, function(data) {
+          if (data && data.data && data.code == '0000'){
+            if (data.data.type && data.data.type.length > 0){
+              if (data.data.type.length == 1){
+                if (data.data.type == '0'){
+                  this_.textType = true;
+                  this_.imageType = false;
+                }else if (data.data.type == '1'){
+                  this_.textType = false;
+                  this_.imageType = true;
+                }
+                this_.dataForm.type = data.data.type;
+              }else {
+                this_.dataForm.type = '0';
+                this_.textType = true;
+                this_.imageType = true;
+              }
+            }
+          }else {
+            this_.$message.error(data.msg || '获取广告位详情失败!');
+          }
+        })
+      },
       init:function () {
+        this.queryAdvertInfo(this.adCodeId);
         if (this.adSourceId){
           this.queryAdSourceInfo(this.adSourceId);
         }
