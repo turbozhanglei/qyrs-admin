@@ -246,7 +246,7 @@ export default {
       this.requestUrl(data,'news/changeCateGoryStatus',callback);
     },
 
-    queryCategoryList:function(data,callback){//查询所以一级分类
+    getCategoryList:function(data,callback){//查询所以一级分类
       this.requestUrl(data,'queryArticle/queryCategoryList',callback);
     },
 

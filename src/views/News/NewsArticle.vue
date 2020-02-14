@@ -280,7 +280,7 @@ export default {
       let params={}
       params.t="newsArticle"
       params.sql="queryCategoryList"
-      this.utils.request.queryCategoryList(params,function(data){
+      this.utils.request.getCategoryList(params,function(data){
         that.options=data.data
       })
     },
