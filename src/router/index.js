@@ -18,6 +18,7 @@ import ResourceList from '@/views/Resource/ResourceList'
 import ResourceInfo from '@/views/Resource/ResourceInfo'
 import AdvertList from '@/views/Advert/AdvertList'
 import AdvertAdd from '@/views/Advert/AdvertAdd'*/
+import memberInfo from '@/views/sys/memberInfo'
 import AdvertSource from '@/views/Advert/AdvertSource'
 import AdvertSourceAdd from '@/views/Advert/AdvertSourceAdd'
 import AdvertAdd from '@/views/Advert/AdvertAdd'
@@ -128,10 +129,20 @@ const router = new Router({
     },*/
     {
       path: '/',
+      name: '会员详情',
+      component: Home,
+      children: [{
+        path: '/sys/memberInfo/:id',
+        name: '会员详情',
+        component: memberInfo
+      }]
+    },
+    {
+      path: '/',
       name: '新增广告位',
       component: Home,
       children: [{
-        path: '/advert/advertAdd',
+        path: '/advert/advertAdd/:id',
         name: '新增广告位',
         component: AdvertAdd
       }]
@@ -141,15 +152,10 @@ const router = new Router({
       name: '广告素材管理',
       component: Home,
       children: [{
-        path: '/advert/advertSource',
+        path: '/advert/advertSource/:id',
         name: '广告素材管理',
         component: AdvertSource
       }]
-    },
-    {
-      path: '/advert/advertSourceAdd',
-      name:'广告位新增',
-      component:AdvertSourceAdd
     }
     ,{
       path: '/',
@@ -165,7 +171,7 @@ const router = new Router({
       name: '广告素材',
       component: Home,
       children: [{
-        path: '/advert/advertSourceAdd',
+        path: '/advert/advertSourceAdd/:adCodeId/:adSourceId/:isEdit',
         name: '广告素材',
         component: AdvertSourceAdd
       }]

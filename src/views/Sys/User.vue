@@ -412,7 +412,7 @@ export default {
       this.dataForm = {
         id: params.row.id,
         name: params.row.name,
-        password: "12345678",
+        password: "1a6XzyruFj",
         deptid: params.row.deptid,
         deptname: params.row.deptname,
         email: params.row.email,
@@ -465,7 +465,10 @@ export default {
             }
 
             params.userRoles = userRoles.map(item => item.roleId).toString();
-
+            
+            if(params.password=="1a6XzyruFj"){
+              delete params.password;
+            }
             if (this.paswordTemp == params.password) {
               delete params.password;
             }

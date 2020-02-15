@@ -104,7 +104,7 @@ export default {
         startTime:"",//开始日期
         endTime:"",//结束日期
       },
-      userId: this.$route.query.userId,
+      userId: this.$route.params.id,
     };
   },
   methods: {

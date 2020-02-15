@@ -194,7 +194,7 @@
         totalSize:0,
         options: [],
         activeName:"0",//tab默认选中生效中 0
-        adId:this.$route.query.adId,//广告codeid
+        adId:this.$route.params.id,//广告codeid
         startDateDisabled:{},
         endDateDisabled:{},
       };
@@ -243,15 +243,15 @@
       },
       //新增
       handleAdd:function () {
-        this.$router.push({path:"/advert/advertSourceAdd",query:{adCodeId:this.adId}});
+        this.$router.push({path:"/advert/advertSourceAdd/" + this.adId + '/0/0'});
       },
       // 显示编辑界面
       handleEdit: function(index,row) {
-        this.$router.push({path:"/advert/advertSourceAdd",query:{adSourceId:row.id,adCodeId:this.adId}});
+        this.$router.push({path:"/advert/advertSourceAdd/" + this.adId + '/' + row.id + '/0'});
       },
       //查看
       handleDetail:function (index,row) {
-        this.$router.push({path:"/advert/advertSourceAdd",query:{adSourceId:row.id,adCodeId:this.adId,isEdit:1}});
+        this.$router.push({path:"/advert/advertSourceAdd/" + this.adId + '/' + row.id + '/1'});
       },
       // 类型格式化
       typeFormat: function(row, column, cellValue, index) {

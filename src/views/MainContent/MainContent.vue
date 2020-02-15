@@ -15,7 +15,7 @@
           </el-dropdown-menu>
         </el-dropdown>
         <el-tab-pane v-for="item in mainTabs"
-          :key="item.name" :label="item.title" :name="item.name">
+          :key="item.path" :label="item.title" :name="item.name">
           <span slot="label"><i :class="item.icon"></i> {{item.title}} </span>
         </el-tab-pane>
       </el-tabs>
@@ -52,7 +52,7 @@ export default {
     selectedTabHandle (tab) {
       tab = this.mainTabs.filter(item => item.name === tab.name)
       if (tab.length >= 1) {
-        this.$router.push({ name: tab[0].name })
+        this.$router.push({ path: tab[0].path })
       }
     },
     // tabs, 删除tab
@@ -61,7 +61,7 @@ export default {
       if (this.mainTabs.length >= 1) {
         // 当前选中tab被删除
         if (tabName === this.mainTabsActiveName) {
-          this.$router.push({ name: this.mainTabs[this.mainTabs.length - 1].name }, () => {
+          this.$router.push({ path: this.mainTabs[this.mainTabs.length - 1].path }, () => {
             this.mainTabsActiveName = this.$route.name
           })
         }
