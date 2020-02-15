@@ -101,7 +101,7 @@
         data(){
           return {
             size: "small",
-            articleId: this.$route.query.articleId,
+            articleId: this.$route.params.articleId,
             labelPosition: 'right',
             dataFormRules: {
               title: [{ required: true, message: "请输入文章标题", trigger: "blur" }],
@@ -196,9 +196,9 @@
           }
         },
         closeArticleAdd:function () {
-          this.$router.push({path:"/news/newsArticle",query:{}});
+          this.$router.push({path:"/news/newsArticle"});
           this.dataForm={
-            title: "",
+              title: "",
               categoryId: "",
               platform: "1",
               startDate: "",
@@ -220,7 +220,7 @@
           })
         },
         queryArticleById(){
-          if(this.articleId!=null && this.articleId!=''){
+          if(this.articleId!=0){
             var that=this;
             let params={}
             params.t="newsArticle"

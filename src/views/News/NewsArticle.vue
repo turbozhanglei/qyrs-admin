@@ -206,11 +206,13 @@ export default {
       this.utils.request.deleteUserInfo(data, data.callback)
     },
     handleAdd:function () {
-      this.$router.push({path:"/news/articleAdd",query:{}});
+      // this.$router.push({path:"/advert/advertSourceAdd/" + this.adId + '/0/0'});
+      this.$router.push({path:"/news/articleAdd"+ '/0'});
     },
     // 显示编辑界面
     handleEdit: function(params) {
-      this.$router.push({path:"/news/articleAdd",query:{articleId:params.row.articleId}});
+      this.$router.push({path:"/news/articleAdd"+ '/'+params.row.articleId});
+      // this.$router.push({path:"/news/articleAdd",query:{articleId:params.row.articleId}});
     },
 
     // 菜单树选中

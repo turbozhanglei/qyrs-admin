@@ -162,7 +162,7 @@ const router = new Router({
       name: '咨询新增',
       component: Home,
       children: [{
-        path: '/news/articleAdd',
+        path: '/news/articleAdd/:articleId',
         name: '咨询新增',
         component: ArticleAdd
       }]
