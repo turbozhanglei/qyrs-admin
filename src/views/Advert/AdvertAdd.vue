@@ -98,7 +98,7 @@
           height:"",
         },
         editLoading: false,
-        adId:this.$route.query.adId,
+        adId:this.$route.params.id,
         checkCodeFlag:false,
       }
     },
@@ -187,6 +187,9 @@
       },
       //初始化
       init:function () {
+        if (this.adId && this.adId === '0'){
+          this.adId = null;
+        }
         if (this.adId){
           this.queryAdvertInfo(this.adId);
         }

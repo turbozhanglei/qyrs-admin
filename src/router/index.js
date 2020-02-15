@@ -131,7 +131,7 @@ const router = new Router({
       name: '新增广告位',
       component: Home,
       children: [{
-        path: '/advert/advertAdd',
+        path: '/advert/advertAdd/:id',
         name: '新增广告位',
         component: AdvertAdd
       }]
@@ -141,15 +141,10 @@ const router = new Router({
       name: '广告素材管理',
       component: Home,
       children: [{
-        path: '/advert/advertSource',
+        path: '/advert/advertSource/:id',
         name: '广告素材管理',
         component: AdvertSource
       }]
-    },
-    {
-      path: '/advert/advertSourceAdd',
-      name:'广告位新增',
-      component:AdvertSourceAdd
     }
     ,{
       path: '/',
@@ -165,7 +160,7 @@ const router = new Router({
       name: '广告素材',
       component: Home,
       children: [{
-        path: '/advert/advertSourceAdd',
+        path: '/advert/advertSourceAdd/:adCodeId/:adSourceId/:isEdit',
         name: '广告素材',
         component: AdvertSourceAdd
       }]

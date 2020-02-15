@@ -111,11 +111,11 @@
       },
       //新增
       handleAdd:function () {
-        this.$router.push({path:"/advert/advertAdd"});
+        this.$router.push({path:"/advert/advertAdd/0"});
       },
       // 显示编辑界面
       handleEdit: function(params) {
-        this.$router.push({path:"/advert/advertAdd",query:{adId:params.row.id}});
+        this.$router.push({path:"/advert/advertAdd/" + params.row.id});
       },
 
       // 页面类型格式化
@@ -160,7 +160,8 @@
       },
       //跳转广告素材管理
       handleDetail:function (params) {
-        this.$router.push({path:"/advert/advertSource",query:{adId:params.row.id}});
+        // this.$router.push({path:"/advert/advertSource",query:{adId:params.row.id}});
+        this.$router.push({path:"/advert/advertSource/" + params.row.id});
       }
     },
     mounted() {

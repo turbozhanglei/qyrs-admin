@@ -135,15 +135,15 @@
           startDate:"",
           endDate:"",
           validDate:"",
-          adCodeId:this.$route.query.adCodeId,
+          adCodeId:this.$route.params.adCodeId,
         },
         fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
         editLoading: false,
         imageSizeLimit:1,//图片上传个数控制
         imageAccept:".jpg,.jpeg,.png,.JPG,.JPEG",//图片上传格式
-        adSourceId: this.$route.query.adSourceId,
-        isEdit:this.$route.query.isEdit,
-        adCodeId:this.$route.query.adCodeId,//广告位id
+        adSourceId: this.$route.params.adSourceId,
+        isEdit:this.$route.params.isEdit,
+        adCodeId:this.$route.params.adCodeId,//广告位id
         textType:true,
         imageType:false,
       }
@@ -171,7 +171,7 @@
                   type: 'success'
                 });
                 setTimeout(function () {
-                  this_.$router.push({path:"/advert/advertSource",query:{adId:this_.adCodeId}});
+                  this_.$router.push({path:"/advert/advertSource/" + this_.adCodeId});
                 }, 3000);
               }else {
                 this_.$message.error(data.msg || '操作失败!');
@@ -184,7 +184,7 @@
       },
       //取消按钮，返回上一级页面
       go:function () {
-        this.$router.push({path:"/advert/advertSource",query:{adId:this.adCodeId}});
+        this.$router.push({path:"/advert/advertSource/" + this.adCodeId});
       },
       handleRemove(file, fileList) {
         console.log(file, fileList);
@@ -247,6 +247,12 @@
         })
       },
       init:function () {
+        if (this.adSourceId && this.adSourceId === '0'){
+          this.adSourceId = null;
+        }
+        if (this.isEdit && this.isEdit === '0'){
+          this.isEdit = null;
+        }
         this.queryAdvertInfo(this.adCodeId);
         if (this.adSourceId){
           this.queryAdSourceInfo(this.adSourceId);
