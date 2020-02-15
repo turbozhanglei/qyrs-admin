@@ -18,7 +18,7 @@ import ResourceList from '@/views/Resource/ResourceList'
 import ResourceInfo from '@/views/Resource/ResourceInfo'
 import AdvertList from '@/views/Advert/AdvertList'
 import AdvertAdd from '@/views/Advert/AdvertAdd'*/
-import memberInfo from '@/views/sys/memberInfo'
+import MemberInfo from '@/views/Sys/MemberInfo'
 import AdvertSource from '@/views/Advert/AdvertSource'
 import AdvertSourceAdd from '@/views/Advert/AdvertSourceAdd'
 import AdvertAdd from '@/views/Advert/AdvertAdd'
@@ -134,7 +134,7 @@ const router = new Router({
       children: [{
         path: '/sys/memberInfo/:id',
         name: '会员详情',
-        component: memberInfo
+        component: MemberInfo
       }]
     },
     {
