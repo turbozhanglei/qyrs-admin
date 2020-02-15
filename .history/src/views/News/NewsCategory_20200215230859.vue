@@ -321,9 +321,9 @@ export default {
   methods: {
 
     changeType:function(value){
-    
+      debugger
       console.log(value)
-      this.$set(this.dataForm,this.dataForm.refId,value);
+      this.$set(this.dataForm,this.dataForm.refId,value+'');
     },
     // 获取分页数据
     findPage: function(data) {
