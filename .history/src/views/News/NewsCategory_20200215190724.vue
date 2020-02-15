@@ -145,7 +145,7 @@
         label-position="right"
       >
         <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类"  >
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类"  :disabled="isShow">
             <el-option
               v-for="item in superCategorys"
               :key="item.refId"
@@ -199,7 +199,7 @@
         label-position="right"
       >
         <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" :disabled="isShow">
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类">
             <el-option
               v-for="item in superCategorys"
               :key="item.refId"

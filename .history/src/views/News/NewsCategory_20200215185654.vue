@@ -199,7 +199,7 @@
         label-position="right"
       >
         <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" :disabled="isShow">
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类">
             <el-option
               v-for="item in superCategorys"
               :key="item.refId"
@@ -251,7 +251,6 @@ export default {
   },
   data() {
     return {
-      isShow:false,
       dialogVisible1:false,
       radio: '1',
        status: [
@@ -426,17 +425,17 @@ export default {
 //新增子类
     addChildrenCategory:function(index,row){
         
-        this.isShow=true
+   
         this.dialogVisible1 = true;
         this.dataForm = {
-        
+        refId: "",
         platform: "1",
         name: "",
         sort: "",
         status: ""
       };
       // this.superCategorys=[{name: "顶级分类", refId: 1}]
-      this.dataForm.refId=row.ref_id
+      this_.dataForm.refId=row.ref_id
       this.dataForm.firstId=row.id
       
         

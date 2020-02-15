@@ -251,7 +251,7 @@ export default {
   },
   data() {
     return {
-      isShow:false,
+      isShow:true,
       dialogVisible1:false,
       radio: '1',
        status: [
@@ -426,7 +426,7 @@ export default {
 //新增子类
     addChildrenCategory:function(index,row){
         
-        this.isShow=true
+        this.isShow=false
         this.dialogVisible1 = true;
         this.dataForm = {
         
