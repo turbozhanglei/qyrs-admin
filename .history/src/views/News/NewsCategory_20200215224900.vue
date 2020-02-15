@@ -320,7 +320,7 @@ export default {
   },
   methods: {
 
-    changeType:function(value){
+    changeType:function(event,value){
       console.log(value)
       this.$set(this.dataForm,this.dataForm.refId,value);
     },

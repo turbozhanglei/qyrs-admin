@@ -320,10 +320,10 @@ export default {
   },
   methods: {
 
-    changeType:function(value){
-      console.log(value)
+    changeType(value){
       this.$set(this.dataForm,this.dataForm.refId,value);
-    },
+
+  },
     // 获取分页数据
     findPage: function(data) {
       // this.$refs.CyTable.findPage({ content: pageResult, total: 11 });
@@ -340,16 +340,17 @@ export default {
     // 显示编辑界面
     handleEdit: function(index,row) {
       // debugger
-      
+      console.log(row.ref_id+"asasasasa");
       let this_=this
       this_.operation = false;
       this_.dialogVisible = true;
       this_.dataForm=row
       this_.dataForm.refId=row.ref_id
-      
+      console.log(row.ref_id+"jkhjhjhh");
       this_.dataForm.status=row.status
       this_.dataForm.id = row.id
-      
+      console.log(row.id);
+      console.log(row.status+"******")
      if(row.ref_id==1){
        this_.setType();
      }else{

@@ -199,7 +199,7 @@
         label-position="right"
       >
         <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" :disabled="isShow" @change="changeType">
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" :disabled="isShow" @change="changeType(value)">
             <el-option
               v-for="item in superCategorys"
               :key="item.refId"
@@ -320,7 +320,7 @@ export default {
   },
   methods: {
 
-    changeType:function(value){
+    changeType:function(event,value){
       console.log(value)
       this.$set(this.dataForm,this.dataForm.refId,value);
     },

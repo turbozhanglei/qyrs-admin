@@ -320,10 +320,11 @@ export default {
   },
   methods: {
 
-    changeType:function(value){
-      console.log(value)
+    changeType(event,value){
+      console.log(value+"aaaaaaaa")
       this.$set(this.dataForm,this.dataForm.refId,value);
-    },
+
+  },
     // 获取分页数据
     findPage: function(data) {
       // this.$refs.CyTable.findPage({ content: pageResult, total: 11 });
