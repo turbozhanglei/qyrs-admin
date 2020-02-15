@@ -199,7 +199,7 @@
         label-position="right"
       >
         <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类">
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" @change="test">
             <el-option
               v-for="item in superCategorys"
               :key="item.refId"
@@ -338,17 +338,19 @@ export default {
     // 显示编辑界面
     handleEdit: function(index,row) {
       // debugger
-      console.log(row.ref_id+"asasasasa");
+      
       let this_=this
       this_.operation = false;
       this_.dialogVisible = true;
       this_.dataForm=row
       this_.dataForm.refId=row.ref_id
+      this_.$set(this_.dataForm, this_.dataForm.refId , row.ref_id)
       console.log(row.ref_id+"jkhjhjhh");
       this_.dataForm.status=row.status
       this_.dataForm.id = row.id
+      
       console.log(row.id);
-      console.log(row.status+"******")
+     console.log(row.status+"******")
      if(row.ref_id==1){
        this_.setType();
      }else{
@@ -358,7 +360,9 @@ export default {
 
     },
 
-  
+  test(){
+     console.log(大大大的的)
+  },
   
     // 删除按钮
       delCategory:function(index,row){

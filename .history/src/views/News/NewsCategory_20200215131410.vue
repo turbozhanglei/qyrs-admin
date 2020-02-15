@@ -145,7 +145,7 @@
         label-position="right"
       >
         <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类"  >
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" >
             <el-option
               v-for="item in superCategorys"
               :key="item.refId"
@@ -199,7 +199,7 @@
         label-position="right"
       >
         <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类">
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" >
             <el-option
               v-for="item in superCategorys"
               :key="item.refId"
@@ -276,7 +276,7 @@ export default {
       dialogVisible: false, // 新增编辑界面是否显示
       options: [],
       superCategorys: [
-     
+       
       ],
       categoryStatus: [
         {
@@ -318,10 +318,6 @@ export default {
     };
   },
   methods: {
-
-    changeFirstId(){
-      this.$forceUpdate()
-  },
     // 获取分页数据
     findPage: function(data) {
       // this.$refs.CyTable.findPage({ content: pageResult, total: 11 });
@@ -329,7 +325,6 @@ export default {
       this.utils.request.queryCategoryList(this.filters,function(res){
         if(res.data!=null){
          this_.tableData=res.data
-        
          }
          
       });
@@ -337,18 +332,17 @@ export default {
 
     // 显示编辑界面
     handleEdit: function(index,row) {
-      // debugger
-      console.log(row.ref_id+"asasasasa");
+      
       let this_=this
       this_.operation = false;
       this_.dialogVisible = true;
       this_.dataForm=row
+     
       this_.dataForm.refId=row.ref_id
-      console.log(row.ref_id+"jkhjhjhh");
       this_.dataForm.status=row.status
       this_.dataForm.id = row.id
       console.log(row.id);
-      console.log(row.status+"******")
+     console.log(row.status+"******")
      if(row.ref_id==1){
        this_.setType();
      }else{
@@ -357,8 +351,6 @@ export default {
       
 
     },
-
-  
   
     // 删除按钮
       delCategory:function(index,row){

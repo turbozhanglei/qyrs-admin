@@ -199,7 +199,7 @@
         label-position="right"
       >
         <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类">
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" @change=" console.log(大大大的的)">
             <el-option
               v-for="item in superCategorys"
               :key="item.refId"
