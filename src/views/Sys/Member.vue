@@ -202,7 +202,7 @@ export default {
       }
     },
     handleDetail:function (params) {
-      this.$router.push({path:"/sys/memberInfo",query:{userId:params.row.id}});
+      this.$router.push({path:"/sys/memberInfo/"+ params.row.id});
     },
    
     // 菜单树选中

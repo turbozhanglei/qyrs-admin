@@ -18,6 +18,7 @@ import ResourceList from '@/views/Resource/ResourceList'
 import ResourceInfo from '@/views/Resource/ResourceInfo'
 import AdvertList from '@/views/Advert/AdvertList'
 import AdvertAdd from '@/views/Advert/AdvertAdd'*/
+import memberInfo from '@/views/sys/memberInfo'
 import AdvertSource from '@/views/Advert/AdvertSource'
 import AdvertSourceAdd from '@/views/Advert/AdvertSourceAdd'
 import AdvertAdd from '@/views/Advert/AdvertAdd'
@@ -126,6 +127,16 @@ const router = new Router({
       name:'广告素材管理',
       component:AdvertSource
     },*/
+    {
+      path: '/',
+      name: '会员详情',
+      component: Home,
+      children: [{
+        path: '/sys/memberInfo/:id',
+        name: '会员详情',
+        component: memberInfo
+      }]
+    },
     {
       path: '/',
       name: '新增广告位',
