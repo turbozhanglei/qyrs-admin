@@ -81,7 +81,7 @@
           return callback(new Error('请输入广告名称'));
         }else if (value.length < 1 || value.length >32){
           return callback(new Error('广告名称在32字符内'));
-        }else if(!(/^[\u4e00-\u9fa5a-z]+$/gi.test(value))){
+        }else if((/[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/im.test(value))){
           return callback(new Error('广告名称不能包含特殊字符'));
         }else {
           callback();
