@@ -27,15 +27,26 @@
           <el-checkbox-group v-model="dataForm.adType">
             <el-checkbox label="0">文字</el-checkbox>
             <el-checkbox label="1">图片
-              <el-form-item v-if="dataForm.adType && dataForm.adType.length>0 && (dataForm.adType[0] ==1 ||dataForm.adType[1] ==1 )" label="图片高度" prop="height">
-                <el-input v-model="dataForm.height" auto-complete="off"></el-input>PX
-              </el-form-item>
-              <el-form-item v-if="dataForm.adType && dataForm.adType.length>0 && (dataForm.adType[0] ==1 ||dataForm.adType[1] ==1 )" label="图片宽度" prop="width">
-                <el-input v-model="dataForm.width" auto-complete="off"></el-input>PX
-              </el-form-item>
             </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
+        <div v-if="dataForm.adType && dataForm.adType.length>0 && (dataForm.adType[0] ==1 ||dataForm.adType[1] ==1 )">
+          <el-form-item label="图片高度" prop="height" required>
+            <el-input v-model="dataForm.height" auto-complete="off">
+              <template slot="append">PX</template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="图片宽度" prop="width" required>
+            <el-input v-model="dataForm.width" auto-complete="off">
+              <template slot="append">PX</template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="图片宽度" prop="sizeLimit" required>
+            <el-input v-model="dataForm.sizeLimit" auto-complete="off">
+              <template slot="append"> M</template>
+            </el-input>
+          </el-form-item>
+        </div>
         <el-form-item label="广告位显示个数" prop="num">
           <el-input v-model="dataForm.num" placeholder="该广告位广告在前台的显示数" auto-complete="off"></el-input>
         </el-form-item>
@@ -84,6 +95,9 @@
           pageType: [{ required: true, message: "请选择广告页面类型", trigger: "blur" }],
           code: [{ required: true, message: "请输入广告位标识", trigger: "blur" }],
           adType: [{ required: true, message: "素材类型至少选择一种", trigger: "blur" }],
+          width: [{ required: true, message: "请输入图片宽度", trigger: "blur" }],
+          height: [{ required: true, message: "请输入图片高度", trigger: "blur" }],
+          sizeLimit: [{ required: true, message: "请输入图片大小", trigger: "blur" }],
         },
         // 新增编辑界面数据
         dataForm:{
@@ -96,6 +110,7 @@
           status: "0",
           width:"",
           height:"",
+          sizeLimit:"",
         },
         editLoading: false,
         adId:this.$route.params.id,
@@ -117,6 +132,7 @@
               if (this_.dataForm.type.indexOf('1') < 0){
                 this_.dataForm.width = '';
                 this_.dataForm.height = '';
+                this_.dataForm.sizeLimit = '';
               }
             }
             this.utils.request.saveAdvertInfo(this.dataForm, function(data) {
@@ -153,6 +169,7 @@
               status: '' + data.data.status,
               width: data.data.width,
               height: data.data.height,
+              sizeLimit:data.data.source_size_limit
             }
           }else {
             this_.$message.error(data.msg || '获取详情失败!');
