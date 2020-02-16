@@ -237,8 +237,16 @@
           this_.$message.error("上传图片只能是jpeg、png、jpg、JPG、JPEG、PNG 格式!");
         }
         const isSize = new Promise(function(resolve, reject) {
-          let width = this_.advert.width;
-          let height = this_.advert.height;
+          let width = '750';
+          let height = '400';
+          if (this_.advert){
+            if (this_.advert.width){
+              width = this_.advert.width;
+            }
+            if (this_.advert.height){
+              height = this_.advert.height;
+            }
+          }
           let _URL = window.URL || window.webkitURL;
           let image = new Image();
           image.onload = function() {
