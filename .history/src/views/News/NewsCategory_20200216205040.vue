@@ -322,7 +322,7 @@ export default {
 
     changeType:function(value){
     
-      
+      console.log(value)
       this.$set(this.dataForm,this.dataForm.refId,value);
     },
     // 获取分页数据

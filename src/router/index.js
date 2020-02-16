@@ -159,11 +159,11 @@ const router = new Router({
     }
     ,{
       path: '/',
-      name: '咨询新增',
+      name: '新增资讯',
       component: Home,
       children: [{
         path: '/news/articleAdd/:articleId',
-        name: '咨询新增',
+        name: '新增资讯',
         component: ArticleAdd
       }]
     },

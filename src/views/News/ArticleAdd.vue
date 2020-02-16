@@ -30,31 +30,27 @@
         <el-form-item label="支持平台" prop="platform" required>
           <el-radio v-model="platform" label="1">微信小程序</el-radio>
         </el-form-item>
-        <el-form-item label="有效期" prop="startDate" required>
+
+        <el-form-item label="有效期" prop="validDate" required>
           <el-date-picker
-            v-model="dataForm.startDate"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="开始时间">
-          </el-date-picker>
-          至
-        </el-form-item>
-        <el-form-item prop="endDate" required>
-          <el-date-picker
-            v-model="dataForm.endDate"
-            value-format="yyyy-MM-dd"
-            type="date"
-            @change="checkDate"
-            placeholder="结束时间">
+            v-model="dataForm.validDate"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :default-time="['00:00:00', '23:59:59']">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="封面图" prop="images">
           <el-upload
             class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :action="imgUpload"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :on-exceed="handleExceed"
+            :before-upload="beforeArticleUpload"
+            :on-success="handleArticleSuccess"
             :file-list="fileList"
             list-type="picture-card"
             :limit="imageSizeLimit"
@@ -100,16 +96,17 @@
         name: "article-add",
         data(){
           return {
+            imgUpload: this.utils.getUpLoadHost(),
             size: "small",
             articleId: this.$route.params.articleId,
             labelPosition: 'right',
             dataFormRules: {
               title: [{ required: true, message: "请输入文章标题", trigger: "blur" }],
               categoryId: [{ required: true, message: "请选择所属分类", trigger: "blur" }],
-              startDate: [{ required: true, message: "请输入开始时间", trigger: "blur" }],
-              endDate: [{ required: true, message: "请输入结束时间", trigger: "blur" }],
+              validDate:[{ required: true, message: "有效期不能为空", trigger: "blur" }],
             },
-            fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+            // fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+            fileList:[],
             // 新增编辑界面数据
             dataForm: {
               id:"",
@@ -120,6 +117,7 @@
               endDate: "",
               describes: "",
               content: "",
+              validDate:[],
             },
             platform:"1",
             categorys:[
@@ -157,6 +155,39 @@
         handleRemove(file, fileList) {
           console.log(file, fileList);
         },
+        //上传图片成功
+        handleArticleSuccess:function (res, file) {
+          if (res && res.code == '0000' && res.data && res.data.imgUrl){
+            this.dataForm.images = res.data.imgUrl;
+          }
+          this.$message({
+            message: '上传成功!',
+            type: 'success'
+          });
+        },
+        //上传图片校验
+        beforeArticleUpload(file) {
+          var size = 2, this_ = this;
+          if (this_.advert && this_.advert.source_size_limit) {
+            size = this_.advert.source_size_limit;
+          }
+          const isLt2M = file.size / 1024 / 1024 < size;
+
+          if (!isLt2M) {
+            this_.$message.error("上传图片大小不能超过" + size + " MB!");
+          }
+          //jpg,jpeg,png,JPG,JPEG
+          const isJPG =
+            file.type === "image/jpeg" ||
+            file.type === "image/png" ||
+            file.type === "image/jpg" ||
+            file.type === "image/JPG" ||
+            file.type === "image/JPEG" ||
+            file.type === "image/PNG";
+          if (!isJPG) {
+            this_.$message.error("上传图片只能是jpeg、png、jpg、JPG、JPEG、PNG 格式!");
+          }
+        },
         handlePreview(file) {
           console.log(file);
         },
@@ -178,6 +209,10 @@
                   this_.dataForm.describes=this.dataForm.content .replace(/<[^>]+>/g, "")
                 }
                }
+                if (this_.dataForm.validDate && this_.dataForm.validDate.length > 0){
+                  this_.dataForm.startDate = this_.dataForm.validDate[0];
+                  this_.dataForm.endDate = this_.dataForm.validDate[1];
+                }
                 let params = Object.assign({}, this.dataForm);
 
                 params.t="newsArticle"
@@ -205,6 +240,7 @@
               endDate: "",
               desc: "",
               content: "",
+            validDate:[],
           }
         },
         queryUserList(){
@@ -228,7 +264,13 @@
             this.utils.request.queryUserInfo(params,function(data){
               that.dataForm=data.data
               that.dataForm.platform=data.data.platform
-              console.log(that.dataForm)
+              if(data.images!=null || data.images!=""){
+                let imgUrl={}
+                imgUrl.name = 1;
+                imgUrl.url = data.images;
+                that.fileList.push(imgUrl)
+              }
+              that.dataForm.validDate=[data.data.startDate,data.data.endDate]
             })
           }
         },

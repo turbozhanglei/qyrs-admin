@@ -37,10 +37,12 @@
           <el-form-item label="广告图片" prop="imageUrl">
             <el-upload
               class="upload-demo"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="imgUpload"
               :on-preview="handlePreview"
               :on-remove="handleRemove"
               :on-exceed="handleExceed"
+              :before-upload="beforeAvatarUpload"
+              :on-success="handleAvatarSuccess"
               :file-list="fileList"
               list-type="picture-card"
               :limit="imageSizeLimit"
@@ -48,7 +50,11 @@
             >
               <!--<el-button size="small" type="primary">点击上传</el-button>-->
               <i class="el-icon-plus"></i>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb;建议尺寸：750 * 400PX，预览封面图不会出现在文章内容中</div>
+              <div slot="tip" class="el-upload__tip">
+                只能上传jpg,jpeg,png,JPG,JPEG,PNG文件，
+                <span v-if="advert && advert.source_size_limit">且不超过{{advert.source_size_limit}}M;</span>
+                <span v-if="advert && advert.width && advert.height">建议尺寸：{{advert.width}} * {{advert.height}}PX</span>
+              </div>
             </el-upload>
           </el-form-item>
         </div>
@@ -127,7 +133,7 @@
         // 新增编辑界面数据
         dataForm: {
           name: "",
-          type: "",
+          type: "0",
           content: "",
           refType:"0",
           linkUrl: "",
@@ -137,15 +143,17 @@
           validDate:"",
           adCodeId:this.$route.params.adCodeId,
         },
-        fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+        fileList: [],
         editLoading: false,
+        imgUpload: this.utils.getUpLoadHost(),
         imageSizeLimit:1,//图片上传个数控制
-        imageAccept:".jpg,.jpeg,.png,.JPG,.JPEG",//图片上传格式
+        imageAccept:".jpg,.jpeg,.png,.JPG,.JPEG,.PNG",//图片上传格式
         adSourceId: this.$route.params.adSourceId,
         isEdit:this.$route.params.isEdit,
         adCodeId:this.$route.params.adCodeId,//广告位id
         textType:true,
         imageType:false,
+        advert:{},
       }
     },
     methods:{
@@ -197,6 +205,66 @@
           confirmButtonText: '确定'
         });
       },
+      handleAvatarSuccess:function (res, file) {
+        if (res && res.code == '0000' && res.data && res.data.imgUrl){
+          this.dataForm.imageUrl = res.data.imgUrl;
+        }
+        this.$message({
+          message: '上传成功!',
+          type: 'success'
+        });
+      },
+      //上传图片校验
+      beforeAvatarUpload(file) {
+        var size = 2,this_ = this;
+        if (this_.advert && this_.advert.source_size_limit){
+          size = this_.advert.source_size_limit;
+        }
+        const isLt2M = file.size / 1024 / 1024 < size;
+
+        if (!isLt2M) {
+          this_.$message.error("上传图片大小不能超过" + size +" MB!");
+        }
+        //jpg,jpeg,png,JPG,JPEG
+        const isJPG =
+          file.type === "image/jpeg" ||
+          file.type === "image/png" ||
+          file.type === "image/jpg" ||
+          file.type === "image/JPG" ||
+          file.type === "image/JPEG" ||
+          file.type === "image/PNG";
+        if (!isJPG){
+          this_.$message.error("上传图片只能是jpeg、png、jpg、JPG、JPEG、PNG 格式!");
+        }
+        const isSize = new Promise(function(resolve, reject) {
+          let width = '750';
+          let height = '400';
+          if (this_.advert){
+            if (this_.advert.width){
+              width = this_.advert.width;
+            }
+            if (this_.advert.height){
+              height = this_.advert.height;
+            }
+          }
+          let _URL = window.URL || window.webkitURL;
+          let image = new Image();
+          image.onload = function() {
+            let valid = image.width <= width && image.height <= height;
+            valid ? resolve() : reject();
+          };
+          image.src = _URL.createObjectURL(file);
+        }).then(
+          () => {
+            return file;
+          },
+          () => {
+            this_.$message.error("上传图片尺寸不符合,只能是" + this_.advert.width+"*" +this_.advert.height+"!");
+            return Promise.reject();
+          }
+        );
+        return isLt2M && isJPG && isSize;
+      },
       //查询素材详情
       queryAdSourceInfo:function (id) {
         var this_ = this;
@@ -215,6 +283,13 @@
               validDate:[data.data.start_date,data.data.end_date],
               adCodeId:data.data.ad_code_id,
             }
+            if (this_.dataForm.type === '1' && this_.dataForm.imageUrl){
+              var urls = this_.dataForm.imageUrl.split("/");
+              if (urls && urls.length > 0){
+                var name = urls[urls.length - 1];
+                this_.fileList = [{name:name,url:this_.dataForm.imageUrl}];
+              }
+            }
           }else {
             this_.$message.error(data.msg || '获取详情失败!');
           }
@@ -225,6 +300,7 @@
         var this_ = this;
         this.utils.request.getAdvertInfo({id:id}, function(data) {
           if (data && data.data && data.code == '0000'){
+            this_.advert = data.data;
             if (data.data.type && data.data.type.length > 0){
               if (data.data.type.length == 1){
                 if (data.data.type == '0'){
@@ -235,8 +311,7 @@
                   this_.imageType = true;
                 }
                 this_.dataForm.type = data.data.type;
-              }else {
-                this_.dataForm.type = '0';
+              }else if (data.data.type.length > 1){
                 this_.textType = true;
                 this_.imageType = true;
               }

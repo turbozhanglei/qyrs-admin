@@ -145,7 +145,7 @@
         label-position="right"
       >
         <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类"  @change="changeType">
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类"  >
             <el-option
               v-for="item in superCategorys"
               :key="item.refId"
@@ -199,7 +199,7 @@
         label-position="right"
       >
         <el-form-item label="上级分类" prop="refId" required>
-          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" :disabled="isShow" >
+          <el-select v-model="dataForm.refId" placeholder="请选择上级分类" :disabled="isShow" @change="changeType">
             <el-option
               v-for="item in superCategorys"
               :key="item.refId"
@@ -322,7 +322,7 @@ export default {
 
     changeType:function(value){
     
-      
+      console.log(value)
       this.$set(this.dataForm,this.dataForm.refId,value);
     },
     // 获取分页数据
@@ -446,14 +446,14 @@ export default {
     submitForm1: function() {
     this.$refs.dataForm.validate(valid => {
       if (valid) {
-       
+        this.$confirm("确认提交吗？", "提示", {}).then(() => {
           this.editLoading = true;
           let params = Object.assign({}, this.dataForm);
          
           console.log("成功啊"+params.refId+params.level)
           this.utils.request.saveChildrenCategory(params, this.editInfoBack);
           
-        ;
+        });
       }
     });
   },
