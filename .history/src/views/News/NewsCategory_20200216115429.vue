@@ -446,14 +446,14 @@ export default {
     submitForm1: function() {
     this.$refs.dataForm.validate(valid => {
       if (valid) {
-       
+        this.$confirm("确认提交吗？", "提示", {}).then(() => {
           this.editLoading = true;
           let params = Object.assign({}, this.dataForm);
          
           console.log("成功啊"+params.refId+params.level)
           this.utils.request.saveChildrenCategory(params, this.editInfoBack);
           
-        ;
+        });
       }
     });
   },
