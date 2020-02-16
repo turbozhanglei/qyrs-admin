@@ -47,7 +47,7 @@
             type="textarea"
             placeholder="请输入敏感词，敏感词之间用英文逗号隔离。"
             v-model="scope.row.word"
-            maxlength="500"
+            maxlength="6000"
             show-word-limit
           >
           </el-input>
