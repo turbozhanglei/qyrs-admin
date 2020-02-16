@@ -32,23 +32,23 @@
         </el-form-item>
         <div v-if="dataForm.adType && dataForm.adType.length>0 && (dataForm.adType[0] ==1 ||dataForm.adType[1] ==1 )">
           <el-form-item label="图片高度" prop="height" required>
-            <el-input v-model="dataForm.height" auto-complete="off">
+            <el-input v-model="dataForm.height" type="number" auto-complete="off">
               <template slot="append">PX</template>
             </el-input>
           </el-form-item>
           <el-form-item label="图片宽度" prop="width" required>
-            <el-input v-model="dataForm.width" auto-complete="off">
+            <el-input v-model="dataForm.width" type="number" auto-complete="off">
               <template slot="append">PX</template>
             </el-input>
           </el-form-item>
-          <el-form-item label="图片宽度" prop="sizeLimit" required>
-            <el-input v-model="dataForm.sizeLimit" auto-complete="off">
+          <el-form-item label="图片大小" prop="sizeLimit" required>
+            <el-input v-model="dataForm.sizeLimit" type="number" auto-complete="off">
               <template slot="append"> M</template>
             </el-input>
           </el-form-item>
         </div>
         <el-form-item label="广告位显示个数" prop="num">
-          <el-input v-model="dataForm.num" placeholder="该广告位广告在前台的显示数" auto-complete="off"></el-input>
+          <el-input v-model="dataForm.num" type="number" placeholder="该广告位广告在前台的显示数" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio v-model="dataForm.status" label="0">启用</el-radio>
@@ -81,7 +81,7 @@
           return callback(new Error('请输入广告名称'));
         }else if (value.length < 1 || value.length >32){
           return callback(new Error('广告名称在32字符内'));
-        }else if(!(/^[\u4e00-\u9fa5a-z]+$/gi.test(value))){
+        }else if((/[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/im.test(value))){
           return callback(new Error('广告名称不能包含特殊字符'));
         }else {
           callback();
