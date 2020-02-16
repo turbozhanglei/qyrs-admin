@@ -40,7 +40,6 @@
             <kt-button
               icon="fa fa-search"
               :label="$t('action.search')"
-              perms="sys:user:view"
               type="primary"
               @click="$refs.CyTable.findPageBeforeRestPages(filters)"
             />

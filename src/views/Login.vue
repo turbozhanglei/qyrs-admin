@@ -150,6 +150,7 @@ export default {
           this_.$router.push("/"); // 登录成功，跳转到主页
         } else {
           messageUtil.showMessage(this_, "error", message);
+          this_.getToken()
         }
       });
     },
