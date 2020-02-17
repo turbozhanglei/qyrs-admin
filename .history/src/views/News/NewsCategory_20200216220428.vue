@@ -215,7 +215,7 @@
           <el-input v-model="dataForm.name" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off"  @keyup="inputChange"></el-input>
+          <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="状态" required>
@@ -321,7 +321,7 @@ export default {
   methods: {
      //表单数字限制
      inputChange() { //输入框值改变
-        this.dataForm.sort = this.dataForm.sort.replace(/[^\d]/g, '')
+        this.pageIndex = this.dataForm.sort.replace(/[^\d]/g, '')
     },
     changeType:function(value){
     
@@ -437,7 +437,7 @@ export default {
         platform: "1",
         name: "",
         sort: "",
-        status: "0"
+        status: ""
       };
       // this.superCategorys=[{name: "顶级分类", refId: 1}]
       this.dataForm.refId=row.ref_id

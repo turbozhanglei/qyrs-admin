@@ -437,7 +437,7 @@ export default {
         platform: "1",
         name: "",
         sort: "",
-        status: "0"
+        status: ""
       };
       // this.superCategorys=[{name: "顶级分类", refId: 1}]
       this.dataForm.refId=row.ref_id
