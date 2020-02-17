@@ -51,8 +51,7 @@
               <el-date-picker
                 v-model="filters.startTime"
                 type="date"
-                placeholder="开始时间"   @change ="checkStartTime()">
-                
+                placeholder="开始时间" >
               </el-date-picker>
               至
             </el-form-item>
@@ -60,7 +59,7 @@
               <el-date-picker
                 v-model="filters.endTime"
                 type="date"
-                placeholder="结束时间"  @change="checkEndTime()">
+                placeholder="结束时间">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -207,7 +206,6 @@
   import KtButton from "@/views/Core/KtButton";
   import TableColumnFilterDialog from "@/views/Core/TableColumnFilterDialog";
   import { exportExcel } from "@/utils/excel";
-  import { format } from "@/utils/datetime";
   export default {
     components: {
       PopupTreeInput,
@@ -237,9 +235,7 @@
           releaseLabel:"",//资源信息标签
           releaseArea:"",//资源区域
           releaseTrade:"",//内贸外贸
-          url:'gy-resource/resource-manager/query-resource-manager',
         },
-         totalSize: 0,
         columns: [],
         filterColumns: [],
         pageRequest: { pageNum: 1, pageSize: 10 },
@@ -248,26 +244,23 @@
       };
     },
     methods: {
-     // 获取分页数据
-    findPage: function() {
-    
-      let this_ = this;
-      if (this_.filters == undefined || this_.filters == null) {
-        this_.filters = {};
-      }
-      this_.filters.start = this.pageRequest.pageNum;
-      this_.filters.limit = this.pageRequest.pageSize;
-      
-      this_.utils.request.httpUtils(this_.filters, function(
-        res
-      ) {
-        if (res.data.rows == null) {
-          res.data.rows = [];
-        }
-        this_.pageResult = res.data.rows;
-        this_.totalSize = Number(res.data.total);
-      });
-    },
+      // 获取分页数据
+      findPage: function(data) {
+        let pageResult=[
+          {resourceid:1,title:'备战开学季 全民半价购',releaseType:1,resourceLabel:1,resourceArea:1,resourceTrade:1,status:1,sticky:1,createTime:'2020-01-05 20:00:00',userId:2131231,mobile:15298798827,browses:22,shares:23},
+          {resourceid:13,title:'备战开学季 全民半价购',releaseType:0,resourceLabel:2,resourceArea:2,resourceTrade:2,status:2,sticky:0,createTime:'2020-01-05 20:00:00',userId:2131231,mobile:15298798827,browses:22,shares:23},
+          {resourceid:14,title:'备战开学季 全民半价购',releaseType:1,resourceLabel:3,resourceArea:3,resourceTrade:3,status:3,sticky:1,createTime:'2020-01-05 20:00:00',userId:2131231,mobile:15298798827,browses:22,shares:23},
+          {resourceid:15,title:'备战开学季 全民半价购',releaseType:0,resourceLabel:4,resourceArea:4,resourceTrade:1,status:4,sticky:0,createTime:'2020-01-05 20:00:00',userId:2131231,mobile:15298798827,browses:22,shares:23},
+          {resourceid:16,title:'备战开学季 全民半价购',releaseType:1,resourceLabel:5,resourceArea:5,resourceTrade:2,status:1,sticky:1,createTime:'2020-01-05 20:00:00',userId:2131231,mobile:15298798827,browses:22,shares:23},
+          {resourceid:17,title:'备战开学季 全民半价购',releaseType:0,resourceLabel:6,resourceArea:7,resourceTrade:3,status:2,sticky:0,createTime:'2020-01-05 20:00:00',userId:2131231,mobile:15298798827,browses:22,shares:23},
+          {resourceid:18,title:'备战开学季 全民半价购',releaseType:1,resourceLabel:7,resourceArea:6,resourceTrade:1,status:3,sticky:1,createTime:'2020-01-05 20:00:00',userId:2131231,mobile:15298798827,browses:22,shares:23},
+          {resourceid:19,title:'备战开学季 全民半价购',releaseType:0,resourceLabel:8,resourceArea:8,resourceTrade:2,status:4,sticky:0,createTime:'2020-01-05 20:00:00',userId:2131231,mobile:15298798827,browses:22,shares:23},
+          {resourceid:20,title:'备战开学季 全民半价购',releaseType:1,resourceLabel:1,resourceArea:1,resourceTrade:3,status:1,sticky:1,createTime:'2020-01-05 20:00:00',userId:2131231,mobile:15298798827,browses:22,shares:23},
+          {resourceid:21,title:'备战开学季 全民半价购',releaseType:0,resourceLabel:2,resourceArea:2,resourceTrade:1,status:2,sticky:0,createTime:'2020-01-05 20:00:00',userId:2131231,mobile:15298798827,browses:22,shares:23},
+          {resourceid:31,title:'备战开学季 全民半价购',releaseType:1,resourceLabel:3,resourceArea:3,resourceTrade:2,status:3,sticky:1,createTime:'2020-01-05 20:00:00',userId:2131231,mobile:15298798827,browses:22,shares:23},
+        ];
+        // this.$refs.CyTable.findPage({ content: pageResult, total: 11 });
+      },
 
       // 资源类型格式化
       releaseTypeFormat: function(row, column, cellValue, index) {
@@ -400,35 +393,11 @@
       },
       //审核状态
       handleUpStatus:function (row,type) {
-         
-      },
 
-      //时间判断
-      checkStartTime:function(){
-        
-        let this_ =this
-        console.log(this_.filters.startTime)
-        let minTime =new Date(this_.filters.startTime).getTime();
-        let maxTime = new Date(this_.filters.endTime).getTime();
-        if(minTime>maxTime){
-           this_.$message({ message: "起始时间不能大于结束时间 ", type: "error" });
-           this_.filters.startTime=''
-        }
-      },
-
-      checkEndTime:function(){
-        let this_=this
-        let minTime =new Date(this_.filters.startTime).getTime();
-        let maxTime = new Date(this_.filters.endTime).getTime();
-         if(maxTime<minTime){
-           this_.$message({ message: "结束时间不能小于起始时间 ", type: "error" });
-            this_.filters.endTime=''
-        }
       }
     },
     mounted() {
       this.initColumns();
-     
     }
   };
 </script>

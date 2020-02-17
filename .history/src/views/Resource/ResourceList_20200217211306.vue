@@ -47,20 +47,20 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="创建时间" prop="startTime">
+            <el-form-item label="创建时间" prop="startTime" @input ="checkStartTime()">
               <el-date-picker
                 v-model="filters.startTime"
                 type="date"
-                placeholder="开始时间"   @change ="checkStartTime()">
+                placeholder="开始时间" >
                 
               </el-date-picker>
               至
             </el-form-item>
-            <el-form-item prop="endTime">
+            <el-form-item prop="endTime" @change="checkEndTime()">
               <el-date-picker
                 v-model="filters.endTime"
                 type="date"
-                placeholder="结束时间"  @change="checkEndTime()">
+                placeholder="结束时间">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -237,7 +237,7 @@
           releaseLabel:"",//资源信息标签
           releaseArea:"",//资源区域
           releaseTrade:"",//内贸外贸
-          url:'gy-resource/resource-manager/query-resource-manager',
+          url:'/gy-resource/resource-manager/query-resource-manager',
         },
          totalSize: 0,
         columns: [],
@@ -250,7 +250,7 @@
     methods: {
      // 获取分页数据
     findPage: function() {
-    
+      debugger
       let this_ = this;
       if (this_.filters == undefined || this_.filters == null) {
         this_.filters = {};
@@ -405,26 +405,15 @@
 
       //时间判断
       checkStartTime:function(){
-        
+        debugger
         let this_ =this
         console.log(this_.filters.startTime)
         let minTime =new Date(this_.filters.startTime).getTime();
         let maxTime = new Date(this_.filters.endTime).getTime();
         if(minTime>maxTime){
            this_.$message({ message: "起始时间不能大于结束时间 ", type: "error" });
-           this_.filters.startTime=''
         }
       },
-
-      checkEndTime:function(){
-        let this_=this
-        let minTime =new Date(this_.filters.startTime).getTime();
-        let maxTime = new Date(this_.filters.endTime).getTime();
-         if(maxTime<minTime){
-           this_.$message({ message: "结束时间不能小于起始时间 ", type: "error" });
-            this_.filters.endTime=''
-        }
-      }
     },
     mounted() {
       this.initColumns();

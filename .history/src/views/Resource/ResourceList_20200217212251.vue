@@ -60,7 +60,7 @@
               <el-date-picker
                 v-model="filters.endTime"
                 type="date"
-                placeholder="结束时间"  @change="checkEndTime()">
+                placeholder="结束时间"  @change="checkEndTimes()">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -237,7 +237,7 @@
           releaseLabel:"",//资源信息标签
           releaseArea:"",//资源区域
           releaseTrade:"",//内贸外贸
-          url:'gy-resource/resource-manager/query-resource-manager',
+          url:'/gy-resource/resource-manager/query-resource-manager',
         },
          totalSize: 0,
         columns: [],
@@ -412,17 +412,15 @@
         let maxTime = new Date(this_.filters.endTime).getTime();
         if(minTime>maxTime){
            this_.$message({ message: "起始时间不能大于结束时间 ", type: "error" });
-           this_.filters.startTime=''
         }
       },
 
-      checkEndTime:function(){
+      checkStartTimes:function(){
         let this_=this
         let minTime =new Date(this_.filters.startTime).getTime();
         let maxTime = new Date(this_.filters.endTime).getTime();
          if(maxTime<minTime){
            this_.$message({ message: "结束时间不能小于起始时间 ", type: "error" });
-            this_.filters.endTime=''
         }
       }
     },

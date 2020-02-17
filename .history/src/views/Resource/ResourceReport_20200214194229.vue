@@ -7,13 +7,13 @@
           <el-date-picker
             v-model="filters.startTime"
             type="date"
-            placeholder="开始时间" @change ="checkStartTime()">
+            placeholder="开始时间">
           </el-date-picker>
           至
           <el-date-picker
             v-model="filters.endTime"
             type="date"
-            placeholder="结束时间"  @change="checkEndTime()">
+            placeholder="结束时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item prop="yesterday">
@@ -139,30 +139,6 @@
       };
     },
     methods: {
-
-     
-      //时间判断
-      checkStartTime:function(){
-        
-        let this_ =this
-        console.log(this_.filters.startTime)
-        let minTime =new Date(this_.filters.startTime).getTime();
-        let maxTime = new Date(this_.filters.endTime).getTime();
-        if(minTime>maxTime){
-           this_.$message({ message: "起始时间不能大于结束时间 ", type: "error" });
-           this_.filters.startTime=''
-        }
-      },
-
-      checkEndTime:function(){
-        let this_=this
-        let minTime =new Date(this_.filters.startTime).getTime();
-        let maxTime = new Date(this_.filters.endTime).getTime();
-         if(maxTime<minTime){
-           this_.$message({ message: "结束时间不能小于起始时间 ", type: "error" });
-            this_.filters.endTime=''
-        }
-      },
       // 获取分页数据
       findPage: function(data) {
         let pageResult=[

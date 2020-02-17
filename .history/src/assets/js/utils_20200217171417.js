@@ -6,62 +6,10 @@ import { Message } from 'element-ui'
 
 //const host='http://39.107.86.181:8092/wms-rest/';
 const host = 'http://localhost:8087/gy-rest/';
-const httpBaseUrl = "http://localhost:8087/";
 const PIC_URL_PRE = 'F:/usr/local/static/imgs';
 
 export default {
   request: {
-
-
-    //资源接口前端调用
-  httpExecute(data, url, callback) {
-    console.log("==========地址为url:" + url);
-    let params = {};
-    params = {
-        'loginChannel': 'pc',
-        'token': localStorage.getItem('token'),
-        'sign': 'qazwsxedc'
-    }
-    if (data != null && data != '') {
-        for (var key in data) {
-            params[key] = data[key];
-        }
-    }
-    url = httpBaseUrl + url;
-    console.log("==========地址为url2:" + url);
-    axios.post(url, JSON.stringify(params), { headers: { 'Content-Type': 'text/plain' } })
-        .then(rsp => {
-
-            if (rsp.data.code == "4000") {
-                Message.error({ //弹窗使用方法
-                    showClose: true,
-                    duration: 2000, //警告的消息3秒钟后消失
-                    message: "登录失效，请重新登录",
-                });
-
-
-                setTimeout(function() {
-                    localStorage.removeItem('token');
-                    router.push("/login");
-                }, 3000);
-
-            } else {
-                callback(rsp.data);
-            }
-
-
-        }).catch(error => {
-            var data = {};
-            data.code = '9999';
-            data.msg = error.message;
-            callback(data);
-        });
-},
-//查询接口
-httpUtils: function(data, callback) {
-  this.httpExecute(data, data.url, callback);
-},
-
     requestUrl(data, url, callback) {
       var params = {};
       params = {
@@ -389,7 +337,55 @@ httpUtils: function(data, callback) {
   },
 
 
-  
+  //资源接口前端调用
+  httpExecute(data, url, callback) {
+    console.log("==========地址为url:" + url);
+    let params = {};
+    params = {
+        'loginChannel': 'pc',
+        'token': localStorage.getItem('token'),
+        'sign': 'qazwsxedc'
+    }
+    if (data != null && data != '') {
+        for (var key in data) {
+            params[key] = data[key];
+        }
+    }
+    url = httpBaseUrl + url;
+    console.log("==========地址为url2:" + url);
+    axios.post(url, JSON.stringify(params), { headers: { 'Content-Type': 'text/plain' } })
+        .then(rsp => {
+
+            if (rsp.data.code == "4000") {
+                Message.error({ //弹窗使用方法
+                    showClose: true,
+                    duration: 2000, //警告的消息3秒钟后消失
+                    message: "登录失效，请重新登录",
+                });
+
+
+                setTimeout(function() {
+                    localStorage.removeItem('token');
+                    router.push("/login");
+                }, 3000);
+
+            } else {
+                callback(rsp.data);
+            }
+
+
+        }).catch(error => {
+            var data = {};
+            data.code = '9999';
+            data.msg = error.message;
+            callback(data);
+        });
+},
+
+httpUtils: function(data, callback) {
+  this.httpExecute(data, data.url, callback);
+},
+
 
 
 }

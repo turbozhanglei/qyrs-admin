@@ -319,7 +319,10 @@ export default {
     };
   },
   methods: {
-    
+     //表单数字限制
+     inputChange(e) { //输入框值改变
+        this.dataForm.sort = e.target.value.replace(/[^\d]/g, '')
+    },
     changeType:function(value){
     
       

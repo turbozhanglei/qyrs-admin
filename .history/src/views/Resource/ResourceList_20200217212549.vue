@@ -237,7 +237,7 @@
           releaseLabel:"",//资源信息标签
           releaseArea:"",//资源区域
           releaseTrade:"",//内贸外贸
-          url:'gy-resource/resource-manager/query-resource-manager',
+          url:'/gy-resource/resource-manager/query-resource-manager',
         },
          totalSize: 0,
         columns: [],

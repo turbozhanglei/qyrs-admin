@@ -161,7 +161,7 @@
           <el-input v-model="dataForm.name" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off" type="number" ></el-input>
+          <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off" :rules="[{type:'number',required: false, message: '请输入数字类型', trigger: 'blur,change'}]"></el-input>
         </el-form-item>
 
         <el-form-item label="状态" required>
@@ -215,7 +215,7 @@
           <el-input v-model="dataForm.name" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off" type="number" ></el-input>
+          <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off"  @keyup="inputChange"></el-input>
         </el-form-item>
 
         <el-form-item label="状态" required>
@@ -319,7 +319,10 @@ export default {
     };
   },
   methods: {
-    
+     //表单数字限制
+     inputChange(e) { //输入框值改变
+        this.dataForm.sort = e.target.value.replace(/[^\d]/g, '')
+    },
     changeType:function(value){
     
       
