@@ -14,53 +14,57 @@ export default {
 
 
     //资源接口前端调用
-  httpExecute(data, url, callback) {
-    console.log("==========地址为url:" + url);
-    let params = {};
-    params = {
+    httpExecute(data, url, callback) {
+      console.log("==========地址为url:" + url);
+      let params = {};
+      params = {
         'loginChannel': 'pc',
         'token': localStorage.getItem('token'),
         'sign': 'qazwsxedc'
-    }
-    if (data != null && data != '') {
+      }
+      if (data != null && data != '') {
         for (var key in data) {
-            params[key] = data[key];
+          params[key] = data[key];
         }
-    }
-    url = httpBaseUrl + url;
-    console.log("==========地址为url2:" + url);
-    axios.post(url, JSON.stringify(params), { headers: { 'Content-Type': 'text/plain' } })
+      }
+      url = httpBaseUrl + url;
+      console.log("==========地址为url2:" + url);
+      axios.post(url, JSON.stringify(params), { headers: { 'Content-Type': 'text/plain' } })
         .then(rsp => {
 
-            if (rsp.data.code == "4000") {
-                Message.error({ //弹窗使用方法
-                    showClose: true,
-                    duration: 2000, //警告的消息3秒钟后消失
-                    message: "登录失效，请重新登录",
-                });
+          if (rsp.data.code == "4000") {
+            Message.error({ //弹窗使用方法
+              showClose: true,
+              duration: 2000, //警告的消息3秒钟后消失
+              message: "登录失效，请重新登录",
+            });
 
 
-                setTimeout(function() {
-                    localStorage.removeItem('token');
-                    router.push("/login");
-                }, 3000);
+            setTimeout(function () {
+              localStorage.removeItem('token');
+              router.push("/login");
+            }, 3000);
 
-            } else {
-                callback(rsp.data);
-            }
+          } else {
+            callback(rsp.data);
+          }
 
 
         }).catch(error => {
-            var data = {};
-            data.code = '9999';
-            data.msg = error.message;
-            callback(data);
+          var data = {};
+          data.code = '9999';
+          data.msg = error.message;
+          callback(data);
         });
-},
-//查询接口
-httpUtils: function(data, callback) {
-  this.httpExecute(data, data.url, callback);
-},
+    },
+    //查询接口
+    httpUtils: function (data, callback) {
+      this.httpExecute(data, data.url, callback);
+    },
+    //资源审核不通过
+    handleNoPass:function(data,callback){
+      this.httpExecute(data, 'gy-resource/resource-manager/batch-check', callback);
+    },
 
     requestUrl(data, url, callback) {
       var params = {};
@@ -272,48 +276,48 @@ httpUtils: function(data, callback) {
     getWordInfo: function (data, callback) { //获取敏感词信息
       this.requestUrl(data, 'word/getInfo', callback);
     },
-    saveWordInfo:function (data,callback) {//保存或修改敏感词
-      this.requestUrl(data,'word/saveInfo',callback);
+    saveWordInfo: function (data, callback) {//保存或修改敏感词
+      this.requestUrl(data, 'word/saveInfo', callback);
     },
-    saveAdvertInfo:function (data,callback) {//保存或修改广告位
-      this.requestUrl(data,'advert/saveInfo',callback);
+    saveAdvertInfo: function (data, callback) {//保存或修改广告位
+      this.requestUrl(data, 'advert/saveInfo', callback);
     },
-    getAdvertInfo:function (data,callback) {//保存或修改广告位
-      this.requestUrl(data,'advert/getInfo',callback);
+    getAdvertInfo: function (data, callback) {//保存或修改广告位
+      this.requestUrl(data, 'advert/getInfo', callback);
     },
-    getTypeList:function(data,callback){//咨询分类类型初始化 单独查询
-      this.requestUrl(data,'news/getTypeList',callback);
+    getTypeList: function (data, callback) {//咨询分类类型初始化 单独查询
+      this.requestUrl(data, 'news/getTypeList', callback);
 
     },
-    saveCateGory:function(data,callback){//新增咨询分类
-      this.requestUrl(data,'news/saveCateGory',callback);
+    saveCateGory: function (data, callback) {//新增咨询分类
+      this.requestUrl(data, 'news/saveCateGory', callback);
     },
-    queryCategoryList:function(data,callback){//分类列表初始化
-      this.requestUrl(data,'news/queryCategoryList',callback);
+    queryCategoryList: function (data, callback) {//分类列表初始化
+      this.requestUrl(data, 'news/queryCategoryList', callback);
     },
-    delCategory:function(data,callback){//删除咨询分类
-      this.requestUrl(data,'news/delCategory',callback);
+    delCategory: function (data, callback) {//删除咨询分类
+      this.requestUrl(data, 'news/delCategory', callback);
     },
-    changeCateGoryStatus:function(data,callback){//禁用启用分类
-      this.requestUrl(data,'news/changeCateGoryStatus',callback);
+    changeCateGoryStatus: function (data, callback) {//禁用启用分类
+      this.requestUrl(data, 'news/changeCateGoryStatus', callback);
     },
-    saveChildrenCategory:function(data,callback){//新增子类
-      this.requestUrl(data,'news/saveChildrenCategory',callback);
+    saveChildrenCategory: function (data, callback) {//新增子类
+      this.requestUrl(data, 'news/saveChildrenCategory', callback);
     },
-    updateAdvertSourceSort:function (data,callback) {//广告素材排序
-      this.requestUrl(data,'advertSource/updateSort',callback);
+    updateAdvertSourceSort: function (data, callback) {//广告素材排序
+      this.requestUrl(data, 'advertSource/updateSort', callback);
     },
-    saveAdvertSourceInfo:function (data,callback) {//保存或修改广告素材
-      this.requestUrl(data,'advertSource/saveInfo',callback);
+    saveAdvertSourceInfo: function (data, callback) {//保存或修改广告素材
+      this.requestUrl(data, 'advertSource/saveInfo', callback);
     },
-    getAdvertSourceInfo:function (data,callback) {//保存或修改广告位
-      this.requestUrl(data,'advertSource/getInfo',callback);
+    getAdvertSourceInfo: function (data, callback) {//保存或修改广告位
+      this.requestUrl(data, 'advertSource/getInfo', callback);
     },
 
-    getCategoryList:function(data,callback){//查询所以一级分类
-      this.requestUrl(data,'queryArticle/queryCategoryList',callback);
+    getCategoryList: function (data, callback) {//查询所以一级分类
+      this.requestUrl(data, 'queryArticle/queryCategoryList', callback);
     },
-   
+
 
 
     checkPhoneSystem() {
@@ -389,7 +393,7 @@ httpUtils: function(data, callback) {
   },
 
 
-  
+
 
 
 }

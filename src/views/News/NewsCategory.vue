@@ -416,12 +416,13 @@ export default {
       this.getTypeList();
       this.dialogVisible = true;
       this.operation = true;
+     
       this.dataForm = {
         refId: "",
         platform: "1",
         name: "",
         sort: "",
-        status: "0"
+        status:""
       };
     },
 //新增子类
@@ -434,7 +435,7 @@ export default {
         platform: "1",
         name: "",
         sort: "",
-        status: "0"
+        status: ""
       };
       // this.superCategorys=[{name: "顶级分类", refId: 1}]
       this.dataForm.refId=row.ref_id
@@ -510,13 +511,13 @@ export default {
   submitForm: function() {
     this.$refs.dataForm.validate(valid => {
       if (valid) {
-        this.$confirm("确认提交吗？", "提示", {}).then(() => {
+      
           this.editLoading = true;
           let params = Object.assign({}, this.dataForm);
           console.log("成功啊"+params.refId+params.level)
           this.utils.request.saveCateGory(params, this.editInfoBack);
           
-        });
+     
       }
     });
   },

@@ -51,8 +51,7 @@
               <el-date-picker
                 v-model="filters.startTime"
                 type="date"
-                placeholder="开始时间"   @change ="checkStartTime()">
-                
+                placeholder="开始时间" >
               </el-date-picker>
               至
             </el-form-item>
@@ -60,7 +59,7 @@
               <el-date-picker
                 v-model="filters.endTime"
                 type="date"
-                placeholder="结束时间"  @change="checkEndTime()">
+                placeholder="结束时间">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -203,11 +202,10 @@
 
 <script>
   import PopupTreeInput from "@/components/PopupTreeInput";
-  import CyTable from "@/views/Core/ProductTable";
+  import CyTable from "@/views/Core/ResourceTable";
   import KtButton from "@/views/Core/KtButton";
   import TableColumnFilterDialog from "@/views/Core/TableColumnFilterDialog";
   import { exportExcel } from "@/utils/excel";
-  import { format } from "@/utils/datetime";
   export default {
     components: {
       PopupTreeInput,
@@ -237,39 +235,35 @@
           releaseLabel:"",//资源信息标签
           releaseArea:"",//资源区域
           releaseTrade:"",//内贸外贸
-          url:'gy-resource/resource-manager/query-resource-manager',
+           url:'gy-resource/resource-manager/query-resource-manager'
         },
-         totalSize: 0,
         columns: [],
         filterColumns: [],
         pageRequest: { pageNum: 1, pageSize: 10 },
         pageResult: [],
         options: [],
+        totalSize: 0,
       };
     },
     methods: {
-     // 获取分页数据
-    findPage: function() {
-      
-      let this_ = this;
+      // 获取分页数据
+       findPage: function() {
+      
+       let this_ = this;
       if (this_.filters == undefined || this_.filters == null) {
         this_.filters = {};
       }
       this_.filters.start = this.pageRequest.pageNum;
       this_.filters.limit = this.pageRequest.pageSize;
-      this_.utils.request.httpUtils(this_.filters, function(
-        res
-      ) {
-       
-        // if (res.data.rows == null) {
-        //   res.data.rows = [];
-        // }
+      this.utils.request.httpUtils(this_.filters, function(res) {
+        if (res.data.rows == null) {
+          res.data.rows = [];
+        }
         this_.pageResult = res.data.rows;
-        console.log("//////"+this_.pageResult)
-        console.log("*********"+res.data.rows)
         this_.totalSize = Number(res.data.total);
       });
-    },
+
+    },
 
       // 资源类型格式化
       releaseTypeFormat: function(row, column, cellValue, index) {
@@ -402,35 +396,11 @@
       },
       //审核状态
       handleUpStatus:function (row,type) {
-         
-      },
 
-      //时间判断
-      checkStartTime:function(){
-        
-        let this_ =this
-        console.log(this_.filters.startTime)
-        let minTime =new Date(this_.filters.startTime).getTime();
-        let maxTime = new Date(this_.filters.endTime).getTime();
-        if(minTime>maxTime){
-           this_.$message({ message: "起始时间不能大于结束时间 ", type: "error" });
-           this_.filters.startTime=''
-        }
-      },
-
-      checkEndTime:function(){
-        let this_=this
-        let minTime =new Date(this_.filters.startTime).getTime();
-        let maxTime = new Date(this_.filters.endTime).getTime();
-         if(maxTime<minTime){
-           this_.$message({ message: "结束时间不能小于起始时间 ", type: "error" });
-            this_.filters.endTime=''
-        }
       }
     },
     mounted() {
       this.initColumns();
-     
     }
   };
 </script>
