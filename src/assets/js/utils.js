@@ -4,9 +4,14 @@ import router from '../../router'
 import { Message } from 'element-ui'
 
 
-// const host='http://40.73.65.243:8087/gy-rest/';
+const baseUrl = 'http://40.73.65.243:8087';
+// const baseUrl = 'http://localhost:8087';
+// const baseUrl = 'http://47.100.214.25:9902';
+
+const path = '/gy-rest/';
+const host=baseUrl + path;
 // const host = 'http://localhost:8087/gy-rest/';
-const host = 'http://47.100.214.25:9902/gy-rest/';
+// const host = 'http://47.100.214.25:9902/gy-rest/';
 const PIC_URL_PRE = 'F:/usr/local/static/imgs';
 
 export default {
@@ -27,7 +32,7 @@ export default {
           params[key] = data[key];
         }
       }
-      url = httpBaseUrl + url;
+      url = baseUrl + url;
       console.log("==========地址为url2:" + url);
       axios.post(url, JSON.stringify(params), { headers: { 'Content-Type': 'text/plain' } })
         .then(rsp => {
