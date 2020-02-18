@@ -299,10 +299,17 @@ export default {
     },
     // 树节点选择监听
     handleMenuCheckChange(data, check, subCheck) {
+      debugger
       if (check) {
         // 节点选中时同步选中父节点
         let parentId = data.pid;
         this.$refs.menuTree.setChecked(parentId, true, false);
+        //节点选中时同步选中子节点
+        if (data.children != null) {
+          data.children.forEach(element => {
+            this.$refs.menuTree.setChecked(element.id, true, false);
+          });
+        }
       } else {
         // 节点取消选中时同步取消选中子节点
         if (data.children != null) {
