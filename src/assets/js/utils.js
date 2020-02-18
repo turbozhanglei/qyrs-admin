@@ -4,8 +4,8 @@ import router from '../../router'
 import { Message } from 'element-ui'
 
 
-const baseUrl = 'http://40.73.65.243:8087';
-// const baseUrl = 'http://localhost:8087';
+// const baseUrl = 'http://40.73.65.243:8087';
+const baseUrl = 'http://localhost:8087';
 // const baseUrl = 'http://47.100.214.25:9902';
 
 const path = '/gy-rest/';
@@ -66,9 +66,17 @@ export default {
     httpUtils: function (data, callback) {
       this.httpExecute(data, data.url, callback);
     },
-    //资源审核不通过
-    handleNoPass:function(data,callback){
-      this.httpExecute(data, 'gy-resource/resource-manager/batch-check', callback);
+    //资源审核
+    handleUpStatus:function(data,callback){
+      this.httpExecute(data, '/gy-resource/resource-manager/check', callback);
+    },
+    //批量审核
+    batchUpStatus:function(data,callback){
+      this.httpExecute(data, '/gy-resource/resource-manager/batch-check', callback);
+    },
+    //发布类型初始化
+    queryDictionry:function(data,callback){
+      this.httpExecute(data, '/gy-resource/resource-dictionary/query-dictionary', callback);
     },
 
     requestUrl(data, url, callback) {

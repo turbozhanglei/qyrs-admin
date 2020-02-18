@@ -60,10 +60,20 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="创建时间" prop="startTime">
-              <el-date-picker v-model="filters.startTime" type="date" placeholder="开始时间"></el-date-picker>至
+              <el-date-picker
+                v-model="filters.startTime"
+                type="date"
+                placeholder="开始时间"
+                @change="checkStartTime()"
+              ></el-date-picker>至
             </el-form-item>
             <el-form-item prop="endTime">
-              <el-date-picker v-model="filters.endTime" type="date" placeholder="结束时间"></el-date-picker>
+              <el-date-picker
+                v-model="filters.endTime"
+                type="date"
+                placeholder="结束时间"
+                @change="checkEndTime()"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -112,14 +122,12 @@
           <el-col :span="12">
             <el-form-item label="资源信息标签" prop="releaseLabel">
               <el-select v-model="filters.releaseLabel" placeholder="资源信息标签">
-                <el-option label="全部" value></el-option>
-                <el-option label="其他" value="0"></el-option>
-                <el-option label="乙二醇" value="1"></el-option>
-                <el-option label="PTA" value="2"></el-option>
-                <el-option label="成品油" value="3"></el-option>
-                <el-option label="PVC" value="4"></el-option>
-                <el-option label="甲醇" value="5"></el-option>
-                <el-option label="塑料" value="6"></el-option>
+                <el-option
+                  v-for="item in resourceLabel"
+                  :key="item.dictionaryKey"
+                  :label="item.name"
+                  :value="item.dictionaryValue"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -128,25 +136,24 @@
           <el-col :span="6">
             <el-form-item label="资源区域" prop="releaseArea">
               <el-select v-model="filters.releaseArea" placeholder="资源区域">
-                <el-option label="全部" value></el-option>
-                <el-option label="东北" value="1"></el-option>
-                <el-option label="华东" value="2"></el-option>
-                <el-option label="华北" value="3"></el-option>
-                <el-option label="华中" value="4"></el-option>
-                <el-option label="华南" value="5"></el-option>
-                <el-option label="西南" value="6"></el-option>
-                <el-option label="西北" value="7"></el-option>
-                <el-option label="西北" value="8"></el-option>
+                <el-option
+                  v-for="item in resourceArea"
+                  :key="item.dictionaryKey"
+                  :label="item.name"
+                  :value="item.dictionaryValue"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="内贸外贸" prop="releaseTrade">
               <el-select v-model="filters.releaseTrade">
-                <el-option label="全部" value></el-option>
-                <el-option label="内贸" value="1"></el-option>
-                <el-option label="进口" value="2"></el-option>
-                <el-option label="出口" value="3"></el-option>
+                <el-option
+                  v-for="item in resourceTrade"
+                  :key="item.dictionaryKey"
+                  :label="item.name"
+                  :value="item.dictionaryValue"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -242,15 +249,40 @@ export default {
       filterColumns: [],
       pageRequest: { pageNum: 1, pageSize: 10 },
       pageResult: {},
-      options: []
+      options: [],
+      //资源信息标签
+      resourceLabel: [],
+      //资源区域
+      resourceArea: [],
+      //内贸外贸
+      resourceTrade: []
     };
   },
   methods: {
+    //时间判断
+    checkStartTime: function() {
+      let this_ = this;
+      console.log(this_.filters.startTime);
+      let minTime = new Date(this_.filters.startTime).getTime();
+      let maxTime = new Date(this_.filters.endTime).getTime();
+      if (minTime > maxTime) {
+        this_.$message({ message: "起始时间不能大于结束时间 ", type: "error" });
+        this_.filters.startTime = "";
+      }
+    },
+
+    checkEndTime: function() {
+      let this_ = this;
+      let minTime = new Date(this_.filters.startTime).getTime();
+      let maxTime = new Date(this_.filters.endTime).getTime();
+      if (maxTime < minTime) {
+        this_.$message({ message: "结束时间不能小于起始时间 ", type: "error" });
+        this_.filters.endTime = "";
+      }
+    },
     // 获取分页数据
     findPage: function() {
-   
       this.$refs.CyTable.findPage(this.filters);
-      console.log("******" + res.data);
     },
 
     // 资源类型格式化
@@ -337,8 +369,8 @@ export default {
     // 处理表格列过滤显示
     initColumns: function() {
       this.columns = [
-        { prop: "resourceid", label: "资源信息编码", minWidth: 100 },
-        { prop: "title", label: "资源信息标题", minWidth: 130 },
+        { prop: "resourceId", label: "资源信息编码", minWidth: 100 },
+        { prop: "resourceTitle", label: "资源信息标题", minWidth: 130 },
         {
           prop: "releaseType",
           label: "资源信息类型",
@@ -364,22 +396,22 @@ export default {
           formatter: this.resourceTradeFormat
         },
         {
-          prop: "status",
+          prop: "issureStatus",
           label: "发布状态",
           minWidth: 80,
           formatter: this.statusFormat
         },
         {
-          prop: "sticky",
+          prop: "topStatus",
           label: "置顶状态",
           minWidth: 80,
           formatter: this.stickyFormat
         },
         { prop: "createTime", label: "创建时间", minWidth: 110 },
-        { prop: "userId", label: "发布人用户ID", minWidth: 100 },
-        { prop: "mobile", label: "发布人手机号", minWidth: 80 },
-        { prop: "browses", label: "浏览量", minWidth: 60 },
-        { prop: "shares", label: "分享数", minWidth: 60 }
+        { prop: "issureId", label: "发布人用户ID", minWidth: 100 },
+        { prop: "issurePhone", label: "发布人手机号", minWidth: 80 },
+        { prop: "browseNum", label: "浏览量", minWidth: 60 },
+        { prop: "shareNum", label: "分享数", minWidth: 60 }
       ];
       var temp = [];
       $.each(this.columns, function(key, val) {
@@ -415,31 +447,97 @@ export default {
     },
     //审核状态
     handleUpStatus: function(row, type) {
+      debugger
       let params = {};
+      if (row.params.length  > 1) {
+        //批量审核通过
+        if (row.type ==3) {
+          params.checkStatus = "3";
+          params.resourceIdList = row.params;
+          params.checkUserId = null;
+        } else if (row.type == 4) {
+          //批量审核不通过
+          params.checkStatus = "4";
+          params.resourceIdList = row.params;
 
-      if (row.status == 0 || row.status == 2 || row.status == 4) {
-        params.checkStatus = 3;
-        params.resourceIdList = row.resourceId;
-        params.checkUserId = null;
+          params.checkUserId = null;
+        }
+        let this_ = this;
+        this.utils.request.batchUpStatus(params, function(data) {
+          if ((data.code = "0000")) {
+            this_.$message({ message: "修改成功 ", type: "success" });
+            this_.findPage();
+          }
+        });
       } else {
-        params.checkStatus = 4;
-        params.resourceIdList = row.resourceId;
-        params.checkUserId = null;
+        if (row.type === 0 || row.type == 2 || row.type == 4) {
+          params.checkStatus = "4";
+          params.resourceIdList = row.params[0].id;
+          params.checkUserId = null;
+        } else if (row.type == 1 || row.type == 3) {
+          params.checkStatus = "3";
+          params.resourceIdList = row.params[0].id;
+
+          params.checkUserId = null;
+        }
+        //  else {
+        //
+        // }
+        let this_ = this;
+        this.utils.request.handleUpStatus(params, function(data) {
+          if ((data.code = "0000")) {
+            this_.$message({ message: "修改成功 ", type: "success" });
+            this_.findPage();
+          }
+        });
       }
     },
+
     //发布类型初始化
     ininPushType: function() {
-      let this_=this
+      let this_ = this;
       let params = {};
       params.code = "release_type";
-      this.utils.request.queryDictionry({}, function(res) {
+      this.utils.request.queryDictionry(params, function(res) {
         this_.pushTypes = res.data;
+      });
+    },
+    //资源信息标签初始化
+    initResourceLabel: function() {
+      let this_ = this;
+      let params = {};
+      params.code = "resource_label";
+      this.utils.request.queryDictionry(params, function(res) {
+        this_.resourceLabel = res.data;
+      });
+    },
+
+    //资源区域初始化
+    initResourceArea: function() {
+      let this_ = this;
+      let params = {};
+      params.code = "resource_area";
+      this.utils.request.queryDictionry(params, function(res) {
+        this_.resourceArea = res.data;
+      });
+    },
+
+    //内贸外贸初始化
+    initresourceTrade: function() {
+      let this_ = this;
+      let params = {};
+      params.code = "resource_trade";
+      this.utils.request.queryDictionry(params, function(res) {
+        this_.resourceTrade = res.data;
       });
     }
   },
   mounted() {
     this.initColumns();
     this.ininPushType();
+    this.initResourceLabel();
+    this.initResourceArea();
+    this.initresourceTrade();
   }
 };
 </script>

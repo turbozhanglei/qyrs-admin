@@ -105,7 +105,7 @@
           />
           <kt-button
             :label="$t('action.audit')"
-            :show="showAuditOperation  && (scope.row.status == 0 || scope.row.status == 2 || scope.row.status == 4)"
+            :show="showAuditOperation  && (scope.row.issureStatus === '0' || scope.row.issureStatus === '2' || scope.row.issureStatus === '4')"
             :perms="permsAudit"
             :size="size"
             type="success"
@@ -113,7 +113,7 @@
           />
           <kt-button
             :label="$t('action.auditFail')"
-            :show="showAuditFailOperation  && (scope.row.status == 1 || scope.row.status == 3 || scope.row.status == 0)"
+            :show="showAuditFailOperation  && (scope.row.issureStatus === '1' || scope.row.issureStatus === '3')"
             :perms="permsAuditFail"
             :size="size"
             type="danger"
@@ -121,7 +121,7 @@
           />
           <kt-button
             :label="$t('action.sticky')"
-            :show="showStickyOperation  && scope.row.sticky == 0"
+            :show="showStickyOperation  && scope.row.topStatus === '0'&&(scope.row.issureStatus==='1'||scope.row.issureStatus==='3')"
             :perms="permsSticky"
             :size="size"
             type="success"
@@ -130,7 +130,7 @@
           />
           <kt-button
             :label="$t('action.cancelSticky')"
-            :show="showCancelStickyOperation  && scope.row.sticky == 1"
+            :show="showCancelStickyOperation  && scope.row.topStatus === '1'&&(scope.row.issureStatus==='1'||scope.row.issureStatus==='3')"
             :perms="permsCancelSticky"
             :size="size"
             type="info"
@@ -383,8 +383,8 @@ export default {
         if (res.rows == null) {
           res.rows = [];
         }
-         this_.content = res.rows;
-         this_.totalSize = Number(res.total);
+         this_.content = res.data.rows;
+         this_.totalSize = Number(res.data.total);
         //this_.content = filters.content;
        // this_.totalSize = Number(filters.total);
       });
@@ -481,11 +481,13 @@ export default {
     },
     //修改状态：禁用启用
     handleUpStatus:function (row,type,value) {
-      this.upStatus(row.id,type,value)
+     
+      this.upStatus(row.id||row.resourceId,type,value)
     },
     //批量修改状态：禁用启用
     handleBatchUpStatus:function (type,value) {
-      let ids = this.selections.map(item => item.id).toString();
+
+      let ids = this.selections.map(item => item.id||item.resourceId).toString();
       this.upStatus(ids,type,value);
     },
     //修改状态：禁用启用
@@ -523,7 +525,7 @@ export default {
           let params = [];
           let idArray = (ids + "").split(",");
           for (var i = 0; i < idArray.length; i++) {
-            params.push({ id: idArray[i] });
+            params.push({ resourceId: idArray[i] });
           }
           //this.loading = true
           let callback = res => {
