@@ -178,7 +178,7 @@
     <!--表格内容栏-->
     <cy-table
       :height="350"
-      :content="pageResult"
+      :data="pageResult"
       :columns="filterColumns"
       @findPage="findPage"
       :showDetailOperation="true"
@@ -240,28 +240,16 @@
         columns: [],
         filterColumns: [],
         pageRequest: { pageNum: 1, pageSize: 10 },
-        pageResult: [],
+        pageResult: {},
         options: [],
-        totalSize: 0,
+       
       };
     },
     methods: {
       // 获取分页数据
        findPage: function() {
       
-       let this_ = this;
-      if (this_.filters == undefined || this_.filters == null) {
-        this_.filters = {};
-      }
-      this_.filters.start = this.pageRequest.pageNum;
-      this_.filters.limit = this.pageRequest.pageSize;
-      this.utils.request.httpUtils(this_.filters, function(res) {
-        if (res.data.rows == null) {
-          res.data.rows = [];
-        }
-        this_.pageResult = res.data.rows;
-        this_.totalSize = Number(res.data.total);
-      });
+      this.$refs.CyTable.findPage(this.filters);
 
     },
 

@@ -356,13 +356,8 @@ export default {
   },
   data() {
     return {
-         // 分页信息
-        pageRequest: {
-          pageNum: 1,
-          pageSize: 10
-        },
       totalSize: 0,
-    
+      content: [],
       // 分页信息
       pageRequest: {
         pageNum: 1,
@@ -382,7 +377,7 @@ export default {
       }
       filters.start = this.pageRequest.pageNum;
       filters.limit = this.pageRequest.pageSize;
-      this.utils.request.queryUserPage(filters, function(res) {
+      this.utils.request.httpUtils(filters, function(res) {
         if (res.rows == null) {
           res.rows = [];
         }
