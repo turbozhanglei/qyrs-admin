@@ -377,7 +377,9 @@ export default {
       }
       filters.start = this.pageRequest.pageNum;
       filters.limit = this.pageRequest.pageSize;
+      
       this.utils.request.httpUtils(filters, function(res) {
+           console.log("******"+res.rows)
         if (res.rows == null) {
           res.rows = [];
         }

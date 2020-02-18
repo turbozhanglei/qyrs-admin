@@ -235,7 +235,7 @@
           releaseLabel:"",//资源信息标签
           releaseArea:"",//资源区域
           releaseTrade:"",//内贸外贸
-           url:'gy-resource/resource-manager/query-resource-manager'
+           url:'/gy-resource/resource-manager/query-resource-manager'
         },
         columns: [],
         filterColumns: [],
@@ -380,12 +380,28 @@
       },
       //查看详情
       handleDetail:function (params) {
-        this.$router.push({path:"/resource/resourceInfo",query:{resourceId:params.row.resourceid}});
+        this.$router.push({path:"/resource/resourceInfo",query:{resourceId:params.row.resourceId}});
       },
       //审核状态
       handleUpStatus:function (row,type) {
+        let params ={}
+        
+        if(row.status==0||row.status==2||row.status==4){
+            params.checkStatus=3
+            params.resourceIdList=row.resourceId
+            params.checkUserId=null
+        }else{
+          params.checkStatus=4
+          params.resourceIdList=row.resourceId
+           params.checkUserId=null
+        }
+      },
+      // //发布状态初始化
+      // ininStatus:function(){
+      //   var this_ = this;
+      //   this
 
-      }
+      // }
     },
     mounted() {
       this.initColumns();
