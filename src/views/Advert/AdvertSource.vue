@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <!--工具栏-->
-    <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
+    <div class="toolbar" style="padding-top:10px;padding-left:15px;">
       <el-form :inline="true" :model="filters" :size="size" ref="filters" :label-position="labelPosition">
         <el-form-item prop="name" label="广告名称">
           <el-input v-model="filters.name" placeholder="广告名称" clearable></el-input>

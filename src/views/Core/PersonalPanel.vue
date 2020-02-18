@@ -16,9 +16,9 @@
          <div class="name-role">
           <span class="sender">手机号: {{ user_info.moile  }}</span>  
         </div> 
-         <div class="name-role">
+         <!-- <div class="name-role">
           <span class="sender">部门: {{ user_info.deptname  }}</span>  
-        </div> 
+        </div>  -->
         <div class="registe-info">
           <span class="registe-info">
             <li class="fa fa-clock-o"></li>
