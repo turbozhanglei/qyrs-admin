@@ -4,9 +4,9 @@ import router from '../../router'
 import { Message } from 'element-ui'
 
 
-//const host='http://39.107.86.181:8092/wms-rest/';
-const host = 'http://localhost:8087/gy-rest/';
-const httpBaseUrl = "http://localhost:8087/";
+// const host='http://40.73.65.243:8087/gy-rest/';
+// const host = 'http://localhost:8087/gy-rest/';
+const host = 'http://47.100.214.25:9902/gy-rest/';
 const PIC_URL_PRE = 'F:/usr/local/static/imgs';
 
 export default {
@@ -276,46 +276,46 @@ export default {
     getWordInfo: function (data, callback) { //获取敏感词信息
       this.requestUrl(data, 'word/getInfo', callback);
     },
-    saveWordInfo: function (data, callback) {//保存或修改敏感词
-      this.requestUrl(data, 'word/saveInfo', callback);
+    saveWordInfo:function (data,callback) {//保存或修改敏感词
+      this.requestUrl(data,'word/saveInfo',callback);
     },
-    saveAdvertInfo: function (data, callback) {//保存或修改广告位
-      this.requestUrl(data, 'advert/saveInfo', callback);
+    saveAdvertInfo:function (data,callback) {//保存或修改广告位
+      this.requestUrl(data,'advert/saveInfo',callback);
     },
-    getAdvertInfo: function (data, callback) {//保存或修改广告位
-      this.requestUrl(data, 'advert/getInfo', callback);
+    getAdvertInfo:function (data,callback) {//保存或修改广告位
+      this.requestUrl(data,'advert/getInfo',callback);
     },
-    getTypeList: function (data, callback) {//咨询分类类型初始化 单独查询
-      this.requestUrl(data, 'news/getTypeList', callback);
+    getTypeList:function(data,callback){//咨询分类类型初始化 单独查询
+      this.requestUrl(data,'news/getTypeList',callback);
 
     },
-    saveCateGory: function (data, callback) {//新增咨询分类
-      this.requestUrl(data, 'news/saveCateGory', callback);
+    saveCateGory:function(data,callback){//新增咨询分类
+      this.requestUrl(data,'news/saveCateGory',callback);
     },
-    queryCategoryList: function (data, callback) {//分类列表初始化
-      this.requestUrl(data, 'news/queryCategoryList', callback);
+    queryCategoryList:function(data,callback){//分类列表初始化
+      this.requestUrl(data,'news/queryCategoryList',callback);
     },
-    delCategory: function (data, callback) {//删除咨询分类
-      this.requestUrl(data, 'news/delCategory', callback);
+    delCategory:function(data,callback){//删除咨询分类
+      this.requestUrl(data,'news/delCategory',callback);
     },
-    changeCateGoryStatus: function (data, callback) {//禁用启用分类
-      this.requestUrl(data, 'news/changeCateGoryStatus', callback);
+    changeCateGoryStatus:function(data,callback){//禁用启用分类
+      this.requestUrl(data,'news/changeCateGoryStatus',callback);
     },
-    saveChildrenCategory: function (data, callback) {//新增子类
-      this.requestUrl(data, 'news/saveChildrenCategory', callback);
+    saveChildrenCategory:function(data,callback){//新增子类
+      this.requestUrl(data,'news/saveChildrenCategory',callback);
     },
-    updateAdvertSourceSort: function (data, callback) {//广告素材排序
-      this.requestUrl(data, 'advertSource/updateSort', callback);
+    updateAdvertSourceSort:function (data,callback) {//广告素材排序
+      this.requestUrl(data,'advertSource/updateSort',callback);
     },
-    saveAdvertSourceInfo: function (data, callback) {//保存或修改广告素材
-      this.requestUrl(data, 'advertSource/saveInfo', callback);
+    saveAdvertSourceInfo:function (data,callback) {//保存或修改广告素材
+      this.requestUrl(data,'advertSource/saveInfo',callback);
     },
-    getAdvertSourceInfo: function (data, callback) {//保存或修改广告位
-      this.requestUrl(data, 'advertSource/getInfo', callback);
+    getAdvertSourceInfo:function (data,callback) {//保存或修改广告位
+      this.requestUrl(data,'advertSource/getInfo',callback);
     },
 
-    getCategoryList: function (data, callback) {//查询所以一级分类
-      this.requestUrl(data, 'queryArticle/queryCategoryList', callback);
+    getCategoryList:function(data,callback){//查询所以一级分类
+      this.requestUrl(data,'queryArticle/queryCategoryList',callback);
     },
 
 
@@ -391,7 +391,6 @@ export default {
     return PIC_URL_PRE + "/" + data;
 
   },
-
 
 
 
