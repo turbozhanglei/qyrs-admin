@@ -179,7 +179,7 @@
     <!--表格内容栏-->
     <cy-table
       :height="350"
-      :content="pageResult"
+      :data="pageResult"
       :columns="filterColumns"
       @findPage="findPage"
       :showDetailOperation="true"

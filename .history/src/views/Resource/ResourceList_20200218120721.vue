@@ -179,7 +179,7 @@
     <!--表格内容栏-->
     <cy-table
       :height="350"
-      :content="pageResult"
+      :data="pageResult"
       :columns="filterColumns"
       @findPage="findPage"
       :showDetailOperation="true"
@@ -203,7 +203,7 @@
 
 <script>
   import PopupTreeInput from "@/components/PopupTreeInput";
-  import CyTable from "@/views/Core/ProductTable";
+  import CyTable from "@/views/Core/CyTable";
   import KtButton from "@/views/Core/KtButton";
   import TableColumnFilterDialog from "@/views/Core/TableColumnFilterDialog";
   import { exportExcel } from "@/utils/excel";
@@ -243,7 +243,7 @@
         columns: [],
         filterColumns: [],
         pageRequest: { pageNum: 1, pageSize: 10 },
-        pageResult: [],
+        // pageResult: [],
         options: [],
       };
     },
