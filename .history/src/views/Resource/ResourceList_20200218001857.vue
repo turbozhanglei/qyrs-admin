@@ -250,23 +250,21 @@
     methods: {
      // 获取分页数据
     findPage: function() {
-      
+    
       let this_ = this;
       if (this_.filters == undefined || this_.filters == null) {
         this_.filters = {};
       }
       this_.filters.start = this.pageRequest.pageNum;
       this_.filters.limit = this.pageRequest.pageSize;
+      
       this_.utils.request.httpUtils(this_.filters, function(
         res
       ) {
-       
-        // if (res.data.rows == null) {
-        //   res.data.rows = [];
-        // }
+        if (res.data.rows == null) {
+          res.data.rows = [];
+        }
         this_.pageResult = res.data.rows;
-        console.log("//////"+this_.pageResult)
-        console.log("*********"+res.data.rows)
         this_.totalSize = Number(res.data.total);
       });
     },

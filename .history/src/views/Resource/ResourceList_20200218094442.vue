@@ -260,14 +260,14 @@
       this_.utils.request.httpUtils(this_.filters, function(
         res
       ) {
-       
+        debugger
         // if (res.data.rows == null) {
         //   res.data.rows = [];
         // }
         this_.pageResult = res.data.rows;
         console.log("//////"+this_.pageResult)
         console.log("*********"+res.data.rows)
-        this_.totalSize = Number(res.data.total);
+        // this_.totalSize = Number(res.data.total);
       });
     },
 

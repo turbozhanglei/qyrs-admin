@@ -243,7 +243,7 @@
         columns: [],
         filterColumns: [],
         pageRequest: { pageNum: 1, pageSize: 10 },
-        pageResult: [],
+        pageResult: {},
         options: [],
       };
     },
@@ -267,7 +267,7 @@
         this_.pageResult = res.data.rows;
         console.log("//////"+this_.pageResult)
         console.log("*********"+res.data.rows)
-        this_.totalSize = Number(res.data.total);
+        // this_.totalSize = Number(res.data.total);
       });
     },
 

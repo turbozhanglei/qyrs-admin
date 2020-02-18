@@ -250,7 +250,7 @@
     methods: {
      // 获取分页数据
     findPage: function() {
-      
+    
       let this_ = this;
       if (this_.filters == undefined || this_.filters == null) {
         this_.filters = {};
@@ -260,7 +260,6 @@
       this_.utils.request.httpUtils(this_.filters, function(
         res
       ) {
-       
         // if (res.data.rows == null) {
         //   res.data.rows = [];
         // }
