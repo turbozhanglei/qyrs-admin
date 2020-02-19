@@ -481,18 +481,28 @@ export default {
     },
     //审核状态
     handleUpStatus: function(row, type) {
-     
+   
       let params = {};
       if (row.params.length  > 1) {
         //批量审核通过
         if (row.type ==3) {
-          params.checkStatus = "3";
-          params.resourceIdList = row.params;
+          params.checkStatus = "4";
+            
+          params.resourceIdList = [];
+          for(var i in row.params){
+            params.resourceIdList.push(row.params[i].id)
+            
+          }
+       
           params.checkUserId = null;
         } else if (row.type == 4) {
           //批量审核不通过
-          params.checkStatus = "4";
-          params.resourceIdList = row.params;
+          params.checkStatus = "3";
+          params.resourceIdList = [];
+          for(var i in row.params){
+            params.resourceIdList.push(row.params[i].id)
+            
+          }
 
           params.checkUserId = null;
         }

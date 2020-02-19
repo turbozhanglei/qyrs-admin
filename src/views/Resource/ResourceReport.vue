@@ -9,8 +9,11 @@
             type="date"
             placeholder="开始时间" @change ="checkStartTime()">
           </el-date-picker>
-          至
-          <el-date-picker
+        </el-form-item>
+           -
+          
+          <el-form-item  prop="endTime" label="日期">
+          <el-date-picker 
             v-model="filters.endTime"
             type="date"
             placeholder="结束时间"  @change="checkEndTime()">
@@ -19,13 +22,13 @@
         <el-form-item prop="yesterday">
           <el-button type="primary"
                      v-model="filters.yesterday"
-                     @click="$refs.CyTable.findPage(filters)"
+                     @click="changeYesterday(1)"
                      plain>昨日</el-button>
         </el-form-item>
         <el-form-item prop="weeks">
           <el-button type="primary"
                      v-model="filters.weeks"
-                     @click="$refs.CyTable.findPage(filters)"
+                     @click="changeWeeks(7)"
                      plain>近7天</el-button>
         </el-form-item>
         <el-form-item prop="months">
@@ -298,6 +301,67 @@
         this.$refs["filters"].resetFields();
         this.$refs.CyTable.resetForm();
         this.findPage();
+      },
+      //获取昨日的时间
+      changeYesterday:function(num,time){//n 为传入的时间 正数为之前的日期 time为传入的置顶时间，默认为当前时间
+
+      let this_ = this
+           let n =num
+           let d=""
+           if(time){
+             d = new Date(time);
+           }else{
+             d = new Date();
+           }
+           let year =d.getFullYear();
+           let mon =d.getMonth()+1;
+           let day =d.getDate();
+           if(day <= n) {
+                if(mon > 1) {
+                    mon = mon - 1;
+                } else {
+                    year = year - 1;
+                    mon = 12;
+                }
+            }
+            d.setDate(d.getDate() - n);
+            year = d.getFullYear();
+            mon = d.getMonth() + 1;
+            day = d.getDate();
+            this_.filters.startTime= year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
+            let now =new Date();
+            this_.filters.endTime=now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()
+           
+         
+      },
+      //获取近7天的时间
+      changeWeeks:function(num,time){
+        let this_ = this
+           let n =num
+           let d=""
+           if(time){
+             d = new Date(time);
+           }else{
+             d = new Date();
+           }
+           let year =d.getFullYear();
+           let mon =d.getMonth()+1;
+           let day =d.getDate();
+           if(day <= n) {
+                if(mon > 1) {
+                    mon = mon - 1;
+                } else {
+                    year = year - 1;
+                    mon = 12;
+                }
+            }
+            d.setDate(d.getDate() - n);
+            year = d.getFullYear();
+            mon = d.getMonth() + 1;
+            day = d.getDate();
+            this_.filters.startTime= year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
+            let now =new Date();
+            this_.filters.endTime=now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()
       }
     },
     mounted() {
