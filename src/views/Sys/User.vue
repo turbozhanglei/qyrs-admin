@@ -343,6 +343,7 @@ export default {
     },
     // 获取分页数据
     findPage: function(data) {
+      this.filters.identity_type=1;
       this.$refs.CyTable.findPage(this.filters);
     },
     // 加载用户角色信息

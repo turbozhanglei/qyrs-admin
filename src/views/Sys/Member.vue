@@ -161,6 +161,7 @@ export default {
     // 获取分页数据
     findPage: function(data) {
       this.filters.t = "sysUser";
+      this.filters.identity_type=0;
       this.$refs.CyTable.findPage(this.filters);
       console.log(this.filters)
     },
@@ -238,7 +239,7 @@ export default {
       this.columns = [
         { prop: "id", label: "用户ID", minWidth: 120 },
         { prop: "nickname", label: "会员昵称", minWidth: 120 },
-        { prop: "username", label: "用户名", minWidth: 120 },
+        // { prop: "username", label: "用户名", minWidth: 120 },
         { prop: "mobile", label: "手机号", minWidth: 100 },
         {
           prop: "status",
