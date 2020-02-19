@@ -23,6 +23,7 @@ import AdvertSource from '@/views/Advert/AdvertSource'
 import AdvertSourceAdd from '@/views/Advert/AdvertSourceAdd'
 import AdvertAdd from '@/views/Advert/AdvertAdd'
 import ArticleAdd from '@/views/News/ArticleAdd'
+import ResourceInfo from '@/views/Resource/ResourceInfo'
 import api from '@/http/api'
 import store from '@/store'
 
@@ -174,6 +175,15 @@ const router = new Router({
         path: '/advert/advertSourceAdd/:adCodeId/:adSourceId/:isEdit',
         name: '广告素材',
         component: AdvertSourceAdd
+      }]
+    },
+    {path: '/',
+      name: '资源详情',
+      component: Home,
+      children: [{
+        path: '/resource/ResourceInfo/:resourceId',
+        name: '资源详情',
+        component: ResourceInfo
       }]
     },
   ]

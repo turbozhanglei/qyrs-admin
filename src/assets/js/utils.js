@@ -78,6 +78,23 @@ export default {
     queryDictionry:function(data,callback){
       this.httpExecute(data, '/gy-resource/resource-dictionary/query-dictionary', callback);
     },
+    //置顶资源
+    setResourceTop:function(data,callback){
+      this.httpExecute(data, '/gy-resource/resource-manager/top', callback);
+    },
+   //取消置顶资源
+   cancelResourceTop:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-manager/top', callback);
+  },
+  //导出资源列表
+  downResourceExcel:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-manager/download-resource', callback);
+  },
+  //查询资源详情
+  queryResourceDetail:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-rest/query-resource-detail', callback);
+  },
+
 
     requestUrl(data, url, callback) {
       var params = {};
