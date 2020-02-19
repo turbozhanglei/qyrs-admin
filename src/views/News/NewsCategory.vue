@@ -164,7 +164,7 @@
           <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off" type="number" ></el-input>
         </el-form-item>
 
-        <el-form-item label="状态" required>
+        <el-form-item label="状态" required prop="status">
           <el-radio-group v-model="dataForm.status">
             <el-radio
               v-for="item in status"
@@ -218,7 +218,7 @@
           <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off" type="number" ></el-input>
         </el-form-item>
 
-        <el-form-item label="状态" required>
+        <el-form-item label="状态" required prop="status">
           <el-radio-group v-model="dataForm.status">
             <el-radio
               v-for="item in status"

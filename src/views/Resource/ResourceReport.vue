@@ -34,7 +34,7 @@
         <el-form-item prop="months">
           <el-button type="primary"
                      v-model="filters.months"
-                     @click="$refs.CyTable.findPage(filters)"
+                     @click="changeMonths(30)"
                      plain>近30天</el-button>
         </el-form-item>
         <el-form-item prop="resourceSort" label="资源信息排序">
@@ -114,7 +114,7 @@
           startTime: "",//开始时间
           endTime:"",//结束时间
           resourceSort:"",//排序类型
-          mobile:"",//手机号
+          issurePhone:"",//手机号
           yesterday:"",//昨日
           weeks:"",//近7天
           months:"",//近30天
@@ -287,13 +287,20 @@
       },
       //列表下载
       downloadExcel() {
+        let this_= this
         this.$confirm("确定下载列表文件?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         })
           .then(() => {
-            exportExcel(this.pageResult.content, this.filterColumns);
+            this.utils.request.downResourceExcel(this_.filters,function(data){
+              if(data.code="0000"){
+                this_.$message({ message: "下载成功 ", type: "success" });
+              }else{
+                this_.$message({ message: "下载失败 ", type: "error" });
+              }
+            });
           })
           .catch(() => {});
       },
@@ -331,6 +338,7 @@
             this_.filters.startTime= year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
             let now =new Date();
             this_.filters.endTime=now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()
+            this_.findPage(this_.filters);
            
          
       },
@@ -362,7 +370,38 @@
             this_.filters.startTime= year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
             let now =new Date();
             this_.filters.endTime=now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()
-      }
+             this_.findPage(this_.filters);
+      },
+      //获取近30天时间
+       changeMonths:function(num,time){
+        let this_ = this
+           let n =num
+           let d=""
+           if(time){
+             d = new Date(time);
+           }else{
+             d = new Date();
+           }
+           let year =d.getFullYear();
+           let mon =d.getMonth()+1;
+           let day =d.getDate();
+           if(day <= n) {
+                if(mon > 1) {
+                    mon = mon - 1;
+                } else {
+                    year = year - 1;
+                    mon = 12;
+                }
+            }
+            d.setDate(d.getDate() - n);
+            year = d.getFullYear();
+            mon = d.getMonth() + 1;
+            day = d.getDate();
+            this_.filters.startTime= year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
+            let now =new Date();
+            this_.filters.endTime=now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate()
+             this_.findPage(this_.filters);
+      },
     },
     mounted() {
       this.initColumns();
