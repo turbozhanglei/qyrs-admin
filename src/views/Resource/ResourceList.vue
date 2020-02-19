@@ -39,7 +39,11 @@
         <el-row>
           <el-col :span="6">
             <el-form-item label="发布状态" prop="issureStatus">
-              <el-select v-model="filters.issureStatus" placeholder="发布状态" style="padding-left: 28px;">
+              <el-select
+                v-model="filters.issureStatus"
+                placeholder="发布状态"
+                style="padding-left: 28px;"
+              >
                 <el-option label="全部" value></el-option>
                 <el-option label="待审核" value="0"></el-option>
                 <el-option label="系统审核通过" value="1"></el-option>
@@ -419,19 +423,44 @@ export default {
       });
       this.filterColumns = temp;
     },
+
     //列表下载
     downloadExcel() {
-      let this_=this
+      let this_ = this;
       this.$confirm("确定下载列表文件?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-         exportExcel(this.pageResult.content, this.filterColumns);
+          this.utils.request.downResourceExcel(this_.filters, function(data) {
+            if ((data.code = "0000")) {
+              this_.$message({ message: "下载成功 ", type: "success" });
+              //  data.data.blob()
+              //  console("******"+ data.data.blob());
+              // var file = new File([data.data], "cesss.xlsx", { type: 'application/force-download' });  
+              // let blobUrl = URL.createObjectURL(file);
+              const blob = new Blob([data.data]);
+             const blobUrl = window.URL.createObjectURL(blob);
+
+              this_.download(blobUrl); 
+            } else {
+              this_.$message({ message: "下载失败 ", type: "error" });
+            }
+          });
         })
         .catch(() => {});
+ 
+     
     },
+     download(blobUrl) {
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.download = "资源列表.xlsx";
+        a.href = blobUrl;
+        a.click();
+        document.body.removeChild(a);
+      },
     reset: function() {
       this.$refs["filters"].resetFields();
       this.$refs.CyTable.resetForm();
@@ -439,69 +468,66 @@ export default {
     },
     //置顶与取消置顶
     handleStickyOperation: function(row, type) {
-     
-      let params ={}
-      if(row.type==1){ //判断按钮
-         params.topStatus="1"
-         params.resourceIdList=row.row.resourceId
-         params.operaId = null
-         params.token =localStorage.getItem('token')
-        let this_ =this
-        this.utils.request.setResourceTop(params,function(data){
-          if(data.code="0000"){
-             this_.$message({ message: "置顶成功 ", type: "success" });
-             this_.findPage();
-          }else{
-             this_.$message({ message: "置顶失败 ", type: "error" });
-             this_.findPage();
+      let params = {};
+      if (row.type == 1) {
+        //判断按钮
+        params.topStatus = "1";
+        params.resourceIdList = row.row.resourceId;
+        params.operaId = null;
+        params.token = localStorage.getItem("token");
+        let this_ = this;
+        this.utils.request.setResourceTop(params, function(data) {
+          if ((data.code = "0000")) {
+            this_.$message({ message: "置顶成功 ", type: "success" });
+            this_.findPage();
+          } else {
+            this_.$message({ message: "置顶失败 ", type: "error" });
+            this_.findPage();
           }
-        })
-      }else if(row.type==0){
-        params.topStatus="0"
-         params.resourceIdList=row.row.resourceId
-         params.operaId = null
-          params.token =localStorage.getItem('token')
-        let this_ =this
-        this.utils.request.cancelResourceTop(params,function(data){
-          if(data.code="0000"){
-             this_.$message({ message: "取消置顶成功 ", type: "success" });
-             this_.findPage();
-          }else{
-             this_.$message({ message: "取消置顶失败 ", type: "error" });
-             this_.findPage();
+        });
+      } else if (row.type == 0) {
+        params.topStatus = "0";
+        params.resourceIdList = row.row.resourceId;
+        params.operaId = null;
+        params.token = localStorage.getItem("token");
+        let this_ = this;
+        this.utils.request.cancelResourceTop(params, function(data) {
+          if ((data.code = "0000")) {
+            this_.$message({ message: "取消置顶成功 ", type: "success" });
+            this_.findPage();
+          } else {
+            this_.$message({ message: "取消置顶失败 ", type: "error" });
+            this_.findPage();
           }
-        })
+        });
       }
-      
     },
     //查看详情
     handleDetail: function(params) {
-      
-      this.$router.push({path:"/resource/resourceInfo/"+ params.row.resourceId});
+      this.$router.push({
+        path: "/resource/resourceInfo/" + params.row.resourceId
+      });
     },
     //审核状态
     handleUpStatus: function(row, type) {
-   
       let params = {};
-      if (row.params.length  > 1) {
+      if (row.params.length > 1) {
         //批量审核通过
-        if (row.type ==3) {
+        if (row.type == 3) {
           params.checkStatus = "4";
-            
+
           params.resourceIdList = [];
-          for(var i in row.params){
-            params.resourceIdList.push(row.params[i].id)
-            
+          for (var i in row.params) {
+            params.resourceIdList.push(row.params[i].id);
           }
-       
+
           params.checkUserId = null;
         } else if (row.type == 4) {
           //批量审核不通过
           params.checkStatus = "3";
           params.resourceIdList = [];
-          for(var i in row.params){
-            params.resourceIdList.push(row.params[i].id)
-            
+          for (var i in row.params) {
+            params.resourceIdList.push(row.params[i].id);
           }
 
           params.checkUserId = null;
