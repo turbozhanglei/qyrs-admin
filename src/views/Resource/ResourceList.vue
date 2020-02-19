@@ -434,16 +434,37 @@ export default {
       })
         .then(() => {
           this.utils.request.downResourceExcel(this_.filters, function(data) {
-            if ((data.code = "0000")) {
-              this_.$message({ message: "下载成功 ", type: "success" });
-              //  data.data.blob()
-              //  console("******"+ data.data.blob());
-              // var file = new File([data.data], "cesss.xlsx", { type: 'application/force-download' });  
-              // let blobUrl = URL.createObjectURL(file);
-              const blob = new Blob([data.data]);
-             const blobUrl = window.URL.createObjectURL(blob);
 
-              this_.download(blobUrl); 
+            
+          
+            if ((data.code = "0000")) {
+            //   this_.$message({ message: "下载成功 ", type: "success" });
+            //   //  data.data.blob()
+            //   //  console("******"+ data.data.blob());
+            //   // var file = new File([data.data], "cesss.xlsx", { type: 'application/force-download' });  
+            //   // let blobUrl = URL.createObjectURL(file);
+            //   const blob = new Blob([data.data]);
+            //  const blobUrl = window.URL.createObjectURL(blob);
+
+            //   this_.download(blobUrl); 
+           
+            const req = new XMLHttpRequest();
+               let trueUrl=this_.utils.getBaseUrl();
+               req.open('POST', trueUrl+'/gy-resource/resource-manager/download-resource', true);
+              // req.open('POST', 'http://localhost:8087/gy-resource/resource-manager/download-resource', true);
+              req.responseType = 'blob';
+              req.setRequestHeader('Content-Type', 'application/json');
+              req.onload = function() {
+                const data = req.response;
+                const a = document.createElement('a');
+                const blob = new Blob([data]);
+                const blobUrl = window.URL.createObjectURL(blob);
+               this_.download(blobUrl) ;
+              };
+
+              req.send(JSON.stringify(this_.filters));
+              
+
             } else {
               this_.$message({ message: "下载失败 ", type: "error" });
             }

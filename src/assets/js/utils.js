@@ -90,6 +90,10 @@ export default {
   downResourceExcel:function(data,callback){
     this.httpExecute(data, '/gy-resource/resource-manager/download-resource', callback);
   },
+  //资源信息汇总报表导出
+  downResourceReportExcel:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-manager/download-report', callback);
+  },
   //查询资源详情
   queryResourceDetail:function(data,callback){
     this.httpExecute(data, '/gy-resource/resource-rest/query-resource-detail', callback);
@@ -396,6 +400,9 @@ export default {
   },
   getHost() {
     return host;
+  },
+  getBaseUrl(){
+    return baseUrl;
   },
   getUpLoadHost() {
     return host + "cmn/imgUpload";
