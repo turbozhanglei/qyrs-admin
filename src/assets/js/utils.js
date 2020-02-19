@@ -5,8 +5,8 @@ import { Message } from 'element-ui'
 
 
 // const host='http://40.73.65.243:8087/gy-rest/';
-// const host = 'http://localhost:8087/gy-rest/';
-const host = 'http://47.100.214.25:9902/gy-rest/';
+const host = 'http://localhost:8087/gy-rest/';
+//const host = 'http://47.100.214.25:9902/gy-rest/';
 const PIC_URL_PRE = 'F:/usr/local/static/imgs';
 
 export default {

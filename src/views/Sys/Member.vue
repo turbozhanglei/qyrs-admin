@@ -162,6 +162,7 @@ export default {
     findPage: function(data) {
       this.filters.t = "sysUser";
       this.filters.identity_type=0;
+      this.filters.sql="queryListMember";
       this.$refs.CyTable.findPage(this.filters);
       console.log(this.filters)
     },
@@ -248,7 +249,7 @@ export default {
           formatter: this.statusFormat
         },
         { prop: "source", label: "注册来源", minWidth: 100 ,formatter: this.source},
-        { prop: "fans", label: "粉丝数", minWidth: 100 },
+        { prop: "fens", label: "粉丝数", minWidth: 100 },
         { prop: "create_time", label: "注册时间", minWidth: 120 }
       ];
       var temp = [];
