@@ -16,7 +16,8 @@
               <el-form-item prop="issurePhone" label="发布人手机号:">
                 <span>{{filters.issurePhone}}</span>
               </el-form-item>
-            </div></el-col>
+            </div>
+          </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item prop="issureUserId" label="发布人用户ID:">
@@ -42,10 +43,12 @@
           </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
-              <el-form-item prop="resourceType" label="资源信息类型:">
-               {{releaseTypeFormat(filters.resourceType)}}
-              </el-form-item>
-            </div></el-col>
+              <el-form-item
+                prop="resourceType"
+                label="资源信息类型:"
+              >{{releaseTypeFormat(filters.resourceType)}}</el-form-item>
+            </div>
+          </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item prop="issureStatus" label="发布状态:">
@@ -74,7 +77,8 @@
               <el-form-item prop="shareNum" label="分享数:">
                 <span>{{filters.shareNum}}</span>
               </el-form-item>
-            </div></el-col>
+            </div>
+          </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item prop="checkAccount" label="审核人账号:">
@@ -103,7 +107,8 @@
               <el-form-item prop="resourceArea" label="资源区域:">
                 <span>{{resourceAreaFormat(filters.resourceArea)}}</span>
               </el-form-item>
-            </div></el-col>
+            </div>
+          </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
               <el-form-item prop="tradeType" label="内贸外贸:">
@@ -123,163 +128,226 @@
         </el-row>
         <el-row>
           <el-form-item>
-            <el-button type="danger" v-if="filters.issureStatus === '1' || filters.issureStatus === '3' || filters.issureStatus === '0'" @click="updateStatus(4)">审核不通过</el-button>
-            <el-button type="success" v-if="filters.issureStatus === '0' || filters.issureStatus === '2' || filters.issureStatus === '4'" @click="updateStatus(3)">审核通过</el-button>
-            <el-button type="success" v-if="filters.topStatus === '0'&&(filters.issureStatus==='1'||filters.issureStatus==='3')" @click="updateSticky(1)">置顶</el-button>
-            <el-button type="info" v-if="filters.topStatus === '1' &&(filters.issureStatus==='1'||filters.issureStatus==='3')" @click="updateSticky(0)">取消置顶</el-button>
-            <el-button type="primary"  @click="go()">返回</el-button>
+            <el-button
+              type="danger"
+              v-if="filters.issureStatus === '1' || filters.issureStatus === '3' || filters.issureStatus === '0'"
+              @click="updateStatus(4)"
+            >审核不通过</el-button>
+            <el-button
+              type="success"
+              v-if="filters.issureStatus === '0' || filters.issureStatus === '2' || filters.issureStatus === '4'"
+              @click="updateStatus(3)"
+            >审核通过</el-button>
+            <el-button
+              type="success"
+              v-if="filters.topStatus === '0'&&(filters.issureStatus==='1'||filters.issureStatus==='3')"
+              @click="updateSticky(1)"
+            >置顶</el-button>
+            <el-button
+              type="info"
+              v-if="filters.topStatus === '1' &&(filters.issureStatus==='1'||filters.issureStatus==='3')"
+              @click="updateSticky(0)"
+            >取消置顶</el-button>
+            <el-button type="primary" @click="go()">返回</el-button>
           </el-form-item>
-
         </el-row>
       </el-form>
     </div>
-
   </div>
 </template>
 
 <script>
-  import PopupTreeInput from "@/components/PopupTreeInput";
-  import CyTable from "@/views/Core/CyTable";
-  import KtButton from "@/views/Core/KtButton";
-  import TableColumnFilterDialog from "@/views/Core/TableColumnFilterDialog";
-  import { format } from "@/utils/datetime";
-  import { exportExcel } from "@/utils/excel";
-  export default {
-    components: {
-      PopupTreeInput,
-      KtButton,
-      TableColumnFilterDialog
-    },
-    data() {
-      return {
-        size: "small",
-        filters: {
-          createTime: "",//创建时间
-          issurePhone:"",//手机号
-          issureUserId:"",//发布人用户id
-          issureNickName:"",//id
-          resourceTitle:"",//标题
-          resourceType:"",//资源类型
-          issureStatus:"",//状态
-          topStatus:"",//置顶
-          browseNum:"",//浏览量
-          shareNum:"",//分享数
-          checkAccount:"",//审核人账号
-          checkDate:"",//审核时间
-          resourceLabel:"",//资源标签
-          resourceArea:"",//资源区域
-          tradeType:"",//内贸外贸
-          resourceContent:"",//内容
-          resourceId: this.$route.params.resourceId,
-          
-        },
-        resourceId: this.$route.params.resourceId,
-      };
-    },
-    methods: {
-      //页面初始化
-       queryResourceDetail(){
-  
-        let this_=this
-      let params  = {}
-      params.resourceId=this_.resourceId
-      this.utils.request.queryResourceDetail(params,function(res){
-         res.data.resourceId=this_.resourceId
-         this_.filters=res.data
-       })
-
-    },
-      //审核状态
-      updateStatus:function (status) {
-
+import PopupTreeInput from "@/components/PopupTreeInput";
+import CyTable from "@/views/Core/CyTable";
+import KtButton from "@/views/Core/KtButton";
+import TableColumnFilterDialog from "@/views/Core/TableColumnFilterDialog";
+import { format } from "@/utils/datetime";
+import { exportExcel } from "@/utils/excel";
+export default {
+  components: {
+    PopupTreeInput,
+    KtButton,
+    TableColumnFilterDialog
+  },
+  data() {
+    return {
+      size: "small",
+      filters: {
+        createTime: "", //创建时间
+        issurePhone: "", //手机号
+        issureUserId: "", //发布人用户id
+        issureNickName: "", //id
+        resourceTitle: "", //标题
+        resourceType: "", //资源类型
+        issureStatus: "", //状态
+        topStatus: "", //置顶
+        browseNum: "", //浏览量
+        shareNum: "", //分享数
+        checkAccount: "", //审核人账号
+        checkDate: "", //审核时间
+        resourceLabel: "", //资源标签
+        resourceArea: "", //资源区域
+        tradeType: "", //内贸外贸
+        resourceContent: "", //内容
+        resourceId: this.$route.params.resourceId
       },
-      //置顶
-      updateSticky:function () {
-
-      },
+      resourceId: this.$route.params.resourceId
+    };
+  },
+  methods: {
+    //页面初始化
+    queryResourceDetail() {
+      let this_ = this;
+      let params = {};
+      params.resourceId = this_.resourceId;
+      this.utils.request.queryResourceDetail(params, function(res) {
+        res.data.resourceId = this_.resourceId;
+        this_.filters = res.data;
+      });
+    },
+    //审核状态
+    updateStatus: function(status) {
      
+       let this_ = this
+       let params={}
+      if (status==3) {//审核通过
+          params.checkStatus = "3";
+          params.resourceIdList = this_.filters.resourceId;
+          params.checkUserId = null;
+        } else if (status==4) {
+          params.checkStatus = "4";
+          params.resourceIdList = this_.filters.resourceId;
 
-      //状态格式化
-      statusFormat: function(cellValue) {
-        if (Number(cellValue) == 1) {
-          return "系统审核通过";
-        }else if (Number(cellValue) == 2) {
-          return "待人工审核";
-        }else if (Number(cellValue) == 3) {
-          return "人工审核通过";
-        }else if (Number(cellValue) == 4) {
-          return "人工审核不通过";
+          params.checkUserId = null;
         }
-        return "待审核";
-      },
-      // 资源类型格式化
-      releaseTypeFormat: function(row, column, cellValue, index) {
-        if (Number(cellValue) == 0) {
-          return "出售";
-        }
-        return "求购";
-      },
-      //资源标签格式化
-      resourceLabelFormat: function(cellValue) {
-        if (Number(cellValue) == 1) {
-          return "乙二醇";
-        }else if (Number(cellValue) == 2) {
-          return "PTA";
-        }else if (Number(cellValue) == 3) {
-          return "成品油";
-        }else if (Number(cellValue) == 4) {
-          return "PVC";
-        }else if (Number(cellValue) == 5) {
-          return "甲醇";
-        }else if (Number(cellValue) == 6) {
-          return "塑料";
-        }
-        return "其他";
-      },
-      //资源区域格式化
-      resourceAreaFormat: function(cellValue) {
-        if (Number(cellValue) == 1) {
-          return "东北";
-        }else if (Number(cellValue) == 2) {
-          return "华东";
-        }else if (Number(cellValue) == 3) {
-          return "华北";
-        }else if (Number(cellValue) == 4) {
-          return "华中";
-        }else if (Number(cellValue) == 5) {
-          return "华南";
-        }else if (Number(cellValue) == 6) {
-          return "西南";
-        }else if (Number(cellValue) == 7) {
-          return "西北";
-        }
-        return "境外";
-      },
-      //资源区域格式化
-      resourceTradeFormat: function(cellValue) {
-        if (Number(cellValue) == 1) {
-          return "内贸";
-        }else if (Number(cellValue) == 2) {
-          return "进口";
-        }
-        return "出口";
-      },
-      //资源置顶状态格式化
-      stickyFormat: function(cellValue) {
-        if (Number(cellValue) == 1) {
-          return "是";
-        }
-        return "否";
-      },
-      go:function () {
-        this.$router.go(-1);
-      }
-
+        
+        this.utils.request.handleUpStatus(params, function(data) {
+          if ((data.code = "0000")) {
+            this_.$message({ message: "修改成功 ", type: "success" });
+            this_.queryResourceDetail();
+          }
+        });
+      
     },
-    mounted() {
-      this.queryResourceDetail()
+    //置顶
+    updateSticky: function(status) {
+    
+      let this_ = this
+      let params = {};
+      if (status == 1) {
+        //判断按钮
+        params.topStatus = "1";
+        params.resourceIdList = this_.filters.resourceId;
+        params.operaId = null;
+        params.token = localStorage.getItem("token");
+        
+        this.utils.request.setResourceTop(params, function(data) {
+          if ((data.code = "0000")) {
+            this_.$message({ message: "置顶成功 ", type: "success" });
+            this_.queryResourceDetail();
+          } else {
+            this_.$message({ message: "置顶失败 ", type: "error" });
+            this_.queryResourceDetail();
+          }
+        });
+      } else if (status == 0) {
+        params.topStatus = "0";
+        params.resourceIdList = this_.filters.resourceId;
+        params.operaId = null;
+        params.token = localStorage.getItem("token");
+      
+        this.utils.request.cancelResourceTop(params, function(data) {
+          if ((data.code = "0000")) {
+            this_.$message({ message: "取消置顶成功 ", type: "success" });
+            this_.queryResourceDetail();
+          } else {
+            this_.$message({ message: "取消置顶失败 ", type: "error" });
+            this_.queryResourceDetail();
+          }
+        });
+      }
+    },
+
+    //状态格式化
+    statusFormat: function(cellValue) {
+      if (Number(cellValue) == 1) {
+        return "系统审核通过";
+      } else if (Number(cellValue) == 2) {
+        return "待人工审核";
+      } else if (Number(cellValue) == 3) {
+        return "人工审核通过";
+      } else if (Number(cellValue) == 4) {
+        return "人工审核不通过";
+      }
+      return "待审核";
+    },
+    // 资源类型格式化
+    releaseTypeFormat: function(row, column, cellValue, index) {
+      if (Number(cellValue) == 0) {
+        return "出售";
+      }
+      return "求购";
+    },
+    //资源标签格式化
+    resourceLabelFormat: function(cellValue) {
+      if (Number(cellValue) == 1) {
+        return "乙二醇";
+      } else if (Number(cellValue) == 2) {
+        return "PTA";
+      } else if (Number(cellValue) == 3) {
+        return "成品油";
+      } else if (Number(cellValue) == 4) {
+        return "PVC";
+      } else if (Number(cellValue) == 5) {
+        return "甲醇";
+      } else if (Number(cellValue) == 6) {
+        return "塑料";
+      }
+      return "其他";
+    },
+    //资源区域格式化
+    resourceAreaFormat: function(cellValue) {
+      if (Number(cellValue) == 1) {
+        return "东北";
+      } else if (Number(cellValue) == 2) {
+        return "华东";
+      } else if (Number(cellValue) == 3) {
+        return "华北";
+      } else if (Number(cellValue) == 4) {
+        return "华中";
+      } else if (Number(cellValue) == 5) {
+        return "华南";
+      } else if (Number(cellValue) == 6) {
+        return "西南";
+      } else if (Number(cellValue) == 7) {
+        return "西北";
+      }
+      return "境外";
+    },
+    //资源区域格式化
+    resourceTradeFormat: function(cellValue) {
+      if (Number(cellValue) == 1) {
+        return "内贸";
+      } else if (Number(cellValue) == 2) {
+        return "进口";
+      }
+      return "出口";
+    },
+    //资源置顶状态格式化
+    stickyFormat: function(cellValue) {
+      if (Number(cellValue) == 1) {
+        return "是";
+      }
+      return "否";
+    },
+    go: function() {
+      this.$router.go(-1);
     }
-  };
+  },
+  mounted() {
+    this.queryResourceDetail();
+  }
+};
 </script>
 
 <style scoped>
