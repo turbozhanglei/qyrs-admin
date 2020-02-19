@@ -4,9 +4,14 @@ import router from '../../router'
 import { Message } from 'element-ui'
 
 
-// const host='http://40.73.65.243:8087/gy-rest/';
-const host = 'http://localhost:8087/gy-rest/';
-//const host = 'http://47.100.214.25:9902/gy-rest/';
+// const baseUrl = 'http://40.73.65.243:8087';
+const baseUrl = 'http://localhost:8087';
+// const baseUrl = 'http://47.100.214.25:9902';
+
+const path = '/gy-rest/';
+const host=baseUrl + path;
+// const host = 'http://localhost:8087/gy-rest/';
+// const host = 'http://47.100.214.25:9902/gy-rest/';
 const PIC_URL_PRE = 'F:/usr/local/static/imgs';
 
 export default {
@@ -27,7 +32,7 @@ export default {
           params[key] = data[key];
         }
       }
-      url = httpBaseUrl + url;
+      url = baseUrl + url;
       console.log("==========地址为url2:" + url);
       axios.post(url, JSON.stringify(params), { headers: { 'Content-Type': 'text/plain' } })
         .then(rsp => {
@@ -61,10 +66,39 @@ export default {
     httpUtils: function (data, callback) {
       this.httpExecute(data, data.url, callback);
     },
-    //资源审核不通过
-    handleNoPass:function(data,callback){
-      this.httpExecute(data, 'gy-resource/resource-manager/batch-check', callback);
+    //资源审核
+    handleUpStatus:function(data,callback){
+      this.httpExecute(data, '/gy-resource/resource-manager/check', callback);
     },
+    //批量审核
+    batchUpStatus:function(data,callback){
+      this.httpExecute(data, '/gy-resource/resource-manager/batch-check', callback);
+    },
+    //发布类型初始化
+    queryDictionry:function(data,callback){
+      this.httpExecute(data, '/gy-resource/resource-dictionary/query-dictionary', callback);
+    },
+    //置顶资源
+    setResourceTop:function(data,callback){
+      this.httpExecute(data, '/gy-resource/resource-manager/top', callback);
+    },
+   //取消置顶资源
+   cancelResourceTop:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-manager/top', callback);
+  },
+  //导出资源列表
+  downResourceExcel:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-manager/download-resource', callback);
+  },
+  //资源信息汇总报表导出
+  downResourceReportExcel:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-manager/download-report', callback);
+  },
+  //查询资源详情
+  queryResourceDetail:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-rest/query-resource-detail', callback);
+  },
+
 
     requestUrl(data, url, callback) {
       var params = {};
@@ -366,6 +400,9 @@ export default {
   },
   getHost() {
     return host;
+  },
+  getBaseUrl(){
+    return baseUrl;
   },
   getUpLoadHost() {
     return host + "cmn/imgUpload";
