@@ -173,11 +173,7 @@
         //上传图片校验
         beforeArticleUpload(file) {
           var size = 2, this_ = this;
-          if (this_.advert && this_.advert.source_size_limit) {
-            size = this_.advert.source_size_limit;
-          }
           const isLt2M = file.size / 1024 / 1024 < size;
-
           if (!isLt2M) {
             this_.$message.error("上传图片大小不能超过" + size + " MB!");
           }
