@@ -63,9 +63,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="创建时间" prop="createStartTime" >
+            <el-form-item label="创建时间" prop="createStartTime" style="padding-left: 28px;">
               <el-date-picker
-              style="width:209px;margin-left: 28px;"
                 v-model="filters.createStartTime"
                 type="date"
                 placeholder="开始时间"
@@ -87,7 +86,7 @@
         <el-row>
           <el-col :span="6">
             <el-form-item prop="issureId" label="发布人用户id">
-              <el-input v-model="filters.issureId" placeholder="发布人用户id"  style="width:209px;padding-left: 3px;" clearable></el-input>
+              <el-input v-model="filters.issureId" placeholder="发布人用户id" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -100,7 +99,7 @@
               <el-select
                 v-model="filters.sensitiveCode"
                 placeholder="敏感词"
-                style="padding-left: 42px;"
+                style="padding-left: 45px;"
               >
                 <el-option label="全部" value></el-option>
                 <el-option label="含有敏感词" value="1"></el-option>
@@ -112,7 +111,7 @@
         <el-row>
           <el-col :span="6">
             <el-form-item prop="browseStartNum" label="浏览量">
-              <el-input v-model="filters.browseStartNum" clearable style="width: 90px;padding-left: 42px;"></el-input>—
+              <el-input v-model="filters.browseStartNum" clearable style="width: 90px"></el-input>—
             </el-form-item>
             <el-form-item prop="browseEndNum">
               <el-input v-model="filters.browseEndNum" clearable style="width: 90px"></el-input>
@@ -120,10 +119,10 @@
           </el-col>
           <el-col :span="6">
             <el-form-item prop="shareStartNum" label="分享数">
-              <el-input v-model="filters.shareStartNum" clearable style="width: 90px;padding-left: 42px;  "></el-input>—
+              <el-input v-model="filters.shareStartNum" clearable style="width: 90px"></el-input>—
             </el-form-item>
             <el-form-item prop="shareEndNum">
-              <el-input v-model="filters.shareEndNum" clearable style="width: 91px"></el-input>
+              <el-input v-model="filters.shareEndNum" clearable style="width: 90px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -142,7 +141,7 @@
         <el-row>
           <el-col :span="6">
             <el-form-item label="资源区域" prop="resourceArea">
-              <el-select v-model="filters.resourceArea" placeholder="资源区域" style="padding-left:27px">
+              <el-select v-model="filters.resourceArea" placeholder="资源区域">
                 <el-option
                   v-for="item in resourceArea"
                   :key="item.dictionaryValue"
@@ -154,7 +153,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="内贸外贸" prop="tradeType">
-              <el-select v-model="filters.tradeType" style="padding-left:27px">
+              <el-select v-model="filters.tradeType">
                 <el-option
                   v-for="item in resourceTrade"
                   :key="item.dictionaryValue"
