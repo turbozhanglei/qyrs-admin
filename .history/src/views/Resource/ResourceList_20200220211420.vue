@@ -65,7 +65,7 @@
           <el-col :span="12">
             <el-form-item label="创建时间" prop="createStartTime" >
               <el-date-picker
-              style="width:209px;margin-left: 28px;"
+              style="margin-left: 28px;"
                 v-model="filters.createStartTime"
                 type="date"
                 placeholder="开始时间"
@@ -87,7 +87,7 @@
         <el-row>
           <el-col :span="6">
             <el-form-item prop="issureId" label="发布人用户id">
-              <el-input v-model="filters.issureId" placeholder="发布人用户id"  style="width:209px;padding-left: 3px;" clearable></el-input>
+              <el-input v-model="filters.issureId" placeholder="发布人用户id"  style="padding-left: 3px;" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -123,7 +123,7 @@
               <el-input v-model="filters.shareStartNum" clearable style="width: 90px;padding-left: 42px;  "></el-input>—
             </el-form-item>
             <el-form-item prop="shareEndNum">
-              <el-input v-model="filters.shareEndNum" clearable style="width: 91px"></el-input>
+              <el-input v-model="filters.shareEndNum" clearable style="width: 90px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">

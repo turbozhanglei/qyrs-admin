@@ -65,7 +65,7 @@
           <el-col :span="12">
             <el-form-item label="创建时间" prop="createStartTime" >
               <el-date-picker
-              style="width:209px;margin-left: 28px;"
+              style="margin-left: 28px;"
                 v-model="filters.createStartTime"
                 type="date"
                 placeholder="开始时间"
