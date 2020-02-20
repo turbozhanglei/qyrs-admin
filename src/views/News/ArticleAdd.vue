@@ -275,10 +275,10 @@
                   endDate:data.data.end_date,
                   validDate:[data.data.startDate,data.data.endDate],
                 }
-                if(data.images!=null || data.images!=""){
+                if(data.data.images!=null || data.data.images!=""){
                   let imgUrl={}
                   imgUrl.name = 1;
-                  imgUrl.url = data.images;
+                  imgUrl.url = data.data.images;
                   this_.fileList.push(imgUrl)
                 }
               }else {
