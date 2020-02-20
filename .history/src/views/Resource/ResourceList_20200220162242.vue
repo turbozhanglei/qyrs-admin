@@ -475,13 +475,15 @@ export default {
         })
         .catch(() => {});
     },
+
     download(blobUrl) {
       const a = document.createElement("a");
       a.style.display = "none";
       a.download = "资源列表.xlsx";
       a.href = blobUrl;
       a.click();
-      document.body.removeChild(a);
+     parent.body.removeChild(a);
+    
     },
 
     reset: function() {

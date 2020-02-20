@@ -438,7 +438,7 @@ export default {
       })
         .then(() => {
           this.utils.request.downResourceExcel(this_.filters, function(data) {
-            if ((data.code = "0000")) {
+            if ((data.data.code = "0000")) {
               //   this_.$message({ message: "下载成功 ", type: "success" });
               //   //  data.data.blob()
               //   //  console("******"+ data.data.blob());

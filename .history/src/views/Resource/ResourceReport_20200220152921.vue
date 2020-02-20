@@ -154,9 +154,6 @@ export default {
     },
     // 获取分页数据
     findPage: function(data) {
-      if(''==this.filters.issurePhone){
-        this.filters.issurePhone=null;
-      }
       this.$refs.CyTable.findPage(this.filters);
     },
 
@@ -344,7 +341,7 @@ export default {
     download(blobUrl) {
         const a = document.createElement("a");
         a.style.display = "none";
-        a.download = "资源汇总报表.xlsx";
+        a.download = "资源列表.xlsx";
         a.href = blobUrl;
         a.click();
         document.body.removeChild(a);

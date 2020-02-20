@@ -69,7 +69,7 @@
                 type="date"
                 placeholder="开始时间"
                 @change="checkStartTime()"
-                value-format="yyyy-MM-dd"
+                 value-format=yyyy-MM-dd
               ></el-date-picker>至
             </el-form-item>
             <el-form-item prop="createEndTime">
@@ -78,7 +78,7 @@
                 type="date"
                 placeholder="结束时间"
                 @change="checkEndTime()"
-                value-format="yyyy-MM-dd"
+                 value-format=yyyy-MM-dd
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -238,7 +238,7 @@ export default {
         createEndTime: "", //创建结束时间
         issureId: "", //发布人用户id
         mobile: "", //发布人手机号
-        issurePhone: null,
+        issurePhone:"",
         sensitiveCode: "", //敏感词
         browseStartNum: "", //浏览量开始
         browseEndNum: "", //浏览量结束
@@ -289,7 +289,10 @@ export default {
     },
     // 获取分页数据
     findPage: function() {
-      //
+
+       if(Object.keys(this.filters.issurePhone).length==0){
+        this.filters.issurePhone=null;
+      }
       this.$refs.CyTable.findPage(this.filters);
     },
 
@@ -438,52 +441,54 @@ export default {
       })
         .then(() => {
           this.utils.request.downResourceExcel(this_.filters, function(data) {
+
+            
+          
             if ((data.code = "0000")) {
-              //   this_.$message({ message: "下载成功 ", type: "success" });
-              //   //  data.data.blob()
-              //   //  console("******"+ data.data.blob());
-              //   // var file = new File([data.data], "cesss.xlsx", { type: 'application/force-download' });
-              //   // let blobUrl = URL.createObjectURL(file);
-              //   const blob = new Blob([data.data]);
-              //  const blobUrl = window.URL.createObjectURL(blob);
+            //   this_.$message({ message: "下载成功 ", type: "success" });
+            //   //  data.data.blob()
+            //   //  console("******"+ data.data.blob());
+            //   // var file = new File([data.data], "cesss.xlsx", { type: 'application/force-download' });  
+            //   // let blobUrl = URL.createObjectURL(file);
+            //   const blob = new Blob([data.data]);
+            //  const blobUrl = window.URL.createObjectURL(blob);
 
-              //   this_.download(blobUrl);
-
-              const req = new XMLHttpRequest();
-              let trueUrl = this_.utils.getBaseUrl();
-              req.open(
-                "POST",
-                trueUrl + "/gy-resource/resource-manager/download-resource",
-                true
-              );
+            //   this_.download(blobUrl); 
+           
+            const req = new XMLHttpRequest();
+               let trueUrl=this_.utils.getBaseUrl();
+               req.open('POST', trueUrl+'/gy-resource/resource-manager/download-resource', true);
               // req.open('POST', 'http://localhost:8087/gy-resource/resource-manager/download-resource', true);
-              req.responseType = "blob";
-              req.setRequestHeader("Content-Type", "application/json");
+              req.responseType = 'blob';
+              req.setRequestHeader('Content-Type', 'application/json');
               req.onload = function() {
                 const data = req.response;
-                const a = document.createElement("a");
+                const a = document.createElement('a');
                 const blob = new Blob([data]);
                 const blobUrl = window.URL.createObjectURL(blob);
-                this_.download(blobUrl);
+               this_.download(blobUrl) ;
               };
 
               req.send(JSON.stringify(this_.filters));
+              
+
             } else {
               this_.$message({ message: "下载失败 ", type: "error" });
             }
           });
         })
         .catch(() => {});
+ 
+     
     },
-    download(blobUrl) {
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.download = "资源列表.xlsx";
-      a.href = blobUrl;
-      a.click();
-      document.body.removeChild(a);
-    },
-
+     download(blobUrl) {
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.download = "资源列表.xlsx";
+        a.href = blobUrl;
+        a.click();
+        document.body.removeChild(a);
+      },
     reset: function() {
       this.$refs["filters"].resetFields();
       this.$refs.CyTable.resetForm();
