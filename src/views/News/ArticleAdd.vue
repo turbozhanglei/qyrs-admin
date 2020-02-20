@@ -60,6 +60,9 @@
             <i class="el-icon-plus"></i>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb;建议尺寸：750 * 400PX，预览封面图不会出现在文章内容中</div>
           </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" hieght="80%" :src="dialogImageUrl" alt="">
+          </el-dialog>
         </el-form-item>
         <el-form-item label="文章摘要" prop="desc">
           <el-input type="textarea" v-model="dataForm.describes" placeholder="不填写会默认抓取正文前54字" auto-complete="off"></el-input>
@@ -121,6 +124,8 @@
               validDate:"",
               images:""
             },
+            dialogImageUrl: '',
+            dialogVisible: false,
             platform:"1",
             categorys:[
             ],
@@ -190,7 +195,8 @@
           }
         },
         handlePreview(file) {
-          console.log(file);
+          this.dialogImageUrl = file.url;
+          this.dialogVisible = true;
         },
         handleExceed:function () {
           this.$alert('最多上传一张', '警告', {
