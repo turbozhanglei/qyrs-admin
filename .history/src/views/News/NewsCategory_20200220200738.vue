@@ -215,7 +215,7 @@
           <el-input v-model="dataForm.name" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input v-model="dataForm.sort" maxlength="2" min="0" auto-complete="off" type="number" @input="watchNumber($event)"></el-input>
+          <el-input v-model="dataForm.sort" maxlength="2" min="0" auto-complete="off" type="number" @input="watchNumber(val)"></el-input>
         </el-form-item>
 
         <el-form-item label="状态"  prop="status">
