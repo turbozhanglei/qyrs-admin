@@ -144,7 +144,7 @@
         :size="size"
         label-position="right"
       >
-        <el-form-item label="上级分类" prop="refId" >
+        <el-form-item label="上级分类" prop="refId" required>
           <el-select v-model="dataForm.refId" placeholder="请选择上级分类"  @change="changeType">
             <el-option
               v-for="item in superCategorys"
@@ -154,10 +154,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所属平台" prop="platform"  >
+        <el-form-item label="所属平台" prop="platform"  required>
           <el-radio v-model="radio" label="1">微信小程序</el-radio>
         </el-form-item>
-        <el-form-item label="分类名称" prop="name" >
+        <el-form-item label="分类名称" prop="name" required>
           <el-input v-model="dataForm.name" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
@@ -198,7 +198,7 @@
         :size="size"
         label-position="right"
       >
-        <el-form-item label="上级分类" prop="refId" >
+        <el-form-item label="上级分类" prop="refId" required>
           <el-select v-model="dataForm.refId" placeholder="请选择上级分类" :disabled="isShow" >
             <el-option
               v-for="item in superCategorys"
@@ -208,17 +208,17 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所属平台" prop="platform"  >
+        <el-form-item label="所属平台" prop="platform"  required>
           <el-radio v-model="radio" label="1">微信小程序</el-radio>
         </el-form-item>
-        <el-form-item label="分类名称" prop="name" >
+        <el-form-item label="分类名称" prop="name" required>
           <el-input v-model="dataForm.name" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input v-model="dataForm.sort" maxlength="2" auto-complete="off" type="number" ></el-input>
         </el-form-item>
 
-        <el-form-item label="状态"  prop="status">
+        <el-form-item label="状态" required prop="status">
           <el-radio-group v-model="dataForm.status">
             <el-radio
               v-for="item in status"
