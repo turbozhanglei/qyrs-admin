@@ -157,8 +157,10 @@
         },
         //上传图片成功
         handleArticleSuccess:function (res, file) {
+          this.fileList=[]
           if (res && res.code == '0000' && res.data && res.data.imgUrl){
             this.dataForm.images = res.data.imgUrl;
+            this.fileList.push(res.data.imgUrl)
           }
           this.$message({
             message: '上传成功!',
@@ -197,6 +199,11 @@
           });
         },
         submitForm:function () {
+          let this_=this
+          if(this_.fileList.length==0){
+            this.$message({ message: "请上传一张封面图片", type: "error" });
+            return false
+          }
           this.$refs.dataForm.validate(valid => {
             if (valid) {
               this.$confirm("确认提交吗？", "提示", {}).then(() => {
@@ -213,6 +220,7 @@
                   this_.dataForm.startDate = this_.dataForm.validDate[0];
                   this_.dataForm.endDate = this_.dataForm.validDate[1];
                 }
+
                 let params = Object.assign({}, this.dataForm);
 
                 params.t="newsArticle"
