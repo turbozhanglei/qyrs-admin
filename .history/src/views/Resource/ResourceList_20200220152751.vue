@@ -69,7 +69,7 @@
                 type="date"
                 placeholder="开始时间"
                 @change="checkStartTime()"
-                 value-format=yyyy-MM-dd
+                 value-format=“yyyy-MM-dd”
               ></el-date-picker>至
             </el-form-item>
             <el-form-item prop="createEndTime">
@@ -78,7 +78,7 @@
                 type="date"
                 placeholder="结束时间"
                 @change="checkEndTime()"
-                 value-format=yyyy-MM-dd
+                 value-format=“yyyy-MM-dd”
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -238,7 +238,6 @@ export default {
         createEndTime: "", //创建结束时间
         issureId: "", //发布人用户id
         mobile: "", //发布人手机号
-        issurePhone:null,
         sensitiveCode: "", //敏感词
         browseStartNum: "", //浏览量开始
         browseEndNum: "", //浏览量结束
@@ -289,8 +288,6 @@ export default {
     },
     // 获取分页数据
     findPage: function() {
-
-      //  
       this.$refs.CyTable.findPage(this.filters);
     },
 

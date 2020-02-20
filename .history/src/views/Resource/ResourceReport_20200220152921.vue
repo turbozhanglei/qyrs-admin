@@ -154,9 +154,6 @@ export default {
     },
     // 获取分页数据
     findPage: function(data) {
-      if(''==this.filters.issurePhone){
-        this.filters.issurePhone=null;
-      }
       this.$refs.CyTable.findPage(this.filters);
     },
 

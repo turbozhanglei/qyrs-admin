@@ -15,7 +15,7 @@
             type="date"
             placeholder="开始时间"
             @change="checkStartTime()"
-            value-format=yyyy-MM-dd
+            value-format=“yyyy-MM-dd”
           ></el-date-picker>
         </el-form-item>
 -
@@ -25,7 +25,7 @@
             type="date"
             placeholder="结束时间"
             @change="checkEndTime()"
-            value-format=yyyy-MM-dd
+            value-format=“yyyy-MM-dd”
           ></el-date-picker>
         </el-form-item>
         <el-form-item prop="yesterday">
@@ -154,9 +154,6 @@ export default {
     },
     // 获取分页数据
     findPage: function(data) {
-      if(''==this.filters.issurePhone){
-        this.filters.issurePhone=null;
-      }
       this.$refs.CyTable.findPage(this.filters);
     },
 

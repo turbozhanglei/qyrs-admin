@@ -238,7 +238,6 @@ export default {
         createEndTime: "", //创建结束时间
         issureId: "", //发布人用户id
         mobile: "", //发布人手机号
-        issurePhone:null,
         sensitiveCode: "", //敏感词
         browseStartNum: "", //浏览量开始
         browseEndNum: "", //浏览量结束
@@ -289,8 +288,10 @@ export default {
     },
     // 获取分页数据
     findPage: function() {
-
-      //  
+      debugger
+       if(""==this.filters.issurePhone){
+        this.filters.issurePhone=null;
+      }
       this.$refs.CyTable.findPage(this.filters);
     },
 
