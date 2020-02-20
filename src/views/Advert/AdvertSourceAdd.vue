@@ -56,6 +56,9 @@
                 <span v-if="advert && advert.width && advert.height">建议尺寸：{{advert.width}} * {{advert.height}}PX</span>
               </div>
             </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
           </el-form-item>
         </div>
         <el-form-item label="广告有效期" prop="validDate" required>
@@ -154,6 +157,8 @@
         textType:true,
         imageType:false,
         advert:{},
+        dialogImageUrl: '',
+        dialogVisible: false
       }
     },
     methods:{
@@ -198,7 +203,8 @@
         console.log(file, fileList);
       },
       handlePreview(file) {
-        console.log(file);
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
       },
       handleExceed:function () {
         this.$alert('最多上传一张', '警告', {
