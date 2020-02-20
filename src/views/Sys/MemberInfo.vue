@@ -45,8 +45,8 @@
             </div></el-col>
           <el-col :span="8">
             <div class="grid-content bg-purple">
-              <el-form-item prop="mobile" label="公司地址:">
-                <span>{{filters.mobile}}</span>
+              <el-form-item prop="company_adress" label="公司地址:">
+                <span>{{filters.company_adress}}</span>
               </el-form-item>
             </div>
           </el-col>
