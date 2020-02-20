@@ -78,6 +78,27 @@ export default {
     queryDictionry:function(data,callback){
       this.httpExecute(data, '/gy-resource/resource-dictionary/query-dictionary', callback);
     },
+    //置顶资源
+    setResourceTop:function(data,callback){
+      this.httpExecute(data, '/gy-resource/resource-manager/top', callback);
+    },
+   //取消置顶资源
+   cancelResourceTop:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-manager/top', callback);
+  },
+  //导出资源列表
+  downResourceExcel:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-manager/download-resource', callback);
+  },
+  //资源信息汇总报表导出
+  downResourceReportExcel:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-manager/download-report', callback);
+  },
+  //查询资源详情
+  queryResourceDetail:function(data,callback){
+    this.httpExecute(data, '/gy-resource/resource-rest/query-resource-detail', callback);
+  },
+
 
     requestUrl(data, url, callback) {
       var params = {};
@@ -379,6 +400,9 @@ export default {
   },
   getHost() {
     return host;
+  },
+  getBaseUrl(){
+    return baseUrl;
   },
   getUpLoadHost() {
     return host + "cmn/imgUpload";
