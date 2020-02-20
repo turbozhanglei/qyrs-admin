@@ -42,7 +42,7 @@
             :default-time="['00:00:00', '23:59:59']">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="封面图" prop="images">
+        <el-form-item label="封面图" prop="images" required>
           <el-upload
             class="upload-demo"
             :action="imgUpload"
@@ -104,6 +104,7 @@
               title: [{ required: true, message: "请输入文章标题", trigger: "blur" }],
               categoryId: [{ required: true, message: "请选择所属分类", trigger: "blur" }],
               validDate:[{ required: true, message: "有效期不能为空", trigger: "blur" }],
+              images:[{ required: true, message: "请上传封面图", trigger: "blur" }],
             },
             // fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
             fileList:[],
@@ -153,7 +154,9 @@
         },
       methods:{
         handleRemove(file, fileList) {
-          console.log(file, fileList);
+          if (fileList && fileList.length == 0){
+            this.dataForm.images = '';
+          }
         },
         //上传图片成功
         handleArticleSuccess:function (res, file) {
@@ -199,33 +202,26 @@
           });
         },
         submitForm:function () {
-          let this_=this
-          if(this_.fileList.length==0){
-            this.$message({ message: "请上传一张封面图片", type: "error" });
-            return false
-          }
-          this.$refs.dataForm.validate(valid => {
+          var this_=this
+          this_.$refs.dataForm.validate(valid => {
             if (valid) {
-              this.$confirm("确认提交吗？", "提示", {}).then(() => {
-                this.editLoading = true;
-                let this_=this
-               if(this.dataForm.describes==""){
+              this_.editLoading = true;
+              if(this_.dataForm.describes==""){
                 if(this_.dataForm.content.length>=54){
-                  this_.dataForm.describes=this.dataForm.content .replace(/<[^>]+>/g, "").slice(0,54)
+                  this_.dataForm.describes=this_.dataForm.content .replace(/<[^>]+>/g, "").slice(0,54)
                 }else{
-                  this_.dataForm.describes=this.dataForm.content .replace(/<[^>]+>/g, "")
+                  this_.dataForm.describes=this_.dataForm.content .replace(/<[^>]+>/g, "")
                 }
-               }
-                if (this_.dataForm.validDate && this_.dataForm.validDate.length > 0){
-                  this_.dataForm.startDate = this_.dataForm.validDate[0];
-                  this_.dataForm.endDate = this_.dataForm.validDate[1];
-                }
+              }
+              if (this_.dataForm.validDate && this_.dataForm.validDate.length > 0){
+                this_.dataForm.startDate = this_.dataForm.validDate[0];
+                this_.dataForm.endDate = this_.dataForm.validDate[1];
+              }
 
-                let params = Object.assign({}, this.dataForm);
+              let params = Object.assign({}, this_.dataForm);
 
-                params.t="newsArticle"
-                this.utils.request.editUserInfo(params, this.editInfoBack);
-              });
+              params.t="newsArticle"
+              this_.utils.request.editUserInfo(params, this_.editInfoBack);
             }
           });
         },
