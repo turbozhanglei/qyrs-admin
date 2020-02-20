@@ -118,7 +118,8 @@
               endDate: "",
               describes: "",
               content: "",
-              validDate:[],
+              validDate:"",
+              images:""
             },
             platform:"1",
             categorys:[
@@ -160,7 +161,6 @@
         },
         //上传图片成功
         handleArticleSuccess:function (res, file) {
-          this.fileList=[]
           if (res && res.code == '0000' && res.data && res.data.imgUrl){
             this.dataForm.images = res.data.imgUrl;
             this.fileList.push(res.data.imgUrl)
@@ -244,7 +244,7 @@
               endDate: "",
               desc: "",
               content: "",
-            validDate:[],
+            validDate:"",
           }
         },
         queryUserList(){
@@ -261,20 +261,34 @@
         },
         queryArticleById(){
           if(this.articleId!=0){
-            var that=this;
+            var this_=this;
             let params={}
             params.t="newsArticle"
-            params.articleId=that.articleId
+            params.articleId=this_.articleId
             this.utils.request.queryUserInfo(params,function(data){
-              that.dataForm=data.data
-              that.dataForm.platform=data.data.platform
-              if(data.images!=null || data.images!=""){
-                let imgUrl={}
-                imgUrl.name = 1;
-                imgUrl.url = data.images;
-                that.fileList.push(imgUrl)
+              if (data && data.data && data.code == '0000'){
+                this_.dataForm = {
+                  id:data.data.id,
+                  title: data.data.title,
+                  describes: data.data.describes,
+                  content: data.data.content,
+                  categoryId: data.data.categoryId,
+                  images: data.data.images,
+                  platform:"1",
+                  startDate:data.data.start_date,
+                  endDate:data.data.end_date,
+                  validDate:[data.data.startDate,data.data.endDate],
+                }
+                if(data.images!=null || data.images!=""){
+                  let imgUrl={}
+                  imgUrl.name = 1;
+                  imgUrl.url = data.images;
+                  this_.fileList.push(imgUrl)
+                }
+              }else {
+                this_.$message.error(data.msg || '获取详情失败!');
               }
-              that.dataForm.validDate=[data.data.startDate,data.data.endDate]
+
             })
           }
         },
