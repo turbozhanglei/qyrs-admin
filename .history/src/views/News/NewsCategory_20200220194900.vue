@@ -99,7 +99,7 @@
       ></el-table-column>
       <el-table-column label="修改时间" width="160" align="center" prop="update_time"></el-table-column>
       <el-table-column label="操作" align="center">
-        <template slot-scope="scope" style="text-align:left">
+        <template slot-scope="scope">
           <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button size="mini" type="primary" @click="addChildrenCategory(scope.$index, scope.row)" v-if="scope.row.level == 1">添加子类</el-button>
           <el-button
@@ -215,7 +215,7 @@
           <el-input v-model="dataForm.name" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input v-model="dataForm.sort" maxlength="2" min="0" auto-complete="off" type="number" @input="watchNumber($event)"></el-input>
+          <el-input v-model="dataForm.sort" maxlength="2" min="0" auto-complete="off" type="number" @input="watchNumber(val)"></el-input>
         </el-form-item>
 
         <el-form-item label="状态"  prop="status">
@@ -321,10 +321,9 @@ export default {
   methods: {
     //监听排序不为负数
     watchNumber:function(val){
-       let this_=this
-     if(val.toString().includes('-')||val.toString().includes('+')) {
-       this_.$message({ message: "排序请输入正整数 ", type: "error" });
-          this_.dataForm.sort = "";
+     
+     if(val.toString().includes('-')) {
+          this.dataForm.sort = Number(val.toString().replace(/\-/g,''));
         }
     },
     changeType:function(value){
