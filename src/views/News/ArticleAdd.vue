@@ -199,7 +199,6 @@
           });
         },
         submitForm:function () {
-          debugger
           let this_=this
           if(this_.fileList.length==0){
             this.$message({ message: "请上传一张封面图片", type: "error" });
