@@ -142,13 +142,13 @@
                   [{ 'script': 'sub' }, { 'script': 'super' }],
                   [{ 'indent': '-1' }, { 'indent': '+1' }],
                   [{ 'direction': 'rtl' }],
-                  [{ 'size': ['small', false, 'large', 'huge'] }],
+                  [{ 'size': ['12px', '14px', false ,'18px', '22px', '26px', '30px', '36px', '42px']  }],
                   [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                   [{ 'color': [] }, { 'background': [] }],
-                  [{ 'font': [] }],
+                  [{ 'font': ['Microsoft-YaHei','SimSun', 'SimHei','KaiTi','Arial'] }],
                   [{ 'align': [] }],
                   ['clean'],
-                  ['link', 'image']
+                  ['image']
                 ]
               },
               placeholder: '请输入文章内容',
