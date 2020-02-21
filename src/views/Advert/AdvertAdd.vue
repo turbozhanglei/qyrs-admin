@@ -32,23 +32,23 @@
         </el-form-item>
         <div v-if="dataForm.adType && dataForm.adType.length>0 && (dataForm.adType[0] ==1 ||dataForm.adType[1] ==1 )">
           <el-form-item label="图片高度" prop="height" required>
-            <el-input v-model="dataForm.height" type="number" auto-complete="off">
+            <el-input v-model="dataForm.height" type="number" min="0" auto-complete="off">
               <template slot="append">PX</template>
             </el-input>
           </el-form-item>
           <el-form-item label="图片宽度" prop="width" required>
-            <el-input v-model="dataForm.width" type="number" auto-complete="off">
+            <el-input v-model="dataForm.width" type="number" min="0" auto-complete="off">
               <template slot="append">PX</template>
             </el-input>
           </el-form-item>
           <el-form-item label="图片大小" prop="sizeLimit" required>
-            <el-input v-model="dataForm.sizeLimit" type="number" auto-complete="off">
+            <el-input v-model="dataForm.sizeLimit" type="number" min="0" auto-complete="off">
               <template slot="append"> M</template>
             </el-input>
           </el-form-item>
         </div>
         <el-form-item label="广告位显示个数" prop="num">
-          <el-input v-model="dataForm.num" type="number" placeholder="该广告位广告在前台的显示数" auto-complete="off"></el-input>
+          <el-input v-model="dataForm.num" type="number" min="0" placeholder="该广告位广告在前台的显示数" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio v-model="dataForm.status" label="0">启用</el-radio>
@@ -87,6 +87,40 @@
           callback();
         }
       };
+      var checkWidth = (rule,value,callback) =>{
+        if (!value){
+          return callback(new Error('请输入图片宽度'));
+        }else if (Number(value) <= 0){
+          return callback(new Error('图片宽度必须大于0'));
+        }else {
+          callback();
+        }
+      };
+      var checkHeight = (rule,value,callback) =>{
+        if (!value){
+          return callback(new Error('请输入图片高度'));
+        }else if (Number(value) <= 0){
+          return callback(new Error('图片高度必须大于0'));
+        }else {
+          callback();
+        }
+      };
+      var checkLimit = (rule,value,callback) =>{
+        if (!value){
+          return callback(new Error('请输入图片大小'));
+        }else if (Number(value) <= 0){
+          return callback(new Error('图片大小必须大于0'));
+        }else {
+          callback();
+        }
+      };
+      var checkNum = (rule,value,callback) =>{
+        if (value && Number(value) <= 0){
+          return callback(new Error('显示个数必须大于0'));
+        }else {
+          callback();
+        }
+      };
       return {
         size: "small",
         labelPosition: 'right',
@@ -95,9 +129,10 @@
           pageType: [{ required: true, message: "请选择广告页面类型", trigger: "blur" }],
           code: [{ required: true, message: "请输入广告位标识", trigger: "blur" }],
           adType: [{ required: true, message: "素材类型至少选择一种", trigger: "blur" }],
-          width: [{ required: true, message: "请输入图片宽度", trigger: "blur" }],
-          height: [{ required: true, message: "请输入图片高度", trigger: "blur" }],
-          sizeLimit: [{ required: true, message: "请输入图片大小", trigger: "blur" }],
+          width: [{ required: true,validator:checkWidth, trigger: "blur" }],
+          height: [{ required: true, validator:checkHeight, trigger: "blur" }],
+          sizeLimit: [{ required: true,validator:checkLimit, trigger: "blur" }],
+          num: [{ validator:checkNum, trigger: "blur" }],
         },
         // 新增编辑界面数据
         dataForm:{
