@@ -88,7 +88,11 @@ export default {
         //   { required: true, message: '请输入验证码', trigger: 'blur' }
         // ]
       },
-      checked: true
+      checked: true,
+      mainTabs: {
+      get () { return this.$store.state.tab.mainTabs },
+      set (val) { this.$store.commit('updateMainTabs', val) }
+    },
     };
   },
   methods: {
@@ -108,7 +112,7 @@ export default {
         password: this.loginForm.password,
         verifyCode: this.loginForm.captcha
       };
-
+      this.$store.state.tab.mainTabs = [];
       if (this.utils.isNull(this.loginForm.username)) {
         return;
       }

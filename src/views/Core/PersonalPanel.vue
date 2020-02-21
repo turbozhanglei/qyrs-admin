@@ -91,13 +91,13 @@ export default {
          rolename:"",
          deptname:"",
          username:""
-      }
+      },
     }
   },
   methods: {
     // 退出登录
     logout: function() {
-
+      let this_=this
       this.$confirm("确认退出吗?", "提示", {
         type: "warning"
       }).then(() => {
@@ -107,7 +107,7 @@ export default {
         localStorage.removeItem('token');
         localStorage.removeItem('id'); 
         localStorage.removeItem('isLogin'); 
-        this.$router.push("/login")
+        this.$router.push("/login");
         
       })
       .catch(() => {

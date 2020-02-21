@@ -101,7 +101,7 @@
       ref="CyTable"
     ></cy-table>
     <!--新增编辑界面-->
-    <el-dialog :title="operation?'新增':'编辑'" width="40%" :visible.sync="dialogVisible" :close-on-click-modal="false">
+    <el-dialog :title="operation?'新增':'编辑'" width="40%" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="handleClose">
       <el-form :model="dataForm" label-width="80px" :rules="dataFormRules" ref="dataForm" :size="size" label-position="right">
         <input type="password" style="display: none;" />
         <el-form-item label="登录名" prop="username" required>
@@ -173,7 +173,6 @@
         <el-form-item label="角色" prop="userRoles">
           <el-select
             v-model="dataForm.userRoles"
-            multiple
             placeholder="请选择"
             style="width: 100%;"
             clearable
@@ -324,6 +323,10 @@ export default {
         this.options = [];
       }
     },
+    handleClose() {
+      this.$refs.dataForm.resetFields();
+      this.$emit('handleClose');
+    },
     choseCustomer: function(selVal) {
       var temp = this.options;
       var this_ = this;
@@ -396,7 +399,7 @@ export default {
         email: "",
         mobile: "",
         status: 1,
-        userRoles: [1],
+        userRoles: [],
         account: "",
         pid: "",
         number: "",
@@ -539,6 +542,7 @@ export default {
         { prop: "username", label: "登录名", minWidth: 120 },
         { prop: "real_name", label: "员工姓名", minWidth: 120 },
         { prop: "mobile", label: "手机号", minWidth: 100 },
+        { prop: "rolename", label: "角色", minWidth: 100 },
         {
           prop: "status",
           label: "状态",
