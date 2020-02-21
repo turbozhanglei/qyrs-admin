@@ -98,8 +98,8 @@
         :formatter="statusFormat"
       ></el-table-column>
       <el-table-column label="修改时间" width="240" align="center" prop="update_time"></el-table-column>
-      <el-table-column label="操作" align="left">
-        <template slot-scope="scope" >
+      <el-table-column label="操作" align="center">
+        <template slot-scope="scope" style="text-align:left">
           <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button size="mini" type="primary" @click="addChildrenCategory(scope.$index, scope.row)" v-if="scope.row.level == 1">添加子类</el-button>
           <el-button

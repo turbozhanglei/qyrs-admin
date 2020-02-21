@@ -17,7 +17,7 @@
         </el-form-item>
 
         <el-form-item label="素材类型" prop="type" required>
-          <el-radio-group v-model="dataForm.type">
+          <el-radio-group v-model="dataForm.type" ref="type">
             <el-radio label="0" v-if="textType">文字</el-radio>
             <el-radio label="1" v-if="imageType">图片</el-radio>
           </el-radio-group>
@@ -56,6 +56,9 @@
                 <span v-if="advert && advert.width && advert.height">建议尺寸：{{advert.width}} * {{advert.height}}PX</span>
               </div>
             </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
           </el-form-item>
         </div>
         <el-form-item label="广告有效期" prop="validDate" required>
@@ -94,7 +97,8 @@
     name: "article-add",
     data(){
       var checkContent = (rule,value,callback) =>{
-        if (this.dataForm.type && this.dataForm.type == '0'){
+        let type = this.$refs.type.value;
+        if (type && type == '0'){
           if (!value){
             return callback(new Error('请输入广告文本'));
           }else if(value.length < 1 || value.length >64){
@@ -107,7 +111,8 @@
         }
       };
       var checkLinkUrl = (rule,value,callback) =>{
-        if (this.dataForm.type && this.dataForm.type == '1'){
+        let type = this.$refs.type.value;
+        if (type && type == '1'){
           if (!value){
             return callback(new Error('请输入跳转参数'));
           }else {
@@ -154,6 +159,8 @@
         textType:true,
         imageType:false,
         advert:{},
+        dialogImageUrl: '',
+        dialogVisible: false
       }
     },
     methods:{
@@ -198,7 +205,8 @@
         console.log(file, fileList);
       },
       handlePreview(file) {
-        console.log(file);
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
       },
       handleExceed:function () {
         this.$alert('最多上传一张', '警告', {

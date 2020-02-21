@@ -71,7 +71,7 @@
                 placeholder="开始时间"
                 @change="checkStartTime()"
                 value-format="yyyy-MM-dd"
-              ></el-date-picker>&nbsp; &nbsp; 至
+              ></el-date-picker>&nbsp;&#32;  至
             </el-form-item>
             <el-form-item prop="createEndTime">
               <el-date-picker
@@ -112,18 +112,18 @@
         <el-row>
           <el-col :span="6">
             <el-form-item prop="browseStartNum" label="浏览量">
-              <el-input v-model="filters.browseStartNum" clearable style="width: 85px;padding-left: 42px;"></el-input>&nbsp;&nbsp;&nbsp;—
+              <el-input v-model="filters.browseStartNum" clearable style="width: 90px;padding-left: 42px;"></el-input>—
             </el-form-item>
             <el-form-item prop="browseEndNum">
-              <el-input v-model="filters.browseEndNum" clearable style="width: 85px"></el-input>
+              <el-input v-model="filters.browseEndNum" clearable style="width: 90px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item prop="shareStartNum" label="分享数">
-              <el-input v-model="filters.shareStartNum" clearable style="width: 85px;padding-left: 42px;  "></el-input>&nbsp;&nbsp;&nbsp;—
+              <el-input v-model="filters.shareStartNum" clearable style="width: 90px;padding-left: 42px;  "></el-input>—
             </el-form-item>
             <el-form-item prop="shareEndNum">
-              <el-input v-model="filters.shareEndNum" clearable style="width: 85px"></el-input>
+              <el-input v-model="filters.shareEndNum" clearable style="width: 91px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">

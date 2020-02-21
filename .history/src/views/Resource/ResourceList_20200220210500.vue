@@ -65,13 +65,13 @@
           <el-col :span="12">
             <el-form-item label="创建时间" prop="createStartTime" >
               <el-date-picker
-              style="width:209px;margin-left: 28px;"
+              style="padding-left: 28px;"
                 v-model="filters.createStartTime"
                 type="date"
                 placeholder="开始时间"
                 @change="checkStartTime()"
                 value-format="yyyy-MM-dd"
-              ></el-date-picker>&nbsp; &nbsp; 至
+              ></el-date-picker>至
             </el-form-item>
             <el-form-item prop="createEndTime">
               <el-date-picker
@@ -87,7 +87,7 @@
         <el-row>
           <el-col :span="6">
             <el-form-item prop="issureId" label="发布人用户id">
-              <el-input v-model="filters.issureId" placeholder="发布人用户id"  style="width:209px;padding-left: 3px;" clearable></el-input>
+              <el-input v-model="filters.issureId" placeholder="发布人用户id" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -100,7 +100,7 @@
               <el-select
                 v-model="filters.sensitiveCode"
                 placeholder="敏感词"
-                style="padding-left: 42px;"
+                style="padding-left: 45px;"
               >
                 <el-option label="全部" value></el-option>
                 <el-option label="含有敏感词" value="1"></el-option>
@@ -112,18 +112,18 @@
         <el-row>
           <el-col :span="6">
             <el-form-item prop="browseStartNum" label="浏览量">
-              <el-input v-model="filters.browseStartNum" clearable style="width: 85px;padding-left: 42px;"></el-input>&nbsp;&nbsp;&nbsp;—
+              <el-input v-model="filters.browseStartNum" clearable style="width: 90px;padding-left: 45px;"></el-input>—
             </el-form-item>
             <el-form-item prop="browseEndNum">
-              <el-input v-model="filters.browseEndNum" clearable style="width: 85px"></el-input>
+              <el-input v-model="filters.browseEndNum" clearable style="width: 90px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item prop="shareStartNum" label="分享数">
-              <el-input v-model="filters.shareStartNum" clearable style="width: 85px;padding-left: 42px;  "></el-input>&nbsp;&nbsp;&nbsp;—
+              <el-input v-model="filters.shareStartNum" clearable style="width: 90px"></el-input>—
             </el-form-item>
             <el-form-item prop="shareEndNum">
-              <el-input v-model="filters.shareEndNum" clearable style="width: 85px"></el-input>
+              <el-input v-model="filters.shareEndNum" clearable style="width: 90px"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -142,7 +142,7 @@
         <el-row>
           <el-col :span="6">
             <el-form-item label="资源区域" prop="resourceArea">
-              <el-select v-model="filters.resourceArea" placeholder="资源区域" style="padding-left:27px">
+              <el-select v-model="filters.resourceArea" placeholder="资源区域">
                 <el-option
                   v-for="item in resourceArea"
                   :key="item.dictionaryValue"
@@ -154,7 +154,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="内贸外贸" prop="tradeType">
-              <el-select v-model="filters.tradeType" style="padding-left:27px">
+              <el-select v-model="filters.tradeType">
                 <el-option
                   v-for="item in resourceTrade"
                   :key="item.dictionaryValue"
@@ -337,7 +337,7 @@ export default {
       }
       return "境外";
     },
-    //内贸外贸
+    //资源区域格式化
     resourceTradeFormat: function(row, column, cellValue, index) {
       if (Number(cellValue) == 1) {
         return "内贸";
@@ -399,7 +399,7 @@ export default {
           formatter: this.resourceAreaFormat
         },
         {
-          prop: "tradeType",
+          prop: "resourceTrade",
           label: "内贸外贸",
           minWidth: 80,
           formatter: this.resourceTradeFormat
@@ -538,7 +538,7 @@ export default {
       if (row.params.length > 1) {
         //批量审核通过
         if (row.type == 3) {
-          params.checkStatus = "3";
+          params.checkStatus = "4";
 
           params.resourceIdList = [];
           for (var i in row.params) {
@@ -548,7 +548,7 @@ export default {
           params.checkUserId = null;
         } else if (row.type == 4) {
           //批量审核不通过
-          params.checkStatus = "4";
+          params.checkStatus = "3";
           params.resourceIdList = [];
           for (var i in row.params) {
             params.resourceIdList.push(row.params[i].id);

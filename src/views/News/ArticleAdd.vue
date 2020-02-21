@@ -60,6 +60,9 @@
             <i class="el-icon-plus"></i>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb;建议尺寸：750 * 400PX，预览封面图不会出现在文章内容中</div>
           </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" hieght="80%" :src="dialogImageUrl" alt="">
+          </el-dialog>
         </el-form-item>
         <el-form-item label="文章摘要" prop="desc">
           <el-input type="textarea" v-model="dataForm.describes" placeholder="不填写会默认抓取正文前54字" auto-complete="off"></el-input>
@@ -89,6 +92,15 @@
   import 'quill/dist/quill.core.css'
   import 'quill/dist/quill.snow.css'
   import 'quill/dist/quill.bubble.css'
+  import * as Quill from 'quill'  //引入编辑器
+  var fonts = ['Microsoft-YaHei','SimSun', 'SimHei','KaiTi','Arial'];
+  var Font = Quill.import('formats/font');
+  Font.whitelist = fonts; //将字体加入到白名单
+  Quill.register(Font, true);
+  var sizes = ['10px', '12px', '14px', '16px', '20px', '24px', '36px'];
+  var fontSizeStyle = Quill.import('attributors/style/size');
+  fontSizeStyle.whitelist =sizes;
+  Quill.register(fontSizeStyle, true);
     export default {
         components: {
           quillEditor
@@ -121,6 +133,8 @@
               validDate:"",
               images:""
             },
+            dialogImageUrl: '',
+            dialogVisible: false,
             platform:"1",
             categorys:[
             ],
@@ -130,6 +144,8 @@
               boundary: document.body,
               modules: {
                 toolbar: [
+                  [{ 'font': fonts }],
+                  [{ 'size': sizes }],
                   ['bold', 'italic', 'underline', 'strike'],
                   ['blockquote', 'code-block'],
                   [{ 'header': 1 }, { 'header': 2 }],
@@ -137,13 +153,11 @@
                   [{ 'script': 'sub' }, { 'script': 'super' }],
                   [{ 'indent': '-1' }, { 'indent': '+1' }],
                   [{ 'direction': 'rtl' }],
-                  [{ 'size': ['small', false, 'large', 'huge'] }],
-                  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                  [{ 'header': [1, 2, 3, 4, 5, 6] }],
                   [{ 'color': [] }, { 'background': [] }],
-                  [{ 'font': [] }],
                   [{ 'align': [] }],
                   ['clean'],
-                  ['link', 'image']
+                  ['image']
                 ]
               },
               placeholder: '请输入文章内容',
@@ -173,11 +187,7 @@
         //上传图片校验
         beforeArticleUpload(file) {
           var size = 2, this_ = this;
-          if (this_.advert && this_.advert.source_size_limit) {
-            size = this_.advert.source_size_limit;
-          }
           const isLt2M = file.size / 1024 / 1024 < size;
-
           if (!isLt2M) {
             this_.$message.error("上传图片大小不能超过" + size + " MB!");
           }
@@ -194,7 +204,8 @@
           }
         },
         handlePreview(file) {
-          console.log(file);
+          this.dialogImageUrl = file.url;
+          this.dialogVisible = true;
         },
         handleExceed:function () {
           this.$alert('最多上传一张', '警告', {
@@ -279,10 +290,10 @@
                   endDate:data.data.end_date,
                   validDate:[data.data.startDate,data.data.endDate],
                 }
-                if(data.images!=null || data.images!=""){
+                if(data.data.images!=null || data.data.images!=""){
                   let imgUrl={}
                   imgUrl.name = 1;
-                  imgUrl.url = data.images;
+                  imgUrl.url = data.data.images;
                   this_.fileList.push(imgUrl)
                 }
               }else {
