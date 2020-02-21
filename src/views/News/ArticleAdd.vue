@@ -92,6 +92,15 @@
   import 'quill/dist/quill.core.css'
   import 'quill/dist/quill.snow.css'
   import 'quill/dist/quill.bubble.css'
+  import * as Quill from 'quill'  //引入编辑器
+  var fonts = ['Microsoft-YaHei','SimSun', 'SimHei','KaiTi','Arial'];
+  var Font = Quill.import('formats/font');
+  Font.whitelist = fonts; //将字体加入到白名单
+  Quill.register(Font, true);
+  var sizes = ['10px', '12px', '14px', '16px', '20px', '24px', '36px'];
+  var fontSizeStyle = Quill.import('attributors/style/size');
+  fontSizeStyle.whitelist =sizes;
+  Quill.register(fontSizeStyle, true);
     export default {
         components: {
           quillEditor
@@ -135,6 +144,8 @@
               boundary: document.body,
               modules: {
                 toolbar: [
+                  [{ 'font': fonts }],
+                  [{ 'size': sizes }],
                   ['bold', 'italic', 'underline', 'strike'],
                   ['blockquote', 'code-block'],
                   [{ 'header': 1 }, { 'header': 2 }],
@@ -142,10 +153,8 @@
                   [{ 'script': 'sub' }, { 'script': 'super' }],
                   [{ 'indent': '-1' }, { 'indent': '+1' }],
                   [{ 'direction': 'rtl' }],
-                  [{ 'size': ['12px', '14px', false ,'18px', '22px', '26px', '30px', '36px', '42px']  }],
-                  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                  [{ 'header': [1, 2, 3, 4, 5, 6] }],
                   [{ 'color': [] }, { 'background': [] }],
-                  [{ 'font': ['Microsoft-YaHei','SimSun', 'SimHei','KaiTi','Arial'] }],
                   [{ 'align': [] }],
                   ['clean'],
                   ['image']
