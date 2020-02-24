@@ -128,12 +128,26 @@
         dataFormRules: {
           name: [
             { required: true, message: "请输入广告名称", trigger: "blur" },
-            {min: 1, max:64, message: "限制在64个字符以内",trigger:"blur"}
-            ],
-          linkUrl: [{ validator:checkLinkUrl, trigger: "blur" }],
-          content: [{ validator:checkContent, trigger: "blur" }],
-          type: [{ required: true, message: "素材类型至少选择一种", trigger: "blur" }],
-          validDate:[{ required: true, message: "有效期不能为空", trigger: "blur" }],
+            {min: 1, max:64, message: "限制在64个字符以内",trigger:"blur"},
+            { required: true, message: "请输入广告名称", trigger: "change" },
+            {min: 1, max:64, message: "限制在64个字符以内",trigger:"change"}
+          ],
+          linkUrl: [
+            { validator:checkLinkUrl, trigger: "blur" },
+            { validator:checkLinkUrl, trigger: "change" }
+          ],
+          content: [
+            { validator:checkContent, trigger: "blur" },
+            { validator:checkContent, trigger: "change" },
+          ],
+          type: [
+            { required: true, message: "素材类型至少选择一种", trigger: "blur" },
+            { required: true, message: "素材类型至少选择一种", trigger: "change" }
+          ],
+          validDate:[
+            { required: true, message: "有效期不能为空", trigger: "blur" },
+            { required: true, message: "有效期不能为空", trigger: "change" }
+          ],
         },
         // 新增编辑界面数据
         dataForm: {
