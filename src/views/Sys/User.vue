@@ -107,12 +107,12 @@
         <el-form-item label="登录名" prop="username" required>
           <el-input v-model="dataForm.username" maxlength="30" show-word-limit placeholder="用户名为必填，1-30字符，不可为为纯符号和纯空格" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item style="position:fixed;buttom:-9999px">
+        <!-- <el-form-item style="position:fixed;buttom:-9999px">
           <el-input v-model="dataForm.password2" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item style="position:fixed;buttom:-9999px">
+        </el-form-item> -->
+        <!-- <el-form-item style="position:fixed;buttom:-9999px">
           <el-input v-model="dataForm.password1" type="password" auto-complete="off"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="密码" prop="password">
           <el-input v-model="dataForm.password" maxlength="16" placeholder="密码为必填，6-16位字符" type="password" auto-complete="off" show-word-limit></el-input>
         </el-form-item>
@@ -125,16 +125,6 @@
             <el-option label="女" :value="2"></el-option>
           </el-select>
         </el-form-item>
-        <!--<el-form-item label="机构" prop="deptname">
-          <popup-tree-input
-            :data="deptData"
-            :props="deptTreeProps"
-            :prop="dataForm.deptname"
-            :nodeKey="''+dataForm.deptid"
-            :currentChangeHandle="deptTreeCurrentChangeHandle"
-            filter_key="dept_name"
-          ></popup-tree-input>
-        </el-form-item>-->
         <el-form-item label="手机号" prop="mobile">
           <el-input
             v-model="dataForm.mobile"
@@ -253,7 +243,6 @@ export default {
       dataFormRules: {
         username: [
           { validator:checkUserName, trigger: "blur" },
-          { validator:checkUserName, trigger: "change" }
           ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
@@ -410,7 +399,6 @@ export default {
       this.dialogVisible = true;
       this.operation = false;
       this.paswordTemp = params.row.password;
-
       this.dataForm = {
         id: params.row.id,
         name: params.row.name,
@@ -423,7 +411,7 @@ export default {
         remark:params.row.remark,
         real_name:params.row.real_name,
         sex:params.row.sex,
-        userRoles: params.row.rolename,
+        userRoles: parseInt(params.row.role_id_list),
         account: params.row.account,
         pid: params.row.pid,
         number: params.row.number,
@@ -443,7 +431,6 @@ export default {
       if (this.dataForm.pid == 0) {
         this.dataForm.pname = " ";
       }
-     debugger
       this.options.push({
         username: this.dataForm.pname,
         id: this.dataForm.pid
