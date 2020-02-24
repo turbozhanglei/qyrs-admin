@@ -177,7 +177,7 @@
       </el-form>
       
       <div slot="footer" class="dialog-footer">
-        <el-button :size="size" @click.native="dialogVisible = false">{{$t('action.cancel')}}</el-button>
+        <el-button :size="size" @click.native="clearTable1">{{$t('action.cancel')}}</el-button>
         <el-button :size="size" type="primary" @click.native="submitForm">{{$t('action.submit')}}</el-button>
       </div>
     </el-dialog>
@@ -231,7 +231,7 @@
       </el-form>
       
       <div slot="footer" class="dialog-footer">
-        <el-button :size="size" @click.native="dialogVisible1 = false">{{$t('action.cancel')}}</el-button>
+        <el-button :size="size" @click.native="clearTable2">{{$t('action.cancel')}}</el-button>
         <el-button :size="size" type="primary" @click.native="submitForm1">{{$t('action.submit')}}</el-button>
       </div>
     </el-dialog>
@@ -319,6 +319,19 @@ export default {
     };
   },
   methods: {
+
+    //取消刷新页面
+    clearTable2:function(val){
+      let this_= this 
+      this_.dialogVisible1 =false
+      this_.findPage()
+    },
+
+     clearTable1:function(val){
+      let this_= this 
+      this_.dialogVisible =false
+      this_.findPage()
+    },
     //监听排序不为负数
     watchNumber:function(val){
        let this_=this
