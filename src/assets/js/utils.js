@@ -347,9 +347,11 @@ export default {
     getAdvertSourceInfo:function (data,callback) {//保存或修改广告位
       this.requestUrl(data,'advertSource/getInfo',callback);
     },
-
     getCategoryList:function(data,callback){//查询所以一级分类
       this.requestUrl(data,'queryArticle/queryCategoryList',callback);
+    },
+    queryMemInfo:function(data,callback){//查询所以一级分类
+      this.requestUrl(data,'wechat/userInformation',callback);
     },
 
 

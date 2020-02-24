@@ -21,8 +21,8 @@
             </div></el-col>
           <el-col :span="8">
             <div class="grid-content bg-purple">
-              <el-form-item prop="mobile" label="粉丝数:">
-                <span>500</span>
+              <el-form-item prop="fens" label="粉丝数:">
+                <span>{{filters.fens}}</span>
               </el-form-item>
             </div>
           </el-col>
@@ -114,7 +114,7 @@ export default {
       let query={};
       query.id=this.userId
       query.t='sysUser';
-      this.utils.request.queryUserInfo(query,function(res){
+      this.utils.request.queryMemInfo(query,function(res){
          this_.filters=res.data
        })
       console.log(this.userId);
