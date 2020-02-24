@@ -12,8 +12,8 @@
         <el-form-item prop="mobile" label="手机号">
           <el-input v-model="filters.mobile" placeholder="手机号" clearable></el-input>
         </el-form-item>
-        <el-form-item prop="roleName" label="角色名">
-          <el-input v-model="filters.roleName" placeholder="角色名" clearable></el-input>
+        <el-form-item prop="real_name" label="角色名">
+          <el-input v-model="filters.real_name" placeholder="角色名" clearable></el-input>
         </el-form-item>
         <el-form-item label="创建时间">
           <el-date-picker
