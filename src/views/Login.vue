@@ -173,18 +173,18 @@ export default {
     onThemeChange: function(themeColor) {
       this.$store.commit("setThemeColor", themeColor);
     },
-    keyupEnter() {
-      document.onkeydown = e => {
-        let body = document.getElementsByTagName("body")[0];
-        if (e.keyCode === 13) {
-          this.login();
-        }
-      };
-    }
+    // keyupEnter() {
+    //   document.onkeydown = e => {
+    //     let body = document.getElementsByTagName("body")[0];
+    //     if (e.keyCode === 13) {
+    //       this.login();
+    //     }
+    //   };
+    // }
   },
   mounted() {
     this.getToken();
-    this.keyupEnter();
+    // this.keyupEnter();
   },
   computed: {
     ...mapState({

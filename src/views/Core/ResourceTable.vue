@@ -451,6 +451,7 @@ export default {
     },
     // 换页刷新
     refreshPageRequest: function(pageNum) {
+        
       this.pageRequest.pageNum = pageNum;
       this.init();
     },
