@@ -113,10 +113,10 @@
             articleId: this.$route.params.articleId,
             labelPosition: 'right',
             dataFormRules: {
-              title: [{ required: true, message: "请输入文章标题", trigger: "blur" }],
+              title: [{ required: true, message: "请输入文章标题", trigger: "blur" },{ required: true, message: "请输入文章标题", trigger: "change" }],
               categoryId: [{ required: true, message: "请选择所属分类", trigger: "blur" }],
-              validDate:[{ required: true, message: "有效期不能为空", trigger: "blur" }],
-              images:[{ required: true, message: "请上传封面图", trigger: "blur" }],
+              validDate:[{ required: true, message: "有效期不能为空", trigger: "blur" },{ required: true, message: "有效期不能为空", trigger: "change" }],
+              images:[{ required: true, message: "请上传封面图", trigger: "blur" },{ required: true, message: "有效期不能为空", trigger: "change" }],
             },
             // fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
             fileList:[],

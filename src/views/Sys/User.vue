@@ -252,7 +252,8 @@ export default {
       editLoading: false,
       dataFormRules: {
         username: [
-          { validator:checkUserName, trigger: "blur" }
+          { validator:checkUserName, trigger: "blur" },
+          { validator:checkUserName, trigger: "change" }
           ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
