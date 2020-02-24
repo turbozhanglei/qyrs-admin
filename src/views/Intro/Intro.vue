@@ -4,7 +4,7 @@
       <el-col :span="8">
         <div class="clearfix">
           <span style="font-size: 20px; color: #212121;">
-            欢迎您admin使用
+            欢迎您使用
             <span style="color: red;">国烨管理系统</span>
           </span>
         </div>
