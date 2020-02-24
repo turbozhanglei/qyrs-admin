@@ -125,14 +125,38 @@
         size: "small",
         labelPosition: 'right',
         dataFormRules: {
-          name: [{ validator:checkName, trigger: "blur" }],
-          pageType: [{ required: true, message: "请选择广告页面类型", trigger: "blur" }],
-          code: [{ required: true, message: "请输入广告位标识", trigger: "blur" }],
-          adType: [{ required: true, message: "素材类型至少选择一种", trigger: "blur" }],
-          width: [{ required: true,validator:checkWidth, trigger: "blur" }],
-          height: [{ required: true, validator:checkHeight, trigger: "blur" }],
-          sizeLimit: [{ required: true,validator:checkLimit, trigger: "blur" }],
-          num: [{ validator:checkNum, trigger: "blur" }],
+          name: [
+            { validator:checkName, trigger: "blur" },
+            { validator:checkName, trigger: "change" }
+          ],
+          pageType: [
+            { required: true, message: "请选择广告页面类型", trigger: "blur" },
+            { required: true, message: "请选择广告页面类型", trigger: "change" }
+          ],
+          code: [
+            { required: true, message: "请输入广告位标识", trigger: "blur" },
+            { required: true, message: "请输入广告位标识", trigger: "change" }
+          ],
+          adType: [
+            { required: true, message: "素材类型至少选择一种", trigger: "blur" },
+            { required: true, message: "素材类型至少选择一种", trigger: "change" }
+          ],
+          width: [
+            { required: true,validator:checkWidth, trigger: "blur" },
+            { required: true,validator:checkWidth, trigger: "change" }
+          ],
+          height: [
+            { required: true,validator:checkWidth, trigger: "blur" },
+            { required: true,validator:checkWidth, trigger: "change" }
+          ],
+          sizeLimit: [
+            { required: true,validator:checkLimit, trigger: "blur" },
+            { required: true,validator:checkLimit, trigger: "change" }
+          ],
+          num: [
+            { validator:checkNum, trigger: "blur" },
+            { validator:checkNum, trigger: "change" },
+          ],
         },
         // 新增编辑界面数据
         dataForm:{

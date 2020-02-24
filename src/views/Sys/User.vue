@@ -12,8 +12,8 @@
         <el-form-item prop="mobile" label="手机号">
           <el-input v-model="filters.mobile" placeholder="手机号" clearable></el-input>
         </el-form-item>
-        <el-form-item prop="roleName" label="角色名">
-          <el-input v-model="filters.roleName" placeholder="角色名" clearable></el-input>
+        <el-form-item prop="real_name" label="角色名">
+          <el-input v-model="filters.real_name" placeholder="角色名" clearable></el-input>
         </el-form-item>
         <el-form-item label="创建时间">
           <el-date-picker
@@ -175,8 +175,6 @@
             v-model="dataForm.userRoles"
             placeholder="请选择"
             style="width: 100%;"
-            clearable
-            filterable
           >
             <el-option
               v-for="item in roles"
@@ -254,7 +252,8 @@ export default {
       editLoading: false,
       dataFormRules: {
         username: [
-          { validator:checkUserName, trigger: "blur" }
+          { validator:checkUserName, trigger: "blur" },
+          { validator:checkUserName, trigger: "change" }
           ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
@@ -275,7 +274,7 @@ export default {
         email: "",
         mobile: "",
         status: 1,
-        userRoles: [],
+        userRoles: "",
         account: "",
         pid: "",
         number: "",
@@ -424,7 +423,7 @@ export default {
         remark:params.row.remark,
         real_name:params.row.real_name,
         sex:params.row.sex,
-        userRoles: [],
+        userRoles: params.row.rolename,
         account: params.row.account,
         pid: params.row.pid,
         number: params.row.number,
@@ -432,25 +431,24 @@ export default {
         pname: params.row.pname
       };
 
-      let userRoles = [];
-      if (!this.utils.isNull(params.row.role_id_list)) {
-        let idList = params.row.role_id_list.split(",");
+      // let userRoles = [];
+      // if (!this.utils.isNull(params.row.role_id_list)) {
+      //   let idList = params.row.role_id_list.split(",");
 
-        $.each(idList, function(key, value) {
-          userRoles.push(Number(value));
-        });
-      }
+      //   $.each(idList, function(key, value) {
+      //     userRoles.push(Number(value));
+      //   });
+      // }
       this.options = [];
       if (this.dataForm.pid == 0) {
         this.dataForm.pname = " ";
       }
-
+     debugger
       this.options.push({
         username: this.dataForm.pname,
         id: this.dataForm.pid
       });
-
-      this.dataForm.userRoles = userRoles;
+      //this.dataForm.userRoles = userRoles;
     },
     // 编辑
     submitForm: function() {
@@ -458,16 +456,15 @@ export default {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
             let params = Object.assign({}, this.dataForm);
-            let userRoles = [];
-            for (let i = 0, len = params.userRoles.length; i < len; i++) {
-              let userRole = {
-                userId: params.id,
-                roleId: params.userRoles[i]
-              };
-              userRoles.push(userRole);
-            }
-
-            params.userRoles = userRoles.map(item => item.roleId).toString();
+            // let userRoles = [];
+            // for (let i = 0, len = params.userRoles.length; i < len; i++) {
+            //   let userRole = {
+            //     userId: params.id,
+            //     roleId: params.userRoles[i]
+            //   };
+            //   userRoles.push(userRole);
+            // }
+            // params.userRoles = userRoles.map(item => item.roleId).toString();
             
             if(params.password=="1a6XzyruFj"){
               delete params.password;
