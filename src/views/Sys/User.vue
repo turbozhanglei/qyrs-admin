@@ -175,8 +175,6 @@
             v-model="dataForm.userRoles"
             placeholder="请选择"
             style="width: 100%;"
-            clearable
-            filterable
           >
             <el-option
               v-for="item in roles"
@@ -275,7 +273,7 @@ export default {
         email: "",
         mobile: "",
         status: 1,
-        userRoles: [],
+        userRoles: "",
         account: "",
         pid: "",
         number: "",
@@ -424,7 +422,7 @@ export default {
         remark:params.row.remark,
         real_name:params.row.real_name,
         sex:params.row.sex,
-        userRoles: [],
+        userRoles: params.row.rolename,
         account: params.row.account,
         pid: params.row.pid,
         number: params.row.number,
@@ -432,25 +430,24 @@ export default {
         pname: params.row.pname
       };
 
-      let userRoles = [];
-      if (!this.utils.isNull(params.row.role_id_list)) {
-        let idList = params.row.role_id_list.split(",");
+      // let userRoles = [];
+      // if (!this.utils.isNull(params.row.role_id_list)) {
+      //   let idList = params.row.role_id_list.split(",");
 
-        $.each(idList, function(key, value) {
-          userRoles.push(Number(value));
-        });
-      }
+      //   $.each(idList, function(key, value) {
+      //     userRoles.push(Number(value));
+      //   });
+      // }
       this.options = [];
       if (this.dataForm.pid == 0) {
         this.dataForm.pname = " ";
       }
-
+     debugger
       this.options.push({
         username: this.dataForm.pname,
         id: this.dataForm.pid
       });
-
-      this.dataForm.userRoles = userRoles;
+      //this.dataForm.userRoles = userRoles;
     },
     // 编辑
     submitForm: function() {
@@ -458,16 +455,15 @@ export default {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
             let params = Object.assign({}, this.dataForm);
-            let userRoles = [];
-            for (let i = 0, len = params.userRoles.length; i < len; i++) {
-              let userRole = {
-                userId: params.id,
-                roleId: params.userRoles[i]
-              };
-              userRoles.push(userRole);
-            }
-
-            params.userRoles = userRoles.map(item => item.roleId).toString();
+            // let userRoles = [];
+            // for (let i = 0, len = params.userRoles.length; i < len; i++) {
+            //   let userRole = {
+            //     userId: params.id,
+            //     roleId: params.userRoles[i]
+            //   };
+            //   userRoles.push(userRole);
+            // }
+            // params.userRoles = userRoles.map(item => item.roleId).toString();
             
             if(params.password=="1a6XzyruFj"){
               delete params.password;
