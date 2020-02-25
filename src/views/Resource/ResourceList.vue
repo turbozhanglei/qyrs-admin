@@ -190,6 +190,10 @@
     </div>
     <!--表格内容栏-->
     <cy-table
+      permsEnable="sys:ri:pass"
+      permsDisable="sys:ri:fail"
+      permsSticky="sys:ri:sticky"
+      permsCancelSticky="sys:ri:cancelsticky"
       :height="350"
       :data="pageResult"
       :columns="filterColumns"

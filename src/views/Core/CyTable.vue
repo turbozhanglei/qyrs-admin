@@ -99,6 +99,7 @@
             icon="fa fa-search"
             :label="detailButtonName"
             :show="showDetailOperation"
+            :perms="permsDetail"
             :size="size"
             type="primary"
             @click="handleDetail(scope.$index, scope.row)"

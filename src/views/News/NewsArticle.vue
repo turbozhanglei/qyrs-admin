@@ -54,6 +54,7 @@
               :label="$t('action.add')"
               type="primary"
               @click="handleAdd"
+              perms="sys:nl:add"
             />
           </el-form-item>
           <el-form-item>
@@ -92,6 +93,8 @@
     </div>
     <!--表格内容栏-->
     <cy-table
+       permsEdit="sys:nl:edit"
+       permsDelete="sys:nl:delete"
       :height="350"
       :data="pageResult"
       :columns="filterColumns"

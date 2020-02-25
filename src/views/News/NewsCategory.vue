@@ -51,6 +51,7 @@
               :label="$t('action.add')"
               type="primary"
               @click="handleAdd"
+              perms="sys:inc:add"
             />
           </el-form-item>
           <el-form-item>
