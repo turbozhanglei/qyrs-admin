@@ -16,10 +16,18 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="资源信息标题" prop="resourceTitle">
-              <el-input v-model="filters.resourceTitle" placeholder="资源信息标题" clearable></el-input>
+            <el-form-item label="内贸外贸" prop="tradeType">
+              <el-select v-model="filters.tradeType" style="padding-left:27px">
+                <el-option
+                  v-for="item in resourceTrade"
+                  :key="item.dictionaryValue"
+                  :label="item.dictionaryValue"
+                  :value="item.dictionaryKey"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
+         
           <el-col :span="12">
             <el-form-item label="资源信息类型" prop="resourceType">
               <el-select v-model="filters.resourceType" placeholder="资源信息类型">
@@ -152,18 +160,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="内贸外贸" prop="tradeType">
-              <el-select v-model="filters.tradeType" style="padding-left:27px">
-                <el-option
-                  v-for="item in resourceTrade"
-                  :key="item.dictionaryValue"
-                  :label="item.dictionaryValue"
-                  :value="item.dictionaryKey"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
+          
         </el-row>
         <el-row>
           <el-form-item>
@@ -235,7 +232,7 @@ export default {
       labelPosition: "right",
       filters: {
         resourceId: "", //id
-        resourceTitle: "", //标题
+       resourceTtitle:null,
         resourceType: "", //资源信息类型
         issureStatus: "", //发布状态
         topStatus: "", //"置顶状态
@@ -383,7 +380,7 @@ export default {
     initColumns: function() {
       this.columns = [
         { prop: "resourceId", label: "资源信息编码", minWidth: 100 },
-        { prop: "resourceTitle", label: "资源信息标题", minWidth: 130 },
+       
         {
           prop: "resourceType",
           label: "资源信息类型",

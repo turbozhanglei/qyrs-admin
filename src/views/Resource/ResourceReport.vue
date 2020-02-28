@@ -251,7 +251,7 @@ export default {
     initColumns: function() {
       this.columns = [
         { prop: "resourceId", label: "资源信息编码", minWidth: 100 },
-        { prop: "resourceTitle", label: "资源信息标题", minWidth: 130 },
+        
         {
           prop: "releaseType",
           label: "资源信息类型",

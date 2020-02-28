@@ -36,8 +36,8 @@
         <el-row :gutter="60">
           <el-col :span="6">
             <div class="grid-content bg-purple">
-              <el-form-item prop="resourceTitle" label="资源信息标题:">
-                <span>{{filters.resourceTitle}}</span>
+              <el-form-item prop="tradeType" label="内贸外贸:">
+                <span>{{resourceTradeFormat(filters.tradeType)}}</span>
               </el-form-item>
             </div>
           </el-col>
@@ -109,13 +109,7 @@
               </el-form-item>
             </div>
           </el-col>
-          <el-col :span="6">
-            <div class="grid-content bg-purple">
-              <el-form-item prop="tradeType" label="内贸外贸:">
-                <span>{{resourceTradeFormat(filters.tradeType)}}</span>
-              </el-form-item>
-            </div>
-          </el-col>
+          
         </el-row>
         <el-row>
           <el-col :span="12">
