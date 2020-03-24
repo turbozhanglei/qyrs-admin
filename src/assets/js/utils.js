@@ -5,8 +5,9 @@ import { Message } from 'element-ui'
 
 
 // const baseUrl = 'http://40.73.65.243:8087';
-const baseUrl = 'http://localhost:8087';
+// const baseUrl = 'http://localhost:19902';
 // const baseUrl = 'http://47.100.214.25:9902';
+const baseUrl = 'http://47.100.214.25:19902';
 
 const path = '/gy-rest/';
 const host=baseUrl + path;

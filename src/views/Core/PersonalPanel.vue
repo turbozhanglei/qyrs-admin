@@ -3,56 +3,56 @@
     <div class="personal-desc" :style="{'background':this.$store.state.app.themeColor}">
         <div class="avatar-container">
           <!-- <img class="avatar" :src="require('@/assets/user.png')" /> -->
-        </div>  
+        </div>
          <div class="name-role">
-          <span class="sender">用户名: {{ user_info.username  }}</span>  
-        </div>  
+          <span class="sender">用户名: {{ user_info.username  }}</span>
+        </div>
         <div class="name-role">
-          <span class="sender">权限: {{ user_info.rolename  }}</span>  
-        </div>  
+          <span class="sender">权限: {{ user_info.rolename  }}</span>
+        </div>
          <div class="name-role" v-show=" user_info.number != null && user_info.number != ''">
-          <span class="sender">工号: {{ user_info.number  }}</span>  
-        </div>  
+          <span class="sender">工号: {{ user_info.number  }}</span>
+        </div>
          <div class="name-role">
-          <span class="sender">手机号: {{ user_info.moile  }}</span>  
-        </div> 
+          <span class="sender">手机号: {{ user_info.mobile  }}</span>
+        </div>
          <!-- <div class="name-role">
-          <span class="sender">部门: {{ user_info.deptname  }}</span>  
+          <span class="sender">部门: {{ user_info.deptname  }}</span>
         </div>  -->
         <div class="registe-info">
           <span class="registe-info">
             <li class="fa fa-clock-o"></li>
                注册时间：{{ user_info.create_time }}
           </span>
-        </div>  
+        </div>
     </div>
     <!-- <div class="personal-relation">
-        <span class="relation-item">followers</span>  
-        <span class="relation-item">watches</span>  
+        <span class="relation-item">followers</span>
+        <span class="relation-item">watches</span>
         <span class="relation-item">friends</span>
     </div> -->
     <!-- <div class="main-operation">
         <span class="main-operation-item">
           <el-button size="small" icon="fa fa-male"> 个人中心</el-button>
-        </span>    
+        </span>
         <span class="main-operation-item">
           <el-button size="small" icon="fa fa-key"> 修改密码</el-button>
-        </span>    
+        </span>
     </div> -->
     <!-- <div class="other-operation">
         <div class="other-operation-item">
           <li class="fa fa-eraser"></li>
           清除缓存
-        </div>    
+        </div>
         <div class="other-operation-item">
           <li class="fa fa-user"></li>
           在线人数
-        </div>    
+        </div>
         <div class="other-operation-item">
           <li class="fa fa-bell"></li>
           访问次数
-        </div>    
-        
+        </div>
+
     </div> -->
     <div class="personal-footer" @click="logout">
       <li class="fa fa-sign-out"></li>
@@ -86,7 +86,7 @@ export default {
     return {
       user_info:{
          create_time:"",
-         moile:"",
+         mobile:"",
          number:"",
          rolename:"",
          deptname:"",
@@ -105,16 +105,16 @@ export default {
         this.deleteCookie("token")
 
         localStorage.removeItem('token');
-        localStorage.removeItem('id'); 
-        localStorage.removeItem('isLogin'); 
+        localStorage.removeItem('id');
+        localStorage.removeItem('isLogin');
         this.$router.push("/login");
-        
+
       })
       .catch(() => {
       })
     },
     // 删除cookie
-    deleteCookie: function(name) { 
+    deleteCookie: function(name) {
         Cookies.remove(name)
     },
     // 打开备份还原界面
@@ -132,29 +132,29 @@ export default {
         })
     },
     getUserInfo:function(){
- 
+
       let filters = {
-          account: localStorage.getItem("user"),
-          t: "sysUser"
+        username: localStorage.getItem("user"),
+        t: "sysUser"
       }
-       
+
       this.utils.request.queryUserPage(filters,(res) => {
           if(res.code == "0000"){
             console.log(res)
                this.user_info.create_time = res.rows[0].create_time;
-               this.user_info.moile = res.rows[0].moile;
+               this.user_info.mobile = res.rows[0].mobile;
                this.user_info.number = res.rows[0].number;
                this.user_info.rolename = res.rows[0].rolename;
-               this.user_info.deptname = res.rows[0].deptname;   
-               this.user_info.username = res.rows[0].username;   
-              
+               this.user_info.deptname = res.rows[0].deptname;
+               this.user_info.username = res.rows[0].username;
+
           }
- 
-      }); 
+
+      });
 
     }
   },
-  mounted() {  
+  mounted() {
     this.getUserInfo();
   }
 }
