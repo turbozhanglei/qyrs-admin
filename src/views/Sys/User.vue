@@ -120,7 +120,7 @@
           <el-input v-model="dataForm.real_name" maxlength="20" placeholder="员工姓名为0-20位字符" auto-complete="off" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="sex" >
-          <el-select v-model="dataForm.sex" placeholder="性别" style="width:639px">
+          <el-select v-model="dataForm.sex" placeholder="性别">
             <el-option label="男" :value="1"></el-option>
             <el-option label="女" :value="2"></el-option>
           </el-select>
@@ -138,7 +138,7 @@
         <el-form-item label="备注" prop="remark">
           <el-input type="textarea" v-model="dataForm.remark" maxlength="200" placeholder="备注为0-200个字符" show-word-limit auto-complete="off"></el-input>
         </el-form-item>
-       
+
 
         <!-- <el-form-item label="上级用户" prop="pid">
           <el-select
@@ -452,7 +452,7 @@ export default {
             //   userRoles.push(userRole);
             // }
             // params.userRoles = userRoles.map(item => item.roleId).toString();
-            
+
             if(params.password=="1a6XzyruFj"){
               delete params.password;
             }
