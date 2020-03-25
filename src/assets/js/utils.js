@@ -5,9 +5,9 @@ import { Message } from 'element-ui'
 
 
 // const baseUrl = 'http://40.73.65.243:8087';
-// const baseUrl = 'http://localhost:19902';
+const baseUrl = 'http://localhost:8087';
 // const baseUrl = 'http://47.100.214.25:9902';
-const baseUrl = 'http://47.100.214.25:19902';
+// const baseUrl = 'http://47.100.214.25:19902';
 
 const path = '/gy-rest/';
 const host=baseUrl + path;
@@ -353,6 +353,9 @@ export default {
     },
     queryMemInfo:function(data,callback){//查询所以一级分类
       this.requestUrl(data,'wechat/userInformation',callback);
+    },
+    queryMemberInfo:function(data,callback){//查询所以一级分类
+      this.requestUrl(data,'cmn/queryMemberInfo',callback);
     },
 
 

@@ -114,7 +114,7 @@ export default {
       let query={};
       query.id=this.userId
       query.t='sysUser';
-      this.utils.request.queryMemInfo(query,function(res){
+      this.utils.request.queryMemberInfo(query,function(res){
          this_.filters=res.data
        })
       console.log(this.userId);
