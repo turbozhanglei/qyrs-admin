@@ -105,6 +105,7 @@ export default {
         endTime:"",//结束日期
       },
       userId: this.$route.params.id,
+      fens: this.$route.params.fens,
     };
   },
   methods: {
@@ -115,7 +116,7 @@ export default {
       query.id=this.userId
       query.t='sysUser';
       this.utils.request.queryMemberInfo(query,function(res){
-         this_.filters=res.data
+         this_.filters=res.data;
        })
       console.log(this.userId);
     }
