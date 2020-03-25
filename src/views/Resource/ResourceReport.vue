@@ -251,9 +251,9 @@ export default {
     initColumns: function() {
       this.columns = [
         { prop: "resourceId", label: "资源信息编码", minWidth: 100 },
-        
+
         {
-          prop: "releaseType",
+          prop: "resourceType",
           label: "资源信息类型",
           minWidth: 100,
           formatter: this.releaseTypeFormat
@@ -271,19 +271,19 @@ export default {
           formatter: this.resourceAreaFormat
         },
         {
-          prop: "resourceTrade",
+          prop: "tradeType",
           label: "内贸外贸",
           minWidth: 80,
           formatter: this.resourceTradeFormat
         },
         {
-          prop: "status",
+          prop: "issureStatus",
           label: "发布状态",
           minWidth: 80,
           formatter: this.statusFormat
         },
         {
-          prop: "sticky",
+          prop: "topStatus",
           label: "置顶状态",
           minWidth: 80,
           formatter: this.stickyFormat
