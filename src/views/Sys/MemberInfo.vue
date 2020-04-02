@@ -73,6 +73,22 @@
             </div>
           </el-col>
         </el-row>
+        <el-row :gutter="80">
+          <el-col :span="8">
+            <div class="grid-content bg-purple">
+              <el-form-item prop="create_time" label="注册时间:">
+                <span>{{filters.create_time}}</span>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="grid-content bg-purple">
+              <el-form-item prop="status" label="状态:">
+                <span>{{statusMessage}}</span>
+              </el-form-item>
+            </div></el-col>
+
+        </el-row>
       </el-form>
     </div>
 
@@ -106,6 +122,7 @@ export default {
       },
       userId: this.$route.params.id,
       fens: this.$route.params.fens,
+      statusMessage:'',
     };
   },
   methods: {
@@ -117,6 +134,11 @@ export default {
       query.t='sysUser';
       this.utils.request.queryMemberInfo(query,function(res){
          this_.filters=res.data;
+         if(res.data.status==0){
+           this_.statusMessage="启用"
+         }else{
+           this_.statusMessage="停用"
+         }
        })
       console.log(this.userId);
     }
