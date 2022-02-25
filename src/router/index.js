@@ -18,6 +18,8 @@ import ResourceList from '@/views/Resource/ResourceList'
 import ResourceInfo from '@/views/Resource/ResourceInfo'
 import AdvertList from '@/views/Advert/AdvertList'
 import AdvertAdd from '@/views/Advert/AdvertAdd'*/
+import PersonnelManagement from '@/views/Sys/PersonnelManagement'
+import Member from '@/views/Sys/Member'
 import MemberInfo from '@/views/Sys/MemberInfo'
 import AdvertSource from '@/views/Advert/AdvertSource'
 import AdvertSourceAdd from '@/views/Advert/AdvertSourceAdd'
@@ -68,66 +70,6 @@ const router = new Router({
       name: '注册',
       component: Registe
     },
-    /*{
-      path: '/sys/member',
-      name: '会员列表',
-      component: Member
-    },
-    {
-      path: '/sys/memberInfo',
-      name: '会员详情',
-      component: MemberInfo
-    },
-    {
-      path: '/word/sensitiveWord',
-      name: '敏感词库',
-      component: SensitiveWord
-    },
-    // {
-    //   path: '/news/newsArticle',
-    //   name: '资讯列表',
-    //   component: NewsArticle
-    // },
-    // {
-    //   path: '/news/articleAdd',
-    //   name: '资讯列表',
-    //   component: ArticleAdd
-    // },
-    {
-      path: '/news/newsCategory',
-      name: '资讯分类',
-      component: NewsCategory
-    },
-    {
-      path: '/resource/resourceReport',
-      name:'资源报表',
-      component:ResourceReport
-    },
-    {
-      path: '/resource/resourceList',
-      name:'资源信息列表',
-      component:ResourceList
-    },
-    {
-      path: '/resource/resourceInfo',
-      name:'资源信息详情',
-      component:ResourceInfo
-    },
-    {
-      path: '/advert/advertList',
-      name:'广告位列表',
-      component:AdvertList
-    },
-    {
-      path: '/advert/advertAdd',
-      name:'广告位新增',
-      component:AdvertAdd
-    },
-    {
-      path: '/advert/advertSource',
-      name:'广告素材管理',
-      component:AdvertSource
-    },*/
     {
       path: '/',
       name: '会员详情',
@@ -185,6 +127,15 @@ const router = new Router({
         name: '资源详情',
         component: ResourceInfo
       }]
+    },
+    {path: '/',
+    name: 'PersonnelManagement',
+    component: Home,
+        children: [{
+          path: '/sys/PersonnelManagement',
+          name: '员工管理',
+          component: PersonnelManagement
+        }]
     },
   ]
 })
