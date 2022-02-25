@@ -6,9 +6,9 @@
         <el-form-item prop="nickname" label="员工姓名">
           <el-input v-model="filters.nickname" placeholder="员工姓名" clearable></el-input>
         </el-form-item>
-        <el-form-item prop="userId" label="用户ID">
-          <el-input v-model="filters.id" placeholder="用户ID" clearable></el-input>
-        </el-form-item>
+        // <el-form-item prop="userId" label="用户ID">
+        //   <el-input v-model="filters.id" placeholder="用户ID" clearable></el-input>
+        // </el-form-item>
         <el-form-item prop="mobile" label="手机号">
           <el-input v-model="filters.mobile" placeholder="手机号" clearable></el-input>
         </el-form-item>
