@@ -357,6 +357,9 @@ export default {
     queryMemberInfo:function(data,callback){//查询所以一级分类
       this.requestUrl(data,'cmn/queryMemberInfo',callback);
     },
+    queryPersonnelList:function(data,callback){//获取员工信息列表
+      this.requestUrl(data,'personnel/getPersonnelList',callback);
+    },
 
 
 

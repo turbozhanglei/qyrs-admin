@@ -6,9 +6,6 @@
         <el-form-item prop="nickname" label="员工姓名">
           <el-input v-model="filters.nickname" placeholder="员工姓名" clearable></el-input>
         </el-form-item>
-        // <el-form-item prop="userId" label="用户ID">
-        //   <el-input v-model="filters.id" placeholder="用户ID" clearable></el-input>
-        // </el-form-item>
         <el-form-item prop="mobile" label="手机号">
           <el-input v-model="filters.mobile" placeholder="手机号" clearable></el-input>
         </el-form-item>
@@ -118,6 +115,7 @@ export default {
   },
   data() {
     return {
+      totalSize: 0,
       size: "small",
       labelPosition: 'left',
       filters: {
@@ -132,7 +130,7 @@ export default {
       columns: [],
       filterColumns: [],
       pageRequest: { pageNum: 1, pageSize: 10 },
-      pageResult: {},
+      pageResult: [],
       deptData: [],
       deptTreeProps: {
         label: "dept_name",
@@ -160,27 +158,12 @@ export default {
   methods: {
     // 获取分页数据
     findPage: function(data) {
-      this.filters.t = "sysUser";
-      this.filters.identity_type=0;
-      this.filters.sql="queryListMember";
+      this.filters.t = "personnel";
       this.$refs.CyTable.findPage(this.filters);
-      console.log(this.filters)
     },
-    // 加载用户角色信息
-    findUserRoles: function() {
-      var this_ = this;
-      let query = {};
-      query.t = "sysRole";
-      this.utils.request.queryUserList(query, function(res) {
-        if (res.code == "0000") {
-          this_.roles = res.data;
-        } else {
-        }
-      });
-    },
+   
     // 启用停用
     handleUpStatus: function(data) {
-      
       if (data != null && data.params != null && data.params.length > 0) {
         let ids = data.params.map(item => item.id).toString();
         var params = {};
@@ -202,22 +185,17 @@ export default {
         });
       }
     },
+
     handleDetail:function (params) {
       this.$router.push({path:"/sys/memberInfo/"+ params.row.id});
     },
    
-    // 菜单树选中
-    deptTreeCurrentChangeHandle(data, node) {
-      console.log(data);
-      this.dataForm.deptid = data.id;
-      this.dataForm.deptname = data.dept_name;
-    },
     // 状态格式化
     statusFormat: function(row, column, cellValue, index) {
       if (Number(cellValue) == 0) {
-        return "启用";
+        return "在职";
       }
-      return "禁用";
+      return "离职";
     },
     source:function(row,column,cellValue,index){
        if(Number(cellValue) == 1){
@@ -239,18 +217,13 @@ export default {
     initColumns: function() {
       this.columns = [
         { prop: "id", label: "用户ID", minWidth: 120 },
-        { prop: "nickname", label: "会员昵称", minWidth: 120 },
-        // { prop: "username", label: "用户名", minWidth: 120 },
-        { prop: "mobile", label: "手机号", minWidth: 100 },
-        {
-          prop: "status",
-          label: "用户状态",
-          minWidth: 70,
-          formatter: this.statusFormat
-        },
+        { prop: "name", label: "员工姓名", minWidth: 120 },
+        { prop: "phoneNumber", label: "手机号", minWidth: 100 },
+        {prop: "status",label: "用户状态",minWidth: 70,formatter: this.statusFormat
+},
         { prop: "source", label: "注册来源", minWidth: 100 ,formatter: this.source},
         { prop: "fens", label: "粉丝数", minWidth: 100 },
-        { prop: "create_time", label: "注册时间", minWidth: 120 }
+        { prop: "createTime", label: "注册时间", minWidth: 120 }
       ];
       var temp = [];
       $.each(this.columns, function(key, val) {
